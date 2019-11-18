@@ -1,0 +1,25 @@
+apply from: '../config/android/application.gradle'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+  defaultConfig {
+    applicationId "com.rakuten.tech.mobile.sdkutils.sample"
+    versionCode 1
+    versionName "1.0"
+  }
+
+  sourceSets.each {
+    it.java.srcDirs += "src/$it.name/kotlin"
+  }
+
+  dataBinding {
+    enabled = true
+  }
+}
+
+dependencies {
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$CONFIG.versions.kotlin"
+  implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta3'
+  implementation project(':sdk-utils')
+}
