@@ -1,0 +1,39 @@
+apply from: '../config/android/library.gradle'
+apply plugin: "kotlin-android"
+apply plugin: 'kotlin-kapt'
+
+android {
+  sourceSets.each {
+    it.java.srcDirs += "src/$it.name/kotlin"
+  }
+
+  testOptions {
+    unitTests {
+      includeAndroidResources = true
+    }
+  }
+}
+
+dependencies {
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$CONFIG.versions.kotlin"
+  implementation "com.squareup.okhttp3:okhttp:$CONFIG.versions.okhttp"
+  compileOnly 'androidx.annotation:annotation:1.1.0'
+
+  testImplementation 'junit:junit:4.12'
+  testImplementation "org.amshove.kluent:kluent-android:1.57"
+  testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+  testImplementation "org.mockito:mockito-inline:2.23.0"
+  testImplementation "com.squareup.okhttp3:mockwebserver:$CONFIG.versions.okhttp"
+}
+
+apply from: "../config/quality/jacoco/android.gradle"
+jacoco {
+  toolVersion = "0.8.3"
+}
+
+apply from: "../config/quality/checkstyle/android.gradle"
+apply from: "../config/quality/detekt/android.gradle"
+dependencies {
+  // Enable the KtLint rules
+  detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0-RC14"
+}

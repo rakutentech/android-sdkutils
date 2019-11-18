@@ -1,0 +1,11 @@
+<network-security-config>
+  <!-- see https://android-developers.googleblog.com/2016/07/changes-to-trusted-certificate.html -->
+  <base-config>
+    <trust-anchors>
+      <!-- Trust preinstalled CAs -->
+      <certificates src="system" />
+      <!-- Additionally trust user added CAs -->
+      <certificates src="user" />
+    </trust-anchors>
+  </base-config>
+</network-security-config>
