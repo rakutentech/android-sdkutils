@@ -20,6 +20,7 @@ dependencies {
   compileOnly 'androidx.annotation:annotation:1.1.0'
 
   testImplementation 'junit:junit:4.12'
+  testImplementation 'org.robolectric:robolectric:4.3'
   testImplementation "org.amshove.kluent:kluent-android:1.57"
   testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
   testImplementation "org.mockito:mockito-inline:2.23.0"

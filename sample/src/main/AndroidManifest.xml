@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   package="com.rakuten.tech.mobile.sdkutils.sample">
+  <uses-permission android:name="android.permission.INTERNET" />
 
   <application
     android:icon="@mipmap/ic_launcher"
