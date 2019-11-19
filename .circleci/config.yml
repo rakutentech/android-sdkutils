@@ -1,0 +1,54 @@
+version: 2
+
+gradle_cache_key: &gradle_cache_key >-
+  gradle-
+  {{ checksum "build.gradle" }}
+  {{ checksum "sdk-utils/build.gradle" }}
+  {{ checksum "sample/build.gradle" }}
+
+jobs:
+  build:
+    docker:
+      - image: circleci/android:api-28
+    working_directory: ~/code
+    environment:
+      JVM_OPTS: "-Xmx3200m"
+    steps:
+      - checkout
+      - run: git submodule update --init
+      - restore_cache:
+          key: *gradle_cache_key
+      - run:
+          name: Download Dependencies
+          command: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: *gradle_cache_key
+      - run:
+          name: Run Tests
+          command: ./gradlew check
+      - run:
+          name: Assemble AAR
+          command: ./gradlew assemble
+      - run:
+          name: Current Version
+          command: ./gradlew currentVersion
+      - run:
+          name: Upload Code Coverage
+          command: bash <(curl -s https://codecov.io/bash)
+      - store_artifacts:
+          path: sdk-utils/build/reports
+          destination: reports/
+      - store_test_results:
+          path: sdk-utils/build/test-results
+      - store_artifacts:
+          path: sdk-utils/build/outputs/aar
+          destination: aar/
+      - store_artifacts:
+          path: sample/build/outputs/apk
+          destination: sample/
+      - persist_to_workspace:
+          root: ~/code
+          paths:
+            - sdk-utils/build
