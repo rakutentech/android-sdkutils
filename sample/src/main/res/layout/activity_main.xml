@@ -16,5 +16,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Button
+      android:id="@+id/rasHeadersButton"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      android:textStyle="bold"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:onClick="@{() -> activity.onSendRasHeadersRequestClick()}"
+      android:text="Send Request w/ RAS Headers"/>
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

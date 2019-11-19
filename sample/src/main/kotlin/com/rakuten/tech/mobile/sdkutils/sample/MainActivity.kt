@@ -2,14 +2,31 @@ package com.rakuten.tech.mobile.sdkutils.sample
 
 import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import com.rakuten.tech.mobile.sdkutils.RasSdkHeaders
+import com.rakuten.tech.mobile.sdkutils.okhttp.addHeaderInterceptor
 import com.rakuten.tech.mobile.sdkutils.sample.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
 
 class MainActivity: Activity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val rasHeadersClient = OkHttpClient.Builder()
+        .addHeaderInterceptor(
+            *RasSdkHeaders(
+                appId = "test-app-name",
+                subscriptionKey = "test-subscription-key",
+                sdkName = "Test Sdk Name",
+                sdkVersion = "2.0.0"
+            ).asArray()
+        ).build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,16 +36,26 @@ class MainActivity: Activity() {
         binding.activity = this
     }
 
-    private fun <T> showToast(title: String, getter: () -> T) {
-        val message = try {
-            "$title = ${getter.invoke()}"
-        } catch (e: Exception) {
-            Log.e("SDK Utils Sample", "Error", e)
+    fun onSendRasHeadersRequestClick() {
+        CoroutineScope(Dispatchers.Default).launch {
+            val response = rasHeadersClient.newCall(
+                Request.Builder()
+                    .url("https://www.example.com")
+                    .build()
+            ).execute()
 
-            "Error: ${e.message}"
+            withContext(Dispatchers.Main) {
+                if (!response.isSuccessful) {
+                    showToast("Error: Failed to send request. Server returned: $response")
+                }
+
+                showToast("Request sent successfully. Returned resposne: ${response.body()!!.string()}")
+            }
         }
 
+    }
+
+    private fun showToast(message: String) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT)
             .show()
-    }
 }
