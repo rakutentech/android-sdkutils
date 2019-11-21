@@ -38,3 +38,17 @@ dependencies {
   // Enable the KtLint rules
   detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.1.1"
 }
+
+apply from: '../config/publish/android.gradle'
+publishing {
+  publications {
+    SdkUtils(MavenPublication, androidArtifact())
+  }
+}
+
+def isSnapshot = project.version.contains('-')
+if (isSnapshot) {
+  apply from: '../config/publish/artifactory.gradle'
+} else {
+  apply from: '../config/publish/bintray.gradle'
+}
