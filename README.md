@@ -12,7 +12,7 @@ repositories {
 }
 
 dependency {
-  implementation 'com.rakuten.tech.mobile.sdkutils:sdkutils:0.0.1'
+  implementation 'com.rakuten.tech.mobile.sdkutils:sdkutils:0.1.0'
 }
 ```
 
@@ -38,3 +38,9 @@ The `AppInfo` class can be used to retrieve some properties of the App which nor
 val appName = AppInfo.instance.name
 val appVersion = AppInfo.instance.version
 ```
+
+## Changelog
+
+### v0.1.0 (2019-11-22)
+
+- Initial release.
