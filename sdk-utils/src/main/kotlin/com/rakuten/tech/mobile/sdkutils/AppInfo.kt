@@ -7,6 +7,7 @@ import androidx.annotation.VisibleForTesting
  * Provides information about the App including App name, and version name.
  * Should be accessed via [AppInfo.instance].
  */
+@Suppress("UnnecessaryAbstractClass")
 abstract class AppInfo {
 
     /**
@@ -23,8 +24,6 @@ abstract class AppInfo {
         @JvmStatic
         lateinit var instance: AppInfo
 
-
-
         internal fun init(context: Context) {
             instance = RealAppInfo(context)
         }
@@ -34,9 +33,9 @@ abstract class AppInfo {
 private data class RealAppInfo @VisibleForTesting constructor(
     override val name: String,
     override val version: String
-): AppInfo() {
+) : AppInfo() {
 
-    constructor(context: Context): this (
+    constructor(context: Context) : this (
         name = context.packageName,
         version = context.packageManager
             .getPackageInfo(context.packageName, 0).versionName

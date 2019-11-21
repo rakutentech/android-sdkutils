@@ -13,15 +13,15 @@ import okhttp3.Response
  */
 fun OkHttpClient.Builder.addHeaderInterceptor(
     vararg headers: Pair<String, String>
-) = this.addNetworkInterceptor(HeaderInterceptor(*headers))
+): OkHttpClient.Builder = this.addNetworkInterceptor(HeaderInterceptor(headers))
 
 private class HeaderInterceptor constructor(
-    private vararg val headers: Pair<String, String>
+    private val headers: Array<out Pair<String, String>>
 ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val requestBuilder = chain.request().newBuilder()
-        headers.forEach {header ->
+        headers.forEach { header ->
             requestBuilder.addHeader(header.first, header.second)
         }
 

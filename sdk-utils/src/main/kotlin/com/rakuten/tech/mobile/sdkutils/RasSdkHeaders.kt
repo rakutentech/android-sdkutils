@@ -3,7 +3,6 @@ package com.rakuten.tech.mobile.sdkutils
 import android.os.Build
 import androidx.annotation.VisibleForTesting
 
-
 /**
  * Standard headers that should be sent with all requests to RAS.
  */
@@ -23,7 +22,7 @@ class RasSdkHeaders private constructor(
         subscriptionKey: String,
         sdkName: String,
         sdkVersion: String
-    ): this(
+    ) : this(
         appId = appId,
         subscriptionKey = subscriptionKey,
         sdkName = sdkName,
@@ -38,7 +37,7 @@ class RasSdkHeaders private constructor(
         sdkName: String,
         sdkVersion: String,
         appInfo: AppInfo
-    ): this(
+    ) : this(
         appId = "ras-app-id" to appId,
         subscriptionKey = "apiKey" to "ras-$subscriptionKey",
         sdkName = "ras-sdk-name" to sdkName,

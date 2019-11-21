@@ -25,3 +25,9 @@ dependencies {
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2"
   implementation project(':sdk-utils')
 }
+
+apply from: "../config/quality/detekt/android.gradle"
+dependencies {
+  // Enable the KtLint rules
+  detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.1.1"
+}

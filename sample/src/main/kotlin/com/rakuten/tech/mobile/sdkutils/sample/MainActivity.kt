@@ -14,7 +14,8 @@ import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 
-class MainActivity: Activity() {
+@Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction", "SpreadOperator")
+class MainActivity : Activity() {
 
     private lateinit var binding: ActivityMainBinding
 
@@ -52,7 +53,6 @@ class MainActivity: Activity() {
                 showToast("Request sent successfully. Returned resposne: ${response.body()!!.string()}")
             }
         }
-
     }
 
     private fun showToast(message: String) =
