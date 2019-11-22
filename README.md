@@ -12,7 +12,7 @@ repositories {
 }
 
 dependency {
-  implementation 'com.rakuten.tech.mobile.sdkutils:sdkutils:0.1.0'
+  implementation 'com.rakuten.tech.mobile.sdkutils:sdk-utils:0.1.0'
 }
 ```
 
