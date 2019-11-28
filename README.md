@@ -12,7 +12,7 @@ repositories {
 }
 
 dependency {
-  implementation 'com.rakuten.tech.mobile.sdkutils:sdk-utils:0.1.0'
+  implementation 'com.rakuten.tech.mobile.sdkutils:sdk-utils:0.1.1'
 }
 ```
 
@@ -40,6 +40,10 @@ val appVersion = AppInfo.instance.version
 ```
 
 ## Changelog
+
+### v0.1.1 (2019-11-29)
+
+- Changed Device OS header from `ras-device-os` to `ras-os-version`.
 
 ### v0.1.0 (2019-11-22)
 
