@@ -43,7 +43,7 @@ class RasSdkHeaders private constructor(
         sdkName = "ras-sdk-name" to sdkName,
         sdkVersion = "ras-sdk-version" to sdkVersion,
         deviceModel = "ras-device-model" to Build.MODEL,
-        deviceOs = "ras-device-os" to Build.VERSION.RELEASE,
+        deviceOs = "ras-os-version" to Build.VERSION.RELEASE,
         appName = "ras-app-name" to appInfo.name,
         appVersion = "ras-app-version" to appInfo.version
     )
