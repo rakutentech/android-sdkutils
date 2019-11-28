@@ -52,7 +52,7 @@ class RasSdkHeadersSpec(
                 arrayOf("App Name", "ras-app-name", "test.app.name"),
                 arrayOf("App Version", "ras-app-version", "1.0.0"),
                 arrayOf("Device Model", "ras-device-model", "test model name"),
-                arrayOf("Device Version", "ras-device-os", "9")
+                arrayOf("Device Version", "ras-os-version", "9")
             )
         }
     }
