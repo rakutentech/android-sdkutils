@@ -2,11 +2,11 @@ buildscript {
   apply from: "config/index.gradle"
 
   CONFIG.versions.kotlin = '1.3.50'
-  CONFIG.versions.android.plugin = '3.5.2'
   CONFIG.versions.okhttp = '3.12.3' // Higher versions require Java 8 to be enabled
 
   repositories {
     google()
+    mavenCentral()
     jcenter()
     gradle()
   }
@@ -14,7 +14,6 @@ buildscript {
     classpath "com.android.tools.build:gradle:$CONFIG.versions.android.plugin"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$CONFIG.versions.kotlin"
     classpath 'pl.allegro.tech.build:axion-release-plugin:1.10.2'
-    classpath 'digital.wup:android-maven-publish:3.6.2'
     classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
   }
 }
@@ -26,6 +25,7 @@ plugins {
 allprojects { proj ->
   repositories {
     google()
+    mavenCentral()
     jcenter()
   }
 

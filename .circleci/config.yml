@@ -6,10 +6,12 @@ gradle_cache_key: &gradle_cache_key >-
   {{ checksum "sdk-utils/build.gradle" }}
   {{ checksum "sample/build.gradle" }}
 
+android-docker-image: &android-docker-image circleci/android@sha256:b6646fdf7457f61825526e7bfce364d8e533da6ceb1cdb98e371e94348ecc834
+
 jobs:
   build:
     docker:
-      - image: circleci/android:api-28
+      - image: *android-docker-image
     working_directory: ~/code
     environment:
       JVM_OPTS: "-Xmx3200m"
@@ -55,7 +57,7 @@ jobs:
 
   publish:
     docker:
-      - image: circleci/android:api-28
+      - image: *android-docker-image
     working_directory: ~/code
     environment:
       JVM_OPTS: "-Xmx3200m"
@@ -64,6 +66,12 @@ jobs:
       - run: git submodule update --init
       - restore_cache:
           key: *gradle_cache_key
+      - run:
+          - name: Decode PGP key to file
+          - command: |
+              if [[ $RELEASE_PGP_KEY_BASE64 != "" ]]; then
+                  base64 -d \<<< $RELEASE_PGP_KEY_BASE64 > ./maven-central-key.gpg
+              fi
       - run:
           name: Current Version
           command: ./gradlew cV

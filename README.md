@@ -10,11 +10,11 @@ Add to your `build.gradle`:
 
 ```groovy
 repositories {
-  jcenter()
+  mavenCentral()
 }
 
 dependency {
-  implementation 'com.rakuten.tech.mobile.sdkutils:sdk-utils:0.1.1'
+  implementation 'io.github.rakutentech.sdkutils:sdk-utils:0.1.1'
 }
 ```
 
