@@ -70,7 +70,7 @@ jobs:
           name: Decode PGP key to file
           command: |
             if [[ $RELEASE_PGP_KEY_BASE64 != "" ]]; then
-                base64 -d \<<< $RELEASE_PGP_KEY_BASE64 > ./maven-central-key.gpg
+                base64 -d <<< $RELEASE_PGP_KEY_BASE64 > ./maven-central-key.gpg
             fi
       - run:
           name: Current Version
