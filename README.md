@@ -14,7 +14,7 @@ repositories {
 }
 
 dependency {
-  implementation 'io.github.rakutentech.sdkutils:sdk-utils:0.1.1'
+  implementation "io.github.rakutentech.sdkutils:sdk-utils:$version"
 }
 ```
 
@@ -63,6 +63,11 @@ val appVersion = AppInfo.instance.version
 ```
 
 ## Changelog
+
+### v0.2.0 (2021-03-05)
+
+- Changed Maven Group ID to `io.github.rakutentech.sdkutils`. You must upudate your dependency declaration to `io.github.rakutentech.sdkutils:sdk-utils:0.2.0`
+- Migrated publishing to Maven Central due to Bintray/JCenter being [shutdown](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/). You must add `mavenCentral()` to your `repositories``.
 
 ### v0.1.1 (2019-11-29)
 
