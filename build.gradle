@@ -7,7 +7,6 @@ buildscript {
   repositories {
     google()
     mavenCentral()
-    jcenter()
     gradle()
   }
   dependencies {
@@ -26,7 +25,6 @@ allprojects { proj ->
   repositories {
     google()
     mavenCentral()
-    jcenter()
   }
 
   apply plugin: 'pl.allegro.tech.build.axion-release'

@@ -13,12 +13,17 @@ abstract class AppInfo {
     /**
      * Package name of the App.
      */
-    abstract val name: String
+    abstract val packageName: String
 
     /**
      * Version name of the App.
      */
     abstract val version: String
+
+    /**
+     * Name of the App.
+     */
+    abstract val appName: String
 
     companion object {
         @JvmStatic
@@ -31,13 +36,15 @@ abstract class AppInfo {
 }
 
 private data class RealAppInfo @VisibleForTesting constructor(
-    override val name: String,
-    override val version: String
+    override val packageName: String,
+    override val version: String,
+    override val appName: String
 ) : AppInfo() {
 
     constructor(context: Context) : this (
-        name = context.packageName,
+        packageName = context.packageName,
         version = context.packageManager
-            .getPackageInfo(context.packageName, 0).versionName
+            .getPackageInfo(context.packageName, 0).versionName,
+        appName = context.applicationInfo.loadLabel(context.packageManager).toString()
     )
 }
