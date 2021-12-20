@@ -9,6 +9,7 @@ import org.amshove.kluent.*
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers
+import org.mockito.Mockito.`when`
 
 class AppInfoSpec {
 
@@ -18,9 +19,10 @@ class AppInfoSpec {
     @Before
     fun setup() {
         val mockPackageManager: PackageManager = mock()
-        When calling mockContext.packageManager itReturns mockPackageManager
-        When calling mockPackageManager.getPackageInfo(ArgumentMatchers.anyString(), any()) itReturns mockPackageInfo
-        When calling mockContext.packageName itReturns "com.test.application.name"
+        `when`(mockContext.packageManager).thenAnswer { mockPackageManager }
+        `when`(mockPackageManager.getPackageInfo(ArgumentMatchers.anyString(), any()))
+            .thenAnswer { mockPackageInfo }
+        `when`(mockContext.packageName).thenAnswer { "com.test.application.name" }
         mockPackageInfo.versionName = "1.0.0"
 
         AppInfo.init(mockContext)
@@ -28,7 +30,7 @@ class AppInfoSpec {
 
     @Test
     fun `should return App Name`() {
-        When calling mockContext.packageName itReturns "com.test.application.name"
+        `when`(mockContext.packageName).thenAnswer { "com.test.application.name" }
 
         AppInfo.instance.name shouldEqual "com.test.application.name"
     }
