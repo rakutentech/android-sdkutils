@@ -44,7 +44,7 @@ private data class RealAppInfo @VisibleForTesting constructor(
     constructor(context: Context) : this (
         packageName = context.packageName,
         version = context.packageManager
-            .getPackageInfo(context.packageName, 0).versionName,
+            .getPackageInfo("com.rakuten.tech.mobile.sdkutils", 0).versionName,
         appName = context.applicationInfo.loadLabel(context.packageManager).toString()
     )
 }

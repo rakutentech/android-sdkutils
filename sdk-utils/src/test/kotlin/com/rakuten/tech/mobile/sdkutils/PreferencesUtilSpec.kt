@@ -7,8 +7,8 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class PreferencesUtilsSpec {
-    private val prefs = PreferencesUtils.getInstance(
+class PreferencesUtilSpec {
+    private val prefs = PreferencesUtil.getInstance(
         ApplicationProvider.getApplicationContext(),
         "com.test.application.name.shared"
     )

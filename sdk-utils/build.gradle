@@ -42,7 +42,7 @@ apply from: "../config/quality/checkstyle/android.gradle"
 apply from: "../config/quality/detekt/android.gradle"
 dependencies {
   // Enable the KtLint rules
-  detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.9.1"
+  detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.16.0"
 }
 
 apply from: '../config/publish/android.gradle'

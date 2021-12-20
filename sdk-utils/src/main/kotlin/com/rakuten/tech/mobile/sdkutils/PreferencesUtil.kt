@@ -2,7 +2,12 @@ package com.rakuten.tech.mobile.sdkutils
 
 import android.content.Context
 
-class PreferencesUtils private constructor(context: Context, name: String) {
+/**
+ * Helper class to get/set values in shared preferences.
+ * Should be accessed via [PreferencesUtil.getInstance].
+ */
+@SuppressWarnings("TooManyFunctions")
+class PreferencesUtil private constructor(context: Context, name: String) {
     private val prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE)
 
     /**
@@ -124,12 +129,19 @@ class PreferencesUtils private constructor(context: Context, name: String) {
     }
 
     companion object {
-        private var instance: PreferencesUtils? = null
-        fun getInstance(context: Context, name: String): PreferencesUtils {
+        private var instance: PreferencesUtil? = null
+
+        /**
+         * Get the preferences instance to cache and retrieve values.
+         *
+         * @param context the context
+         * @param name the shared file name
+         */
+        fun getInstance(context: Context, name: String): PreferencesUtil {
             if (instance == null) {
-                instance = PreferencesUtils(context, name)
+                instance = PreferencesUtil(context, name)
             }
-            return instance as PreferencesUtils
+            return instance as PreferencesUtil
         }
     }
 }
