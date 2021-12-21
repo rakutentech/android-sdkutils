@@ -2,13 +2,11 @@ package com.rakuten.tech.mobile.sdkutils
 
 import android.os.Build
 import com.nhaarman.mockitokotlin2.mock
-import org.amshove.kluent.When
-import org.amshove.kluent.calling
-import org.amshove.kluent.itReturns
 import org.amshove.kluent.shouldContain
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import org.mockito.Mockito.`when`
 import org.robolectric.util.ReflectionHelpers
 
 @RunWith(Parameterized::class)
@@ -22,8 +20,8 @@ class RasSdkHeadersSpec(
 
     @Test
     fun `should have the header`() {
-        When calling appInfo.name itReturns "test.app.name"
-        When calling appInfo.version itReturns "1.0.0"
+        `when`(appInfo.name).thenAnswer { "test.app.name" }
+        `when`(appInfo.version).thenAnswer { "1.0.0" }
         ReflectionHelpers.setStaticField(Build::class.java, "MODEL", "test model name")
         ReflectionHelpers.setStaticField(Build.VERSION::class.java, "RELEASE", "9")
 
