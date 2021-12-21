@@ -14,20 +14,20 @@ Please include unit tests where necessary to cover any functionality that is int
 * All features or bug fixes **must be tested** by one or more unit tests/specs
 * All public API methods **must be documented** in the KDoc/JavaDoc and potentially in the user guide.
 * All Kotlin code must follow [Kotlin's Coding Conventions](https://kotlinlang.org/docs/reference/coding-conventions.html).
-* All Java code must follow [Google's Java Code style](https://google.github.io/styleguide/javaguide.html), the only excption being that annotations on members or classes may be on the same line (no forced line break).
+* All Java code must follow [Google's Java Code style](https://google.github.io/styleguide/javaguide.html), the only exception being that annotations on members or classes may be on the same line (no forced line break).
 
 ## Commit messages
-Each commit message consists of a header, a body and a footer. The header has a special format that includes a type and a subject:
+Each commit message consists of a header, and an optional body and footer. The header has a special format that includes a type, a subject and an optional ticket number:
 
 ```
-<type>: <subject>
+<type>: <subject> (<ticket-no>)
 <BLANK LINE>
 <body>
 <BLANK LINE>
 <footer>
 ```
 
-The **header** is mandatory and the **scope** of the header is optional.
+The **header** is mandatory but the `<ticket-no>` part of the header is optional.
 
 Any line of the commit message cannot be longer 100 characters! This allows the message to be easier
 to read on GitHub as well as in various git tools.
@@ -40,29 +40,57 @@ If the commit reverts a previous commit, it should begin with `revert: `, follow
 ### Type
 Must be one of the following:
 
-* **build**: Changes that affect the build system or external dependencies (example scopes: gradle, fastlane, npm)
-* **ci**: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
-* **docs**: Documentation only changes
-* **feat**: A new feature
 * **fix**: A bug fix
-* **perf**: A code change that improves performance
-* **refactor**: A code change that neither fixes a bug nor adds a feature
-* **style**: Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
-* **test**: Adding missing tests or correcting existing tests
+* **feat**: A new feature, new UI
+* **refactor**: (or **improve:**) A code change that neither fixes a bug nor adds a feature (incl. Swift/Kotlin migration)
+* **build**: Changes that affect the build system or external dependencies (example scopes: gradle, fastlane, npm)
+* **ci**: Changes to our CI configuration files and scripts (Jenkins, Bitrise, Circle CI, SonarCloud, Mobscansf, etc)
+* **docs**: Documentation only changes
+* **chore**: Changes that do not affect the meaning of the code (formatting/linting, etc). Changes as a part of routine tasks like **Pre/Post release operation** (version bump + CHANGELOG, merge fix, etc).
+* **test(s)**: Adding missing tests or correcting existing tests
 
 ### Subject
-The subject contains succinct description of the change:
+The subject contains a succinct description of the change:
 
 * use the imperative, present tense: "change" not "changed" nor "changes"
 * don't capitalize first letter
 * no dot (.) at the end
+* an issue reference e.g. SDK-1234 can be added to the end of the subject in parentheses
 
 ### Body
 Just as in the **subject**, use the imperative, present tense: "change" not "changed" nor "changes".
 The body should include the motivation for the change and contrast this with previous behavior.
 
 ### Footer
-The footer should contain any information about **Breaking Changes** and is also the place to
-reference GitHub issues that this commit **Closes**.
+The footer should reference GitHub issues that this commit **Closes**.
 
-**Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines. The rest of the commit message is then used for this.
+### Examples
+#### Bad examples:
+* _**Pull request #519:**_ improve: refactor user data handling (SDKCF-3970)
+<br>Remove default prefixes added by Bitbucket.
+
+* improve: refactor user data handling (SDKCF-3970) _**(#23)**_
+<br>Remove default suffixes added by Github.
+
+* _**Revert "refactor user data handling"**_
+<br>Revert should start with `revert:` followed by exact original commit message of reverted commit (without quotes).
+
+* fix: _**fix crash on Android 12**_ (SDKCF-0000)
+<br>Commit message should contain some context. In this case - a cause of the crash.
+
+* feat: _**add new build configuration for users that require user data to be stored in another directory and add migration logic with exception of users migration from SDK version 1.0.0**_
+<br>Try to fit within 100 characters limit. Use abbreviations if necessary. Focus on the most important change.
+
+#### Good examples:
+* improve: refactor user data handling (SDKCF-3970)
+* improve: refine URL session configuration, add timeouts (SDKCF-0000)
+* docs: update README with gradle information (SDKCF-4388)
+* chore: bump RSDKUtils to 2.1.0 (SDKCF-4392)
+* chore: prepare 5.0.0 release (SDKCF-4160)
+* revert: improve: refine URL session configuration, add timeouts (SDKCF-0000)
+<br>This reverts commit 6608beb114610ec0a5e96b77e62a5590753e247e.
+* feat: add support for id tracking (SDKCF-4072)
+* ci: add mobsfscan config (SDKCF-0000)
+* tests: add UI tests (SDKCF-2246)
+* tests: fix and refactor integration tests (SDKCF-0000)
+* fix: fix startup crash caused by wrong build config (SDKCF-0000)
