@@ -1,18 +1,17 @@
 package com.rakuten.tech.mobile.sdkutils
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import org.json.JSONObject
 
 /**
- * This utility class provides application information and sdk information.
+ * This utility class provides application information.
  */
 object StaticInfoUtil {
     /**
      * Get the application information.
      *
-     * @return the application info
+     * @return return the app info map data based on AppInfo and BuildInfo keys
      */
     fun getAppInfo(): String {
         val infoMap = HashMap<String, Any?>()
@@ -24,7 +23,7 @@ object StaticInfoUtil {
         infoMap[AppInfoKey.PACKAGES] = getPackages()
 
         // Populate build info
-        infoMap[AppInfoKey.BUILD] = getBuildMap()
+        infoMap[BuildInfoKey.BUILD] = getBuildMap()
 
         return JSONObject(infoMap).toString()
     }
@@ -66,16 +65,16 @@ object StaticInfoUtil {
      */
     fun getBuildMap(): HashMap<String, String> {
         val buildMap = HashMap<String, String>()
-        buildMap[AppInfoKey.RELEASE] = Build.VERSION.RELEASE
-        buildMap[AppInfoKey.BOARD] = Build.BOARD
-        buildMap[AppInfoKey.BRAND] = Build.BRAND
-        buildMap[AppInfoKey.DEVICE] = Build.DEVICE
-        buildMap[AppInfoKey.FINGER_PRINT] = Build.FINGERPRINT
-        buildMap[AppInfoKey.HARDWARE] = Build.HARDWARE
-        buildMap[AppInfoKey.ID] = Build.ID
-        buildMap[AppInfoKey.MANUFACTURER] = Build.MANUFACTURER
-        buildMap[AppInfoKey.MODEL] = Build.MODEL
-        buildMap[AppInfoKey.PRODUCT] = Build.PRODUCT
+        buildMap[BuildInfoKey.RELEASE] = Build.VERSION.RELEASE
+        buildMap[BuildInfoKey.BOARD] = Build.BOARD
+        buildMap[BuildInfoKey.BRAND] = Build.BRAND
+        buildMap[BuildInfoKey.DEVICE] = Build.DEVICE
+        buildMap[BuildInfoKey.FINGER_PRINT] = Build.FINGERPRINT
+        buildMap[BuildInfoKey.HARDWARE] = Build.HARDWARE
+        buildMap[BuildInfoKey.ID] = Build.ID
+        buildMap[BuildInfoKey.MANUFACTURER] = Build.MANUFACTURER
+        buildMap[BuildInfoKey.MODEL] = Build.MODEL
+        buildMap[BuildInfoKey.PRODUCT] = Build.PRODUCT
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             addSecurityPatch(buildMap)
         }
@@ -85,96 +84,17 @@ object StaticInfoUtil {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun addSecurityPatch(map: MutableMap<String, String>) {
-        map[AppInfoKey.SECURITY_PATCH] = Build.VERSION.SECURITY_PATCH
+        map[BuildInfoKey.SECURITY_PATCH] = Build.VERSION.SECURITY_PATCH
     }
 
-    /**
-     * Get the SDK info.
-     *
-     * @param context the application context
-     * @return the sdk info
-     */
-    fun getSdkInfo(context: Context): String {
-        val sdkVersion = getModuleVersion(context, SdkInfoKey.MODULE_SDK)
-        return if (sdkVersion != null) {
-            SdkInfoKey.MODULE_SDK + "/" + sdkVersion
-        } else {
-            val sdkInfo = StringBuilder()
-            for (key in SdkInfoKey.KEYS) {
-                appendSdkModuleVersion(context, sdkInfo, key)
-            }
-            sdkInfo.toString()
-        }
-    }
-
-    private fun appendSdkModuleVersion(context: Context, sdkInfo: StringBuilder, moduleId: String) {
-        val version = getModuleVersion(context, moduleId)
-        if (version != null) {
-            if (sdkInfo.isNotEmpty()) {
-                sdkInfo.append("; ")
-            }
-            sdkInfo.append(moduleId).append('/').append(version)
-        }
-    }
-
-    /**
-     * Get the SDK info map.
-     *
-     * @param context the application context
-     * @return map of the sdk info
-     */
-    fun getSdkInfoMap(context: Context): HashMap<String, Any?> {
-        val infoMap = HashMap<String, Any?>()
-        for (key in SdkInfoKey.KEYS) {
-            val version = getModuleVersion(context, key)
-            if (version != null) {
-                infoMap[key] = getModuleVersion(context, key)
-            }
-        }
-        return infoMap
-    }
-
-    @SuppressWarnings("SwallowedException", "TooGenericExceptionCaught")
-    private fun getModuleVersion(context: Context, name: String): String? {
-        return try {
-            context.getString(
-                context.resources
-                    .getIdentifier(name + "__version", "string", context.packageName)
-            )
-        } catch (ex: Exception) {
-            null
-        }
-    }
-
-    // sdk info keys
-    internal object SdkInfoKey {
-        private const val MODULE_ANALYTICS = "analytics"
-        private const val MODULE_ANALYTICS_CORE = "analytics_core"
-        private const val MODULE_ANALYTICS_RAT = "analytics_rat"
-        private const val MODULE_ANALYTICS_IDTOKEN = "analytics_idtoken"
-        private const val MODULE_DISCOVER = "discover"
-        private const val MODULE_FEEDBACK = "feedback"
-        private const val MODULE_PING = "ping"
-        private const val MODULE_PUSH = "push"
-        private const val MODULE_IAM = "inappmessaging"
-        const val MODULE_SDK = "sdk"
-        val KEYS = arrayOf(/* Keys of all modules, MODULE_SDK ignored on purpose */
-            MODULE_ANALYTICS,
-            MODULE_ANALYTICS_CORE,
-            MODULE_ANALYTICS_RAT,
-            MODULE_ANALYTICS_IDTOKEN,
-            MODULE_DISCOVER,
-            MODULE_FEEDBACK,
-            MODULE_PING,
-            MODULE_PUSH,
-            MODULE_IAM
-        )
-    }
-
-    // app info keys
+    // App info keys
     internal object AppInfoKey {
         const val PROPERTIES = "properties"
         const val PACKAGES = "packages"
+    }
+
+    // Build info keys
+    internal object BuildInfoKey {
         const val RELEASE = "release"
         const val SECURITY_PATCH = "security_patch"
         const val BOARD = "board"

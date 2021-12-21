@@ -1,147 +1,183 @@
 package com.rakuten.tech.mobile.sdkutils
 
 import android.content.Context
+import android.content.SharedPreferences
 
 /**
  * Helper class to get/set values in shared preferences.
- * Should be accessed via [PreferencesUtil.getInstance].
  */
-@SuppressWarnings("TooManyFunctions")
-class PreferencesUtil private constructor(context: Context, name: String) {
-    private val prefs = context.getSharedPreferences(name, Context.MODE_PRIVATE)
-
+object PreferencesUtil {
     /**
      * Get integer value from shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
+     * @param defValue the default value
      * @return return the integer value
      */
-    fun getInt(key: String) = prefs.getInt(key, -1)
+    fun getInt(context: Context, name: String, key: String, defValue: Int = -1) =
+        getSharedPreferences(context, name).getInt(key, defValue)
 
     /**
      * Get long value from shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
+     * @param defValue the default value
      * @return return the long value
      */
-    fun getLong(key: String) = prefs.getLong(key, -1)
+    fun getLong(context: Context, name: String, key: String, defValue: Long = -1) =
+        getSharedPreferences(context, name).getLong(key, defValue)
 
     /**
      * Get floating value from shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
+     * @param defValue the default value
      * @return return the floating value
      */
-    fun getFloat(key: String) = prefs.getFloat(key, -1.0f)
+    fun getFloat(context: Context, name: String, key: String, defValue: Float = -1.0f) =
+        getSharedPreferences(context, name).getFloat(key, defValue)
 
     /**
      * Get boolean value from shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
+     * @param defValue the default value
      * @return return the boolean value
      */
-    fun getBoolean(key: String) = prefs.getBoolean(key, false)
+    fun getBoolean(context: Context, name: String, key: String, defValue: Boolean = false) =
+        getSharedPreferences(context, name).getBoolean(key, defValue)
 
     /**
      * Get string value from shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
+     * @param defValue the default value
      * @return return the string value
      */
-    fun getString(key: String) = prefs.getString(key, null)
+    fun getString(context: Context, name: String, key: String, defValue: String?) =
+        getSharedPreferences(context, name).getString(key, defValue)
 
     /**
      * Get string set values from shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
+     * @param defValue the default value
      * @return return the string values
      */
-    fun getStringSet(key: String): MutableSet<String>? = prefs.getStringSet(key, null)
+    fun getStringSet(
+        context: Context,
+        name: String,
+        key: String,
+        defValue: MutableSet<String>?
+    ): MutableSet<String>? =
+        getSharedPreferences(context, name).getStringSet(key, defValue)
 
     /**
      * Put integer value to shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
      * @param value the integer value
      */
-    fun putInt(key: String, value: Int) {
-        prefs.edit().putInt(key, value).apply()
+    fun putInt(context: Context, name: String, key: String, value: Int) {
+        getSharedPreferences(context, name).edit().putInt(key, value).apply()
     }
 
     /**
      * Put long value to shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
      * @param value the long value
      */
-    fun putLong(key: String, value: Long) {
-        prefs.edit().putLong(key, value).apply()
+    fun putLong(context: Context, name: String, key: String, value: Long) {
+        getSharedPreferences(context, name).edit().putLong(key, value).apply()
     }
 
     /**
      * Put floating value to shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
      * @param value the floating value
      */
-    fun putFloat(key: String, value: Float) {
-        prefs.edit().putFloat(key, value).apply()
+    fun putFloat(context: Context, name: String, key: String, value: Float) {
+        getSharedPreferences(context, name).edit().putFloat(key, value).apply()
     }
 
     /**
      * Put boolean value to shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
      * @param value the boolean value
      */
-    fun putBoolean(key: String, value: Boolean) {
-        prefs.edit().putBoolean(key, value).apply()
+    fun putBoolean(context: Context, name: String, key: String, value: Boolean) {
+        getSharedPreferences(context, name).edit().putBoolean(key, value).apply()
     }
 
     /**
      * Put string value to shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
      * @param value the string value
      */
-    fun putString(key: String, value: String) {
-        prefs.edit().putString(key, value).apply()
+    fun putString(context: Context, name: String, key: String, value: String) {
+        getSharedPreferences(context, name).edit().putString(key, value).apply()
     }
 
     /**
      * Put string set value to shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
      * @param values the string set value
      */
-    fun putStringSet(key: String, values: Set<String>) {
-        prefs.edit().putStringSet(key, values).apply()
+    fun putStringSet(context: Context, name: String, key: String, values: Set<String>) {
+        getSharedPreferences(context, name).edit().putStringSet(key, values).apply()
     }
 
     /**
-     * Clear data from shared preferences.
+     * Remove value based on key from shared preferences.
      *
+     * @param context the application context
+     * @param name the name of the shared file
      * @param key the preference key
      */
-    /** Clear data from shared preferences. */
-    fun clear(key: String) {
-        prefs.edit().remove(key).apply()
+    fun remove(context: Context, name: String, key: String) {
+        getSharedPreferences(context, name).edit().remove(key).apply()
     }
 
-    companion object {
-        private var instance: PreferencesUtil? = null
+    /**
+     * Clear all data from shared preferences.
+     *
+     * @param context the application context
+     * @param name the name of the shared file
+     */
+    fun clear(context: Context, name: String) {
+        getSharedPreferences(context, name).edit().clear().apply()
+    }
 
-        /**
-         * Get the preferences instance to cache and retrieve values.
-         *
-         * @param context the context
-         * @param name the shared file name
-         */
-        fun getInstance(context: Context, name: String): PreferencesUtil {
-            if (instance == null) {
-                instance = PreferencesUtil(context, name)
-            }
-            return instance as PreferencesUtil
-        }
+    private fun getSharedPreferences(context: Context, name: String): SharedPreferences {
+        return context.getSharedPreferences(name, Context.MODE_PRIVATE)
     }
 }

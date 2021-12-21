@@ -48,17 +48,12 @@ class MainActivity : Activity() {
     }
 
     fun onSharedButtonClick() {
-        val prefs = PreferencesUtil.getInstance(this, "$packageName.shared")
-        prefs.putString("TEST_STRING", "Test String")
-        Toast.makeText(this, prefs.getString("TEST_STRING"), Toast.LENGTH_SHORT).show()
+        PreferencesUtil.putString(this, "$packageName.shared","TEST_STRING", "Test String")
+        Toast.makeText(this, PreferencesUtil.getString(this, "$packageName.shared","TEST_STRING", null), Toast.LENGTH_SHORT).show()
     }
 
     fun onAppInfoButtonClick() {
         Toast.makeText(this, StaticInfoUtil.getAppInfo(), Toast.LENGTH_SHORT).show()
-    }
-
-    fun onSdkInfoButtonClick() {
-        Toast.makeText(this, StaticInfoUtil.getSdkInfoMap(this).toString(), Toast.LENGTH_SHORT).show()
     }
 
     fun onSendRasHeadersRequestClick() {
