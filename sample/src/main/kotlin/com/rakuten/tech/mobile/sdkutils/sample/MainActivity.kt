@@ -48,8 +48,17 @@ class MainActivity : Activity() {
     }
 
     fun onSharedButtonClick() {
-        PreferencesUtil.putString(this, "$packageName.shared","TEST_STRING", "Test String")
-        Toast.makeText(this, PreferencesUtil.getString(this, "$packageName.shared","TEST_STRING", null), Toast.LENGTH_SHORT).show()
+        PreferencesUtil.putString(
+            this, "$packageName.shared", "TEST_STRING",
+            "Test String"
+        )
+        Toast.makeText(
+            this, PreferencesUtil.getString(
+                this,
+                "$packageName.shared", "TEST_STRING", null
+            ),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     fun onAppInfoButtonClick() {
