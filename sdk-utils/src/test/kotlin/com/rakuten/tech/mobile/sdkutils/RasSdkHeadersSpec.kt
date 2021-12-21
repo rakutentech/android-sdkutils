@@ -11,6 +11,7 @@ import org.robolectric.util.ReflectionHelpers
 
 @RunWith(Parameterized::class)
 class RasSdkHeadersSpec(
+    private val description: String,
     private val name: String,
     private val value: String
 ) {
@@ -19,8 +20,8 @@ class RasSdkHeadersSpec(
 
     @Test
     fun `should have the header`() {
-        `when`(appInfo.packageName).thenReturn("test.app.name")
-        `when`(appInfo.version).thenReturn("1.0.0")
+        `when`(appInfo.name).thenAnswer { "test.app.name" }
+        `when`(appInfo.version).thenAnswer { "1.0.0" }
         ReflectionHelpers.setStaticField(Build::class.java, "MODEL", "test model name")
         ReflectionHelpers.setStaticField(Build.VERSION::class.java, "RELEASE", "9")
 
