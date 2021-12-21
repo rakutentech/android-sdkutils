@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.rakuten.tech.mobile.sdkutils.PreferencesUtil
+import com.rakuten.tech.mobile.sdkutils.logger.Logger
 import com.rakuten.tech.mobile.sdkutils.RasSdkHeaders
 import com.rakuten.tech.mobile.sdkutils.StaticInfoUtil
 import com.rakuten.tech.mobile.sdkutils.okhttp.addHeaderInterceptor
@@ -15,11 +16,13 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.util.*
 
 @Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction", "SpreadOperator")
 class MainActivity : Activity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val log = Logger(MainActivity::class.java.simpleName)
 
     private val rasHeadersClient = OkHttpClient.Builder()
         .addHeaderInterceptor(
@@ -32,6 +35,11 @@ class MainActivity : Activity() {
         ).build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        // enable debug logs (by default only info, warn and error are logged)
+        Logger.setDebug(true)
+        log.debug("simple debug log at %s", listOf(Date()))
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 

@@ -61,8 +61,41 @@ The `AppInfo` class can be used to retrieve some properties of the App which nor
 val appName = AppInfo.instance.name
 val appVersion = AppInfo.instance.version
 ```
+### <a name="#logger-usage"></a>Logging Utility
+
+This library contains a simple logging facility.
+
+Logging conventions are:
+
+* Debug: for SDK developers. Will print source file, method and line.
+* Info: for SDK consumers. They should know, but is no problem.
+* Warn: for SDK consumers. An unexpected situation, that the SDK can recover from.
+* Error: for SDK consumers: An error that may cause the SDK to stop working.
+ 
+By default only info, warn and error are logged. Debug is only logged if [Logger.setDebug] is called with `true`.
+
+All log calls come in 2 variants:
+
+* log(String template, Object.. args) - will use [String.format] to format the string.
+* log(Throwable cause, String template, Object.. args) - same as above, but will add a "Caused by" and stacktrace to the log.
+
+```kotlin
+private val log = Logger(MainActivity::class.java.simpleName)
+//enable debug logs (by default only info, warn and error are logged)
+Logger.setDebug(true)
+
+//Examples:
+log.debug("simple debug log") // simple debug log  
+log.debug("simple debug log at %s", listOf(Date())) // simple debug log at [Mon Dec 20 16:51:12 GMT+09:00 2021]
+
+```
 
 ## Changelog
+
+### v0.3.0 (In progress)
+
+* SDKCF-4685: Added an API for logging facility, Please see [usage](#logger-usage) section for details.
+
 
 ### v0.2.0 (2021-03-05)
 
