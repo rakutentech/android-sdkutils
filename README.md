@@ -2,6 +2,12 @@
 
 This is a library that contains utilities which are useful when developing Android SDKs. They are intended for use internally by Rakuten's SDKs.
 
+## This page covers
+
+* [Setup](#setup)
+* [Usage](#usage)
+* [Changelog](#changelog)
+
 ## Setup
 
 ### 1. Add dependency to build.gradle
@@ -118,13 +124,13 @@ val device: Device? = gson.fromResources(path, Device::class.java)
 
 ### v0.2.0 (2021-03-05)
 
-- Changed Maven Group ID to `io.github.rakutentech.sdkutils`. You must upudate your dependency declaration to `io.github.rakutentech.sdkutils:sdk-utils:0.2.0`
-- Migrated publishing to Maven Central due to Bintray/JCenter being [shutdown](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/). You must add `mavenCentral()` to your `repositories``.
+* Changed Maven Group ID to `io.github.rakutentech.sdkutils`. You must upudate your dependency declaration to `io.github.rakutentech.sdkutils:sdk-utils:0.2.0`
+* Migrated publishing to Maven Central due to Bintray/JCenter being [shutdown](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/). You must add `mavenCentral()` to your `repositories``.
 
 ### v0.1.1 (2019-11-29)
 
-- Changed Device OS header from `ras-device-os` to `ras-os-version`.
+* Changed Device OS header from `ras-device-os` to `ras-os-version`.
 
 ### v0.1.0 (2019-11-22)
 
-- Initial release.
+* Initial release.
