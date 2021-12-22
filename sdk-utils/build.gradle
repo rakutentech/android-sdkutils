@@ -18,7 +18,7 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$CONFIG.versions.kotlin"
   implementation "com.squareup.okhttp3:okhttp:$CONFIG.versions.okhttp"
   implementation "com.google.code.gson:gson:$CONFIG.versions.thirdParty.gson"
-  compileOnly 'androidx.annotation:annotation:1.1.0'
+  compileOnly 'androidx.annotation:annotation:1.0.0'
 
   testImplementation 'junit:junit:4.12'
   testImplementation 'org.robolectric:robolectric:4.3'
@@ -26,6 +26,8 @@ dependencies {
   testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
   testImplementation "org.mockito:mockito-inline:2.23.0"
   testImplementation "com.squareup.okhttp3:mockwebserver:$CONFIG.versions.okhttp"
+
+  api 'androidx.test:core:1.4.0'
 }
 
 apply from: "../config/quality/jacoco/android.gradle"

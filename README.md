@@ -61,7 +61,8 @@ The `AppInfo` class can be used to retrieve some properties of the App which nor
 val appName = AppInfo.instance.name
 val appVersion = AppInfo.instance.version
 ```
-### <a name="#logger-usage"></a>Logging Utility
+
+### Logging Utility
 
 This library contains a simple logging facility.
 
@@ -90,12 +91,30 @@ log.debug("simple debug log at %s", listOf(Date())) // simple debug log at [Mon 
 
 ```
 
+### Json Utility
+
+This utility can be used to convert a JSON string loaded from app resources to an equivalent object.
+
+#### Examples
+
+```kotlin
+//deserializes a Json loaded from app resources into a generic type object.
+val path = "my-file.json"
+val devices: List<Device>? = gson.fromResources(path, object: TypeToken<List<Device>>(){}.type)
+
+//deserializes a Json loaded from app resources into an object.
+val path = "my-file.json"
+val device: Device? = gson.fromResources(path, Device::class.java)
+```
+
 ## Changelog
 
 ### v0.3.0 (In progress)
 
-* SDKCF-4685: Added an API for logging facility, Please see [usage](#logger-usage) section for details.
+* SDKCF-4685: Added APIs for:
 
+  1. logging facility, Please see [usage](#logging-utility) section for details.
+  2. Json deserializer utility, Please see [usage](#json-utility) section for details.
 
 ### v0.2.0 (2021-03-05)
 
