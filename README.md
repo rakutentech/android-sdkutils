@@ -2,6 +2,12 @@
 
 This is a library that contains utilities which are useful when developing Android SDKs. They are intended for use internally by Rakuten's SDKs.
 
+## This page covers
+
+* [Setup](#setup)
+* [Usage](#usage)
+* [Changelog](#changelog)
+
 ## Setup
 
 ### 1. Add dependency to build.gradle
@@ -61,7 +67,8 @@ The `AppInfo` class can be used to retrieve some properties of the App which nor
 val appName = AppInfo.instance.name
 val appVersion = AppInfo.instance.version
 ```
-### <a name="#logger-usage"></a>Logging Utility
+
+### Logging Utility
 
 This library contains a simple logging facility.
 
@@ -91,7 +98,7 @@ log.debug("simple debug log at %s", listOf(Date())) // simple debug log at [Mon 
 ```
 
 ### <a name="#sharedpreferences-usage"></a>Preferences Utility
-Please check the following sample code to use the preference utility feature.
+Please check the following sample code to use the preferences utility feature for caching data.
 
 ```kotlin
 // We can put int, string, float, long, string set and boolean to cache in preferences
@@ -100,25 +107,40 @@ PreferencesUtil.putString(appContext, preferencesFileName, key, value)
 // We can get int, string, float, long, string set and boolean to retrieve from preferences
 PreferencesUtil.getString(appContext, preferencesFileName, key, defaultValue)
 
+### Json Utility
+
+This utility can be used to convert a JSON string loaded from app resources to an equivalent object.
+
+#### Examples
+
+```kotlin
+//deserializes a Json loaded from app resources into a generic type object.
+val path = "my-file.json"
+val devices: List<Device>? = gson.fromResources(path, object: TypeToken<List<Device>>(){}.type)
+
+//deserializes a Json loaded from app resources into an object.
+val path = "my-file.json"
+val device: Device? = gson.fromResources(path, Device::class.java)
 ```
 
 ## Changelog
 
 ### v0.3.0 (In progress)
 
-* SDKCF-4685: Added an API for logging facility, Please see [usage](#logger-usage) section for details.
 * SDKCF-4686: Moved SharedPreferences handling and App/Env Info retrieval to SDKUtils. Please see [usage](#sharedpreferences-usage) section for details.
-
+* SDKCF-4685: Added APIs for:
+  1. logging facility, Please see [usage](#logging-utility) section for details.
+  2. Json deserializer utility, Please see [usage](#json-utility) section for details.
 
 ### v0.2.0 (2021-03-05)
 
-- Changed Maven Group ID to `io.github.rakutentech.sdkutils`. You must upudate your dependency declaration to `io.github.rakutentech.sdkutils:sdk-utils:0.2.0`
-- Migrated publishing to Maven Central due to Bintray/JCenter being [shutdown](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/). You must add `mavenCentral()` to your `repositories``.
+* Changed Maven Group ID to `io.github.rakutentech.sdkutils`. You must upudate your dependency declaration to `io.github.rakutentech.sdkutils:sdk-utils:0.2.0`
+* Migrated publishing to Maven Central due to Bintray/JCenter being [shutdown](https://jfrog.com/blog/into-the-sunset-bintray-jcenter-gocenter-and-chartcenter/). You must add `mavenCentral()` to your `repositories``.
 
 ### v0.1.1 (2019-11-29)
 
-- Changed Device OS header from `ras-device-os` to `ras-os-version`.
+* Changed Device OS header from `ras-device-os` to `ras-os-version`.
 
 ### v0.1.0 (2019-11-22)
 
-- Initial release.
+* Initial release.
