@@ -90,11 +90,24 @@ log.debug("simple debug log at %s", listOf(Date())) // simple debug log at [Mon 
 
 ```
 
+### <a name="#sharedpreferences-usage"></a>Preferences Utility
+Please check the following sample code to use the preference utility feature.
+
+```kotlin
+// We can put int, string, float, long, string set and boolean to cache in preferences
+PreferencesUtil.putString(appContext, preferencesFileName, key, value)
+
+// We can get int, string, float, long, string set and boolean to retrieve from preferences
+PreferencesUtil.getString(appContext, preferencesFileName, key, defaultValue)
+
+```
+
 ## Changelog
 
 ### v0.3.0 (In progress)
 
 * SDKCF-4685: Added an API for logging facility, Please see [usage](#logger-usage) section for details.
+* SDKCF-4686: Moved SharedPreferences handling and App/Env Info retrieval to SDKUtils. Please see [usage](#sharedpreferences-usage) section for details.
 
 
 ### v0.2.0 (2021-03-05)
