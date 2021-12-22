@@ -97,6 +97,16 @@ log.debug("simple debug log at %s", listOf(Date())) // simple debug log at [Mon 
 
 ```
 
+### <a name="#sharedpreferences-usage"></a>Preferences Utility
+Please check the following sample code to use the preferences utility feature for caching data.
+
+```kotlin
+// We can put int, string, float, long, string set and boolean to cache in preferences
+PreferencesUtil.putString(appContext, preferencesFileName, key, value)
+
+// We can get int, string, float, long, string set and boolean to retrieve from preferences
+PreferencesUtil.getString(appContext, preferencesFileName, key, defaultValue)
+
 ### Json Utility
 
 This utility can be used to convert a JSON string loaded from app resources to an equivalent object.
@@ -117,8 +127,8 @@ val device: Device? = gson.fromResources(path, Device::class.java)
 
 ### v0.3.0 (In progress)
 
+* SDKCF-4686: Moved SharedPreferences handling and App/Env Info retrieval to SDKUtils. Please see [usage](#sharedpreferences-usage) section for details.
 * SDKCF-4685: Added APIs for:
-
   1. logging facility, Please see [usage](#logging-utility) section for details.
   2. Json deserializer utility, Please see [usage](#json-utility) section for details.
 

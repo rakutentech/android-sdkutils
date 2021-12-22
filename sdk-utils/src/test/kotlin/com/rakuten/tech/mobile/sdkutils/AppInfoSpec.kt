@@ -32,13 +32,13 @@ class AppInfoSpec {
     fun `should return App Name`() {
         `when`(mockContext.packageName).thenAnswer { "com.test.application.name" }
 
-        AppInfo.instance.name shouldEqual "com.test.application.name"
+        AppInfo.instance.name shouldBeEqualTo "com.test.application.name"
     }
 
     @Test
     fun `should return App Version`() {
         mockPackageInfo.versionName = "1.0.0"
 
-        AppInfo.instance.version shouldEqual "1.0.0"
+        AppInfo.instance.version shouldBeEqualTo "1.0.0"
     }
 }

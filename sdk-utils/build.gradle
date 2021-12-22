@@ -12,6 +12,11 @@ android {
       includeAndroidResources = true
     }
   }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
 }
 
 dependencies {
@@ -20,13 +25,12 @@ dependencies {
   implementation "com.google.code.gson:gson:$CONFIG.versions.thirdParty.gson"
   compileOnly 'androidx.annotation:annotation:1.0.0'
 
-  testImplementation 'junit:junit:4.12'
+  testImplementation 'junit:junit:4.13.2'
   testImplementation 'org.robolectric:robolectric:4.3'
   testImplementation "org.amshove.kluent:kluent-android:1.65"
   testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
-  testImplementation "org.mockito:mockito-inline:2.23.0"
+  testImplementation "org.mockito:mockito-inline:3.2.0"
   testImplementation "com.squareup.okhttp3:mockwebserver:$CONFIG.versions.okhttp"
-
   api 'androidx.test:core:1.4.0'
 }
 
@@ -39,7 +43,7 @@ apply from: "../config/quality/checkstyle/android.gradle"
 apply from: "../config/quality/detekt/android.gradle"
 dependencies {
   // Enable the KtLint rules
-  detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.9.1"
+  detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.16.0"
 }
 
 apply from: '../config/publish/android.gradle'

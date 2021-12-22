@@ -4,8 +4,10 @@ import android.app.Activity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import com.rakuten.tech.mobile.sdkutils.PreferencesUtil
 import com.rakuten.tech.mobile.sdkutils.logger.Logger
 import com.rakuten.tech.mobile.sdkutils.RasSdkHeaders
+import com.rakuten.tech.mobile.sdkutils.StaticInfoUtil
 import com.rakuten.tech.mobile.sdkutils.okhttp.addHeaderInterceptor
 import com.rakuten.tech.mobile.sdkutils.sample.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
@@ -43,6 +45,24 @@ class MainActivity : Activity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.activity = this
+    }
+
+    fun onSharedButtonClick() {
+        PreferencesUtil.putString(
+            this, "$packageName.shared", "TEST_STRING",
+            "Test String"
+        )
+        Toast.makeText(
+            this, PreferencesUtil.getString(
+                this,
+                "$packageName.shared", "TEST_STRING", null
+            ),
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    fun onAppInfoButtonClick() {
+        Toast.makeText(this, StaticInfoUtil.getAppInfo(), Toast.LENGTH_SHORT).show()
     }
 
     fun onSendRasHeadersRequestClick() {
