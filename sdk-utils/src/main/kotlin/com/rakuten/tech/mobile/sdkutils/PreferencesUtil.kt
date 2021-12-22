@@ -13,7 +13,7 @@ object PreferencesUtil {
      * @param context the application context
      * @param name the name of the shared file
      * @param key the preference key
-     * @param defValue the default value
+     * @param the default value if key does not exist
      * @return return the integer value
      */
     fun getInt(context: Context, name: String, key: String, defValue: Int = -1) =
@@ -25,7 +25,7 @@ object PreferencesUtil {
      * @param context the application context
      * @param name the name of the shared file
      * @param key the preference key
-     * @param defValue the default value
+     * @param the default value if key does not exist
      * @return return the long value
      */
     fun getLong(context: Context, name: String, key: String, defValue: Long = -1) =
@@ -37,7 +37,7 @@ object PreferencesUtil {
      * @param context the application context
      * @param name the name of the shared file
      * @param key the preference key
-     * @param defValue the default value
+     * @param the default value if key does not exist
      * @return return the floating value
      */
     fun getFloat(context: Context, name: String, key: String, defValue: Float = -1.0f) =
@@ -49,7 +49,7 @@ object PreferencesUtil {
      * @param context the application context
      * @param name the name of the shared file
      * @param key the preference key
-     * @param defValue the default value
+     * @param the default value if key does not exist
      * @return return the boolean value
      */
     fun getBoolean(context: Context, name: String, key: String, defValue: Boolean = false) =
@@ -61,7 +61,7 @@ object PreferencesUtil {
      * @param context the application context
      * @param name the name of the shared file
      * @param key the preference key
-     * @param defValue the default value
+     * @param the default value if key does not exist
      * @return return the string value
      */
     fun getString(context: Context, name: String, key: String, defValue: String?) =
@@ -73,7 +73,7 @@ object PreferencesUtil {
      * @param context the application context
      * @param name the name of the shared file
      * @param key the preference key
-     * @param defValue the default value
+     * @param the default value if key does not exist
      * @return return the string values
      */
     fun getStringSet(
