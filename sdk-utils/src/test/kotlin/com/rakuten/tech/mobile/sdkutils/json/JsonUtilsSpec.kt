@@ -5,7 +5,6 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -17,17 +16,12 @@ import java.io.InputStreamReader
 class JsonUtilsSpec {
     private val gson = Gson()
 
-    @Before
-    fun before() {
-
-    }
-
     @Test
     fun `should convert payload from file for generic type`() {
         val path = LIST_PAYLOAD
         val inputAsString = InputStreamReader(javaClass.classLoader?.getResourceAsStream(path))
             .use { it.readText() }
-        val devices: List<Device>? = gson.fromResources(path, object: TypeToken<List<Device>>(){}.type)
+        val devices: List<Device>? = gson.fromResources(path, object : TypeToken<List<Device>>() {}.type)
         gson.toJson(devices) shouldBeEqualTo inputAsString
     }
 
@@ -43,7 +37,7 @@ class JsonUtilsSpec {
     @Test
     fun `should return null if empty payload for generic type`() {
         val path = EMPTY_PAYLOAD
-        val devices: List<Device>? = gson.fromResources(path, object: TypeToken<List<Device>>(){}.type)
+        val devices: List<Device>? = gson.fromResources(path, object : TypeToken<List<Device>>() {}.type)
         devices.shouldBeNull()
     }
 
@@ -57,7 +51,7 @@ class JsonUtilsSpec {
     @Test
     fun `should return null if not found file for generic type`() {
         val path = INVALID_PATH
-        val devices: List<Device>? = gson.fromResources(path, object: TypeToken<List<Device>>(){}.type)
+        val devices: List<Device>? = gson.fromResources(path, object : TypeToken<List<Device>>() {}.type)
         devices.shouldBeNull()
     }
 
@@ -68,13 +62,11 @@ class JsonUtilsSpec {
         device.shouldBeNull()
     }
 
-
-
-    data class Device(val name:String, val os: String)
+    data class Device(val name: String, val os: String)
 
     companion object {
         private const val LIST_PAYLOAD = "json-utils-list-payload.json"
-        private const val OBJECT_PAYLOAD = "json-utils-OBJECT-payload.json"
+        private const val OBJECT_PAYLOAD = "json-utils-object-payload.json"
         private const val EMPTY_PAYLOAD = "json-utils-empty-payload.json"
         private const val INVALID_PATH = "invalid-path.json"
     }

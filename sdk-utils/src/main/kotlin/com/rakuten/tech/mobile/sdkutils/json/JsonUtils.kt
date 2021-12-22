@@ -2,9 +2,9 @@ package com.rakuten.tech.mobile.sdkutils.json
 
 import com.google.gson.Gson
 import com.rakuten.tech.mobile.sdkutils.logger.Logger
-import java.io.*
-import java.lang.reflect.Type
+import java.io.InputStreamReader
 
+import java.lang.reflect.Type
 
 /**
  * This method deserializes the given Json loaded from app resources into an object of the given type.
@@ -22,7 +22,8 @@ import java.lang.reflect.Type
  * @return an object of type `T` from the resources file. Returns `null` if an exception is thrown
  * or if the file is empty.
  */
-fun <T> Gson.fromResources(path: String, typeOfT: Type) : T? {
+@SuppressWarnings("TooGenericExceptionCaught")
+fun <T> Gson.fromResources(path: String, typeOfT: Type): T? {
     return try {
         fromJson<T>(InputStreamReader(javaClass.classLoader?.getResourceAsStream(path)), typeOfT)
     } catch (e: Exception) {
@@ -47,9 +48,10 @@ fun <T> Gson.fromResources(path: String, typeOfT: Type) : T? {
  * @return an object of type `T` from the resources file. Returns `null` if an exception is thrown
  * or if the file is empty.
  **/
-fun <T> Gson.fromResources(path: String, classOfT: Class<T>) : T? {
+@SuppressWarnings("TooGenericExceptionCaught")
+fun <T> Gson.fromResources(path: String, classOfT: Class<T>): T? {
     return try {
-        fromJson<T>(InputStreamReader(javaClass.classLoader?.getResourceAsStream(path)), classOfT)
+        fromJson(InputStreamReader(javaClass.classLoader?.getResourceAsStream(path)), classOfT)
     } catch (e: Exception) {
         Logger("JsonUtils")
             .error(e, "Failed to deserialize the Json from $path path file.")
