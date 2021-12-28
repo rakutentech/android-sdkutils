@@ -121,7 +121,7 @@ object CommonUtil {
         val result = googleApi.isGooglePlayServicesAvailable(context)
         if (result != ConnectionResult.SUCCESS) {
             if (googleApi.isUserResolvableError(result)) {
-                googleApi.getErrorDialog(context, result, PLAY_SERVICES_RESOLUTION_REQUEST).show()
+                googleApi.getErrorDialog(context, result, PLAY_SERVICES_RESOLUTION_REQUEST)?.show()
             }
             return false
         }

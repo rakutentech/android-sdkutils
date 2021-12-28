@@ -123,6 +123,24 @@ val path = "my-file.json"
 val device: Device? = gson.fromResources(path, Device::class.java)
 ```
 
+### <a name="#common-usage"></a>Common Utility
+Please check the following sample code to use the common utility function (s).
+
+```kotlin
+// To check the device mode setting, i.e. dark/ light
+CommonUtil.isDarkMode(context)
+
+// To check the play service of device
+CommonUtil.checkPlayServices(activity)
+
+// To get the Sha256 digest data
+CommonUtil.getSha256HashData("Test")
+
+// To get the MD5 digest data
+CommonUtil.getMD5HashData("Test")
+
+```
+
 ## Changelog
 
 ### v0.3.0 (In progress)
@@ -131,6 +149,7 @@ val device: Device? = gson.fromResources(path, Device::class.java)
 * SDKCF-4685: Added APIs for:
   1. logging facility, Please see [usage](#logging-utility) section for details.
   2. Json deserializer utility, Please see [usage](#json-utility) section for details.
+* SDKCF-4688: Add common class extension to SDKUtils. Please see [usage](#common-usage) section for details.
 
 ### v0.2.0 (2021-03-05)
 
