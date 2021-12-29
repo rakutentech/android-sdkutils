@@ -124,20 +124,20 @@ val device: Device? = gson.fromResources(path, Device::class.java)
 ```
 
 ### <a name="#common-usage"></a>Common Utility
-Please check the following sample code to use the common utility function (s).
+Please check the following sample code to use the extension function (s).
 
 ```kotlin
 // To check the device mode setting, i.e. dark/ light
-CommonUtil.isDarkMode(context)
+Context.isDarkMode(context)
 
 // To check the play service of device
-CommonUtil.checkPlayServices(activity)
+Activity.checkPlayServices(activity)
 
 // To get the Sha256 digest data
-CommonUtil.getSha256HashData("Test")
+String.getSha256HashData("Test")
 
 // To get the MD5 digest data
-CommonUtil.getMD5HashData("Test")
+String.getMD5HashData("Test")
 
 ```
 
