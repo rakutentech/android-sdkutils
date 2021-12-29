@@ -26,32 +26,36 @@ object CommonUtil {
     private val logger = Logger(CommonUtil::class.java.simpleName)
 
     /**
-     * Get the encoded byte array of string from character set
+     * Get the encoded byte array of string for charset "UTF-16"
      *
-     * @param rawString the raw string.
-     * @param charsetName the character set, i.e. "UTF-8", "UTF-16"
      * @return the ByteArray of the string
      */
-    fun getEncodedByteArray(rawString: String, charsetName: String): ByteArray {
-        return rawString.toByteArray(Charset.forName(charsetName))
+    fun String.getUTF16ByteArray(): ByteArray {
+        return this.toByteArray(Charset.forName("UTF-16"))
+    }
+
+    /**
+     * Get the encoded byte array of string for charset "UTF-8"
+     *
+     * @return the ByteArray of the string
+     */
+    fun String.getUTF8ByteArray(): ByteArray {
+        return this.toByteArray(Charset.forName("UTF-8"))
     }
 
     /**
      * Get the encoded MD5 digest string
      *
-     * @param rawString the raw string.
      * @return the MD5 digest string
      */
-    fun getMD5HashData(rawString: String?): String? {
-        return if (rawString == null) {
-            null
-        } else try {
+    fun String.getMD5HashData(): String? {
+        return try {
             String.format(
                 "%032x",
                 BigInteger(
                     1,
                     MessageDigest.getInstance("MD5")
-                        .digest(getEncodedByteArray(rawString, "UTF-8"))
+                        .digest(getUTF8ByteArray())
                 )
             )
         } catch (swallowed: NoSuchAlgorithmException) {
@@ -60,38 +64,14 @@ object CommonUtil {
     }
 
     /**
-     * Check whether the strings are same.
-     *
-     * @param first the first string
-     * @param second the second string
-     * @return true if same otherwise false
-     */
-    fun isEqual(first: String, second: String): Boolean {
-        return first == second
-    }
-
-    /**
-     * Check the string whether null or empty
-     *
-     * @param rawString the raw string
-     * @return true if null or empty otherwise false
-     */
-    fun isNullOrEmpty(rawString: String?): Boolean {
-        return rawString.isNullOrEmpty()
-    }
-
-    /**
      * Get the encoded Sha256 digest string
      *
-     * @param rawString the raw string.
      * @return the encoded string
      */
-    fun getSha256HashData(rawString: String?): String? {
-        return if (rawString == null) {
-            null
-        } else try {
+    fun String.getSha256HashData(): String? {
+        return try {
             val md = MessageDigest.getInstance("SHA-256")
-            val byteData = md.digest(getEncodedByteArray(rawString, "utf-8"))
+            val byteData = md.digest(getUTF8ByteArray())
             val sb = StringBuilder()
             for (b in byteData) {
                 val hex = Integer.toHexString(0xFF and b.toInt())
@@ -109,19 +89,17 @@ object CommonUtil {
     /**
      * Check the device to make sure it has the Google Play Services APK.
      *
-     *
      * If it doesn't, display a dialog that allows users to download the APK from the Google Play
      * Store or enable it in the device's system settings.
      *
-     * @param context non null activity, used to display update dialog if necessary.
      * @return true if play services are available, false otherwise
      */
-    fun checkPlayServices(context: Activity): Boolean {
+    fun Activity.checkPlayServices(): Boolean {
         val googleApi = GoogleApiAvailability.getInstance()
-        val result = googleApi.isGooglePlayServicesAvailable(context)
+        val result = googleApi.isGooglePlayServicesAvailable(this)
         if (result != ConnectionResult.SUCCESS) {
             if (googleApi.isUserResolvableError(result)) {
-                googleApi.getErrorDialog(context, result, PLAY_SERVICES_RESOLUTION_REQUEST)?.show()
+                googleApi.getErrorDialog(this, result, PLAY_SERVICES_RESOLUTION_REQUEST)?.show()
             }
             return false
         }
@@ -135,13 +113,12 @@ object CommonUtil {
      */
     @SuppressLint("SimpleDateFormat")
     fun getUTCDateFormat(): DateFormat {
-        val dateFormat: DateFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        val dateFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
         } else {
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
         }
-        val timeZone = TimeZone.getTimeZone("UTC")
-        dateFormat.timeZone = timeZone
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         return dateFormat
     }
 
@@ -153,48 +130,44 @@ object CommonUtil {
      */
     @SuppressLint("SimpleDateFormat")
     fun getUTCDate(dateString: String?): Date? {
-        val dateFormat: DateFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        val dateFormat = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX")
         } else {
             SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
         }
-        val timeZone = TimeZone.getTimeZone("UTC")
-        dateFormat.timeZone = timeZone
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
         return dateFormat.parse(dateString ?: "2021-12-01T00:00:00Z")
     }
 
     /**
      * Get the resource id from drawable folder.
      *
-     * @param context the application context.
      * @param resourceName the resource name
      * @return the drawable resource id
      */
-    fun getDrawableResourceId(context: Context, resourceName: String?): Int {
-        return context.resources.getIdentifier(resourceName, "drawable", context.packageName)
+    fun Context.getDrawableResourceId(resourceName: String?): Int {
+        return this.resources.getIdentifier(resourceName, "drawable", this.packageName)
     }
 
     /**
      * Get the resource id from raw folder.
      *
-     * @param context the application context.
      * @param resourceName the resource name
      * @return the raw resource id
      */
-    fun getRawResourceId(context: Context, resourceName: String?): Int {
-        return context.resources.getIdentifier(resourceName, "raw", context.packageName)
+    fun Context.getRawResourceId(resourceName: String?): Int {
+        return this.resources.getIdentifier(resourceName, "raw", this.packageName)
     }
 
     /**
      * Parse the color string, and return the corresponding color-int.
      *
-     * @param colorString the color string.
      * @return the color int value
      */
     @ColorInt
-    fun getColorValue(colorString: String?): Int {
+    fun String.getColorValue(): Int {
         return try {
-            Color.parseColor(colorString)
+            Color.parseColor(this)
         } catch (exception: Exception) {
             logger.error(exception, "Failed to parse color", exception)
             -1
@@ -204,15 +177,14 @@ object CommonUtil {
     /**
      * Get the desired file path exists in assets folder.
      *
-     * @param context the application context.
      * @param fileName the file name
      * @return the asset path of the file
      */
-    fun getAssetsFilePath(context: Context, fileName: String?): String? {
+    fun Context.getAssetsFilePath(fileName: String?): String? {
         if (fileName != null) {
-            val cacheFile = File(context.cacheDir, fileName)
+            val cacheFile = File(this.cacheDir, fileName)
             try {
-                context.assets.open(fileName).use { input ->
+                this.assets.open(fileName).use { input ->
                     FileOutputStream(cacheFile).use { output ->
                         input.copyTo(output)
                     }
@@ -229,11 +201,10 @@ object CommonUtil {
     /**
      * Get the device mode (Dark or Light)
      *
-     * @param context the application context.
      * @return true if dark mode otherwise false for light mode
      */
-    fun isDarkMode(context: Context): Boolean {
-        when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+    fun Context.isDarkMode(): Boolean {
+        when (this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_NO -> {
                 return false
             }
