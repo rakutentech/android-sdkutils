@@ -4,11 +4,13 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
+import com.google.android.gms.common.GoogleApiAvailability
 import com.rakuten.tech.mobile.sdkutils.ContextExtension.checkPlayServices
 import com.rakuten.tech.mobile.sdkutils.ContextExtension.getAssetsFilePath
 import com.rakuten.tech.mobile.sdkutils.ContextExtension.getDrawableResourceId
 import com.rakuten.tech.mobile.sdkutils.ContextExtension.getRawResourceId
 import com.rakuten.tech.mobile.sdkutils.ContextExtension.isDarkMode
+import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldNotBe
 import org.junit.Test
@@ -22,11 +24,20 @@ class ContextExtensionSpec {
 
     @Test
     fun `should get assets file path`() {
-        val assetPath: String? =
-            context.getAssetsFilePath(
-                "sample_assets_image.jpg"
-            )
+        val assetPath: String? = context.getAssetsFilePath("sample_assets_image.jpg")
         assetPath shouldNotBe null
+    }
+
+    @Test
+    fun `should get null for invalid assets file path`() {
+        val assetPath: String? = context.getAssetsFilePath("test")
+        assetPath shouldBe null
+    }
+
+    @Test
+    fun `should get null for null assets file path`() {
+        val assetPath: String? = context.getAssetsFilePath(null)
+        assetPath shouldBe null
     }
 
     @Test
