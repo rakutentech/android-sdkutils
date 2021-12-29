@@ -24,6 +24,7 @@ dependencies {
   implementation "com.squareup.okhttp3:okhttp:$CONFIG.versions.okhttp"
   implementation "com.google.code.gson:gson:$CONFIG.versions.thirdParty.gson"
   compileOnly 'androidx.annotation:annotation:1.0.0'
+  implementation 'com.google.android.gms:play-services-base:18.0.1'
 
   testImplementation 'junit:junit:4.13.2'
   testImplementation 'org.robolectric:robolectric:4.3'
