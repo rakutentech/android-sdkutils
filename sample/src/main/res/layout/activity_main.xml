@@ -25,5 +25,23 @@
       android:layout_height="wrap_content"
       android:onClick="@{() -> activity.onSendRasHeadersRequestClick()}"
       android:text="Send Request w/ RAS Headers"/>
+
+    <Button
+        android:id="@+id/sharedButton"
+        app:layout_constraintTop_toBottomOf="@id/rasHeadersButton"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> activity.onSharedButtonClick()}"
+        android:text="Show String Preferences"/>
+
+    <Button
+        android:id="@+id/appInfoButton"
+        app:layout_constraintTop_toBottomOf="@id/sharedButton"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> activity.onAppInfoButtonClick()}"
+        android:text="Show App Info"/>
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
