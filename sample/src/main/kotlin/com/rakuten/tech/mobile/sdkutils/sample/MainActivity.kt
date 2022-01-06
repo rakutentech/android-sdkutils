@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.rakuten.tech.mobile.sdkutils.logger.Logger
 import com.rakuten.tech.mobile.sdkutils.RasSdkHeaders
-import com.rakuten.tech.mobile.sdkutils.okhttp.addHeaderInterceptor
+import com.rakuten.tech.mobile.sdkutils.network.addHeaderInterceptor
 import com.rakuten.tech.mobile.sdkutils.sample.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.util.*
+import java.util.Date
 
 @Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction", "SpreadOperator")
 class MainActivity : Activity() {
@@ -56,9 +56,10 @@ class MainActivity : Activity() {
             withContext(Dispatchers.Main) {
                 if (!response.isSuccessful) {
                     showToast("Error: Failed to send request. Server returned: $response")
+                    return@withContext
                 }
 
-                showToast("Request sent successfully. Returned resposne: ${response.body()!!.string()}")
+                showToast("Request sent successfully. Returned response: ${response.body()?.toString()}")
             }
         }
     }

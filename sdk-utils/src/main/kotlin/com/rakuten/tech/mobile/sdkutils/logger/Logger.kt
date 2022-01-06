@@ -77,8 +77,8 @@ class Logger(private val tag: String = "") {
     /**
      * Log messages as DEBUG.
      * Will use [String.format] to format the message by substituting the given arguments [args].
-     * @param message: The message to log.
-     * @param args: Arguments for the format string.
+     * @param message The message to log.
+     * @param args Arguments for the format string.
      */
     fun debug(message: String?, vararg args: Any?) {
         log(Log.DEBUG, null, message, *args)
@@ -87,9 +87,9 @@ class Logger(private val tag: String = "") {
     /**
      * Log messages as DEBUG.
      * Will use [String.format] to format the message by substituting the given arguments [args].
-     * @param cause: The given exception to log.
-     * @param message: The message to log.
-     * @param args: Arguments for the format string.
+     * @param cause The given exception to log.
+     * @param message The message to log.
+     * @param args Arguments for the format string.
      */
     fun debug(cause: Throwable? = null, message: String?, vararg args: Any?) {
         log(Log.DEBUG, cause, message, *args)
@@ -98,8 +98,8 @@ class Logger(private val tag: String = "") {
     /**
      * Log messages as INFO.
      * * Will use [String.format] to format the message by substituting the given arguments [args].
-     * @param message: The message to log.
-     * @param args: Arguments for the format string.
+     * @param message The message to log.
+     * @param args Arguments for the format string.
      */
     fun info(message: String?, vararg args: Any?) {
         log(Log.INFO, null, message, *args)
@@ -108,9 +108,9 @@ class Logger(private val tag: String = "") {
     /**
      * Log messages as INFO.
      * Will use [String.format] to format the message by substituting the arguments.
-     * @param cause: The given exception to log.
-     * @param message: The message to log.
-     * @param args: Arguments for the format string.
+     * @param cause The given exception to log.
+     * @param message The message to log.
+     * @param args Arguments for the format string.
      */
     fun info(cause: Throwable? = null, message: String?, vararg args: Any?) {
         log(Log.INFO, cause, message, *args)
@@ -119,8 +119,8 @@ class Logger(private val tag: String = "") {
     /**
      * Log messages as WARN.
      * Will use [String.format] to format the message by substituting Arguments.
-     * @param message: The message to log.
-     * @param args: Arguments for the format string.
+     * @param message The message to log.
+     * @param args Arguments for the format string.
      */
     fun warn(message: String?, vararg args: Any?) {
         log(Log.WARN, null, message, *args)
@@ -129,9 +129,9 @@ class Logger(private val tag: String = "") {
     /**
      * Log messages as WARN.
      * Will use [String.format] to format the message by substituting Arguments [args].
-     * @param cause: The given exception to log.
-     * @param message: The message to log.
-     * @param args: Arguments for the format string.
+     * @param cause The given exception to log.
+     * @param message The message to log.
+     * @param args Arguments for the format string.
      */
     fun warn(cause: Throwable? = null, message: String?, vararg args: Any?) {
         log(Log.WARN, cause, message, *args)
@@ -140,8 +140,8 @@ class Logger(private val tag: String = "") {
     /**
      * Log messages as ERROR.
      * Will use [String.format] to format the message by substituting Arguments [args].
-     * @param message: The message to log.
-     * @param args: Arguments for the format string.
+     * @param message The message to log.
+     * @param args Arguments for the format string.
      */
     fun error(message: String?, vararg args: Any?) {
         log(Log.ERROR, null, message, *args)
@@ -150,9 +150,9 @@ class Logger(private val tag: String = "") {
     /**
      * Log messages as ERROR.
      * Will use [String.format] to format the message by substituting the given arguments [args].
-     * @param cause: The given exception to log.
-     * @param message: The message to log.
-     * @param args: Arguments for the format string.
+     * @param cause The given exception to log.
+     * @param message The message to log.
+     * @param args Arguments for the format string.
      */
     fun error(cause: Throwable? = null, message: String?, vararg args: Any?) {
         log(Log.ERROR, cause, message, *args)

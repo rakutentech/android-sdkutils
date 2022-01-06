@@ -95,7 +95,7 @@ log.debug("simple debug log at %s", listOf(Date())) // simple debug log at [Mon 
 ### v0.3.0 (In progress)
 
 * SDKCF-4685: Added an API for logging facility, Please see [usage](#logger-usage) section for details.
-
+* SDKCF-4687: Added APIs for networking facility, Please see [usage](#logger-usage) section for details.
 
 ### v0.2.0 (2021-03-05)
 

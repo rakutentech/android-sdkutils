@@ -1,11 +1,11 @@
-package com.rakuten.tech.mobile.sdkutils.okhttp
+package com.rakuten.tech.mobile.sdkutils.network
 
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import org.amshove.kluent.shouldEqual
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -44,7 +44,7 @@ class HeaderInterceptorSpec {
             Request.Builder().url(url).build()
         ).execute()
 
-        server.takeRequest().headers["test_header_name"] shouldEqual "test_header_value"
+        server.takeRequest().headers["test_header_name"] shouldBeEqualTo "test_header_value"
     }
 
     @Test
@@ -59,8 +59,8 @@ class HeaderInterceptorSpec {
         ).execute()
         val headers = server.takeRequest().headers
 
-        headers["test_header_name"] shouldEqual "test_header_value"
-        headers["test_header_name_2"] shouldEqual "test_header_value_2"
+        headers["test_header_name"] shouldBeEqualTo "test_header_value"
+        headers["test_header_name_2"] shouldBeEqualTo "test_header_value_2"
     }
 
     @Test
@@ -76,6 +76,6 @@ class HeaderInterceptorSpec {
                 .build()
         ).execute()
 
-        server.takeRequest().headers["another_header_name"] shouldEqual "another_header_value"
+        server.takeRequest().headers["another_header_name"] shouldBeEqualTo "another_header_value"
     }
 }

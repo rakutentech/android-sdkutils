@@ -1,6 +1,6 @@
 @file:JvmName("OkHttpUtils")
 
-package com.rakuten.tech.mobile.sdkutils.okhttp
+package com.rakuten.tech.mobile.sdkutils.network
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -14,6 +14,8 @@ import okhttp3.Response
 fun OkHttpClient.Builder.addHeaderInterceptor(
     vararg headers: Pair<String, String>
 ): OkHttpClient.Builder = this.addNetworkInterceptor(HeaderInterceptor(headers))
+
+
 
 private class HeaderInterceptor constructor(
     private val headers: Array<out Pair<String, String>>
@@ -30,3 +32,5 @@ private class HeaderInterceptor constructor(
         )
     }
 }
+
+
