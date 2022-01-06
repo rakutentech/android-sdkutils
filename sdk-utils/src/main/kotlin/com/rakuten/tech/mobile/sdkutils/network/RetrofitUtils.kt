@@ -13,9 +13,9 @@ import java.util.concurrent.Executors
  * Adding OkHttp to handle the network requests.
  *
  * @param baseUrl the API base URL.
- * @param okHttpClient The HTTP client used for requests.
+ * @param okHttpClient the HTTP client used for requests.
  * @param gsonConverterFactory converter factory for serialization and deserialization of objects.
- * @param executor The executor on which Callback methods are invoked when returning Call
+ * @param executor the executor on which Callback methods are invoked when returning Call
  * from the service method.
  *
  * @return the [Retrofit] instance using the configured values.

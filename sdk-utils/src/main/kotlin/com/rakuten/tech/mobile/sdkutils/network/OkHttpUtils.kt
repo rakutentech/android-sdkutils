@@ -15,8 +15,6 @@ fun OkHttpClient.Builder.addHeaderInterceptor(
     vararg headers: Pair<String, String>
 ): OkHttpClient.Builder = this.addNetworkInterceptor(HeaderInterceptor(headers))
 
-
-
 private class HeaderInterceptor constructor(
     private val headers: Array<out Pair<String, String>>
 ) : Interceptor {
@@ -32,5 +30,3 @@ private class HeaderInterceptor constructor(
         )
     }
 }
-
-

@@ -4,7 +4,6 @@ import okhttp3.OkHttpClient
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldContain
-import org.amshove.kluent.shouldNotBeInstanceOf
 import org.junit.Test
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
