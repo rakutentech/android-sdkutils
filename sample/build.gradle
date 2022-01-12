@@ -7,6 +7,7 @@ android {
     applicationId "com.rakuten.tech.mobile.sdkutils.sample"
     versionCode 1
     versionName "1.0"
+    minSdkVersion 23
   }
 
   sourceSets.each {
@@ -16,6 +17,16 @@ android {
   dataBinding {
     enabled = true
   }
+
+  compileOptions {
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+  }
+
+  kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_1_8.toString()
+  }
+
 }
 
 dependencies {

@@ -1,4 +1,4 @@
-package com.rakuten.tech.mobile.sdkutils.okhttp
+package com.rakuten.tech.mobile.sdkutils.network
 
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient

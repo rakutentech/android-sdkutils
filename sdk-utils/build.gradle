@@ -17,13 +17,20 @@ android {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
   }
+
+  kotlinOptions {
+    jvmTarget = JavaVersion.VERSION_1_8.toString()
+  }
 }
 
 dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$CONFIG.versions.kotlin"
   implementation "com.squareup.okhttp3:okhttp:$CONFIG.versions.okhttp"
+  compileOnly 'androidx.annotation:annotation:1.1.0'
+  implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+  implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+  implementation 'com.google.code.gson:gson:2.8.9'
   implementation "com.google.code.gson:gson:$CONFIG.versions.thirdParty.gson"
-  compileOnly 'androidx.annotation:annotation:1.0.0'
   implementation 'com.google.android.gms:play-services-base:18.0.1'
 
   testImplementation 'junit:junit:4.13.2'

@@ -1,6 +1,6 @@
 @file:JvmName("OkHttpUtils")
 
-package com.rakuten.tech.mobile.sdkutils.okhttp
+package com.rakuten.tech.mobile.sdkutils.network
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

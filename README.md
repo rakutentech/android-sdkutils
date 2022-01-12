@@ -97,7 +97,8 @@ log.debug("simple debug log at %s", listOf(Date())) // simple debug log at [Mon 
 
 ```
 
-### <a name="#sharedpreferences-usage"></a>Preferences Utility
+### Preferences Utility
+
 Please check the following sample code to use the preferences utility feature for caching data.
 
 ```kotlin
@@ -123,7 +124,8 @@ val path = "my-file.json"
 val device: Device? = gson.fromResources(path, Device::class.java)
 ```
 
-### <a name="#common-usage"></a>Common Utility
+### Common Utility
+
 Please check the following sample code to use the extension function (s).
 
 ```kotlin
@@ -141,15 +143,64 @@ String.getMD5HashData("Test")
 
 ```
 
+### Networking Utility
+
+The following extension functions make networking framework easy to use, check the sample code to know more.
+
+<ul>
+<li>
+
+```HttpCallback``` : a Callback Class that communicate the remote server response.
+
+ ```kotlin
+// by using an HttpCallback object:
+client.newCall(request).enqueue(HttpCallback(
+    { response ->  ... },{ exception ->  ... }
+))
+
+ //or by using a lambda function:
+
+ //1- create your function e.g.
+ fun get(success: (response: Response) -> Unit, failure: (exception: Exception) -> Unit) {
+     val request = Request.Builder().url(url).build()
+     ...
+     client.newCall(request).enqueue(HttpCallback(success, failure))
+ }
+
+ // 2- get the response
+ get({ response = it  ... }, { exception = it  ... })
+```
+
+</li>
+<li>
+
+Kotlin extension to get a reference of ```Retrofit```
+
+```kotlin
+//Get a reference of Retrofit using the default parameters 
+val retrofit = Retrofit.Builder().build("your_baseUrl")
+
+// Get a reference of Retrofit using your personalysed parameter(s) 
+val okHttpClient: OkHttpClient = your_httpClient
+val gsonConverterFactory: GsonConverterFactory = your_converterFactory
+val executor: ExecutorService = your_executor
+
+val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConverterFactory, executor)
+
+```
+
+</li>
+</ul>
 ## Changelog
 
 ### v0.3.0 (In progress)
 
-* SDKCF-4686: Moved SharedPreferences handling and App/Env Info retrieval to SDKUtils. Please see [usage](#sharedpreferences-usage) section for details.
+* SDKCF-4686: Moved SharedPreferences handling and App/Env Info retrieval to SDKUtils. Please see [usage](#preferences-utility) section for details.
 * SDKCF-4685: Added APIs for:
   1. logging facility, Please see [usage](#logging-utility) section for details.
   2. Json deserializer utility, Please see [usage](#json-utility) section for details.
-* SDKCF-4688: Add common class extension to SDKUtils. Please see [usage](#common-usage) section for details.
+* SDKCF-4688: Add common class extension to SDKUtils. Please see [usage](#common-utility) section for details.
+* SDKCF-4687: Added APIs for networking facility, Please see [usage](#networking-utility) section for details.
 
 ### v0.2.0 (2021-03-05)
 
