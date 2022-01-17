@@ -1,5 +1,13 @@
 version: 2
 
+java_tool_options: &java_tool_options >-
+  -Dhttp.proxyHost=pkg.proxy.prod.jp.local
+  -Dhttps.proxyHost=pkg.proxy.prod.jp.local
+  -Dhttp.proxyPort=10080
+  -Dhttps.proxyPort=10080
+  -Dhttp.nonProxyHosts=artifactory.intra.rakuten-it.com|*.intra.rakuten-it.com
+  -Dhttps.nonProxyHosts=artifactory.intra.rakuten-it.com|*.intra.rakuten-it.com
+
 gradle_cache_key: &gradle_cache_key >-
   gradle-
   {{ checksum "build.gradle" }}
@@ -12,7 +20,7 @@ jobs:
   build:
     docker:
       - image: *android-docker-image
-    working_directory: ~/code
+    working_directory: ~/code/workspace
     environment:
       JVM_OPTS: "-Xmx3200m"
     steps:
@@ -53,7 +61,26 @@ jobs:
       - persist_to_workspace:
           root: ~/code
           paths:
-            - sdk-utils/build
+            - workspace
+
+  sonarqube-analysis:
+    docker:
+      - image: circleci/android@sha256:b6646fdf7457f61825526e7bfce364d8e533da6ceb1cdb98e371e94348ecc834
+    working_directory: ~/code/workspace
+    environment:
+      JAVA_TOOL_OPTIONS: *java_tool_options
+    steps:
+      - attach_workspace:
+          at: ~/code/workspace
+      - run:
+          name: Run SonarQube
+          command: |
+            cd workspace
+            if $SONARQUBE_ENABLED; then
+              ./gradlew sonarqube
+            else
+              echo "SonarQube is disabled"
+            fi
 
   publish:
     docker:
@@ -89,10 +116,18 @@ workflows:
               only: /^v.*/
             branches:
               only: /.*/
+      - sonarqube-analysis:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only: /.*/
       - release-verification:
           type: approval
           requires:
-            - build
+            - sonarqube-analysis
           filters:
             tags:
               only: /^v.*/

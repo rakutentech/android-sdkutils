@@ -1,0 +1,48 @@
+apply plugin: 'org.sonarqube'
+
+def branch = System.getenv("CIRCLE_BRANCH")
+
+sonarqube {
+    properties {
+        property 'sonar.sourceEncoding', 'UTF-8'
+        property 'sonar.projectName', 'Android SDK Utils'
+        property 'sonar.host.url', SONARQUBE_HOST_URL
+        property 'sonar.login', SONARQUBE_TOKEN
+        property 'sonar.projectKey', SONARQUBE_PROJ_CODECOV
+        property 'sonar.projectVersion', scmVersion.version
+        if (branch == "master") {
+            property 'sonar.branch.name', 'master'
+        } else {
+            property 'sonar.pullrequest.key', System.getenv("CIRCLE_PULL_REQUEST").findAll(/\d+/)*.toInteger().last()
+            property 'sonar.pullrequest.branch', System.getenv("CIRCLE_BRANCH")
+            property 'sonar.pullrequest.base', 'master'
+        }
+        property 'sonar.qualitygate.wait', true
+    }
+}
+
+subprojects { subproject ->
+    sonarqube {
+        properties {
+            property 'sonar.sources', 'src'
+            property 'sonar.exclusions',    '**/test/**, ' +
+                                            '**/*Generated.java, ' +
+                                            'build/**, ' +
+                                            '*.json, ' +
+                                            '**/*test*/**, ' +
+                                            '**/.gradle/**, ' +
+                                            '**/R.class'
+            property 'sonar.test.inclusions', '**/test/**'
+            property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/jacocoReleaseReport/jacocoReleaseReport.xml'
+            property 'sonar.junit.reportPaths', 'build/test-results/testReleaseUnitTest'
+        }
+    }
+}
+
+// sample module is a sample app to test sdk utils functions which should be excluded from sdk-utils
+project(':sample') {
+    sonarqube {
+        skipProject = true
+    }
+}
+
