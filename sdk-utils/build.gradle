@@ -1,5 +1,4 @@
 apply from: '../config/android/library.gradle'
-apply plugin: 'io.gitlab.arturbosch.detekt'
 apply plugin: "kotlin-android"
 apply plugin: 'kotlin-kapt'
 
@@ -69,11 +68,3 @@ if (isSnapshot) {
   ext["MAVEN_CENTRAL_IS_SNAPSHOT"] = true
 }
 apply from: '../config/publish/maven-central.gradle'
-
-buildscript {
-  repositories {
-    maven {
-      url "https://plugins.gradle.org/m2/"
-    }
-  }
-}
