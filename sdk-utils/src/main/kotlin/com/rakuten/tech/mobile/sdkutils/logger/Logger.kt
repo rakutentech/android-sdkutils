@@ -25,7 +25,7 @@ import kotlin.math.min
  *
  */
 @SuppressWarnings("TooManyFunctions", "SpreadOperator")
-class Logger(private val tag: String = "") {
+open class Logger(private val tag: String = "") {
 
     @SuppressWarnings("LongMethod", "ComplexMethod", "NestedBlockDepth")
     @Synchronized
