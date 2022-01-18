@@ -69,3 +69,11 @@ if (isSnapshot) {
   ext["MAVEN_CENTRAL_IS_SNAPSHOT"] = true
 }
 apply from: '../config/publish/maven-central.gradle'
+
+buildscript {
+  repositories {
+    maven {
+      url "https://plugins.gradle.org/m2/"
+    }
+  }
+}
