@@ -117,4 +117,16 @@ class PreferencesUtilSpec {
         PreferencesUtil.clear(context, sharedName)
         PreferencesUtil.getString(context, sharedName, "STRING", null) shouldBeEqualTo null
     }
+
+    @Test
+    fun `should check the key used in shared preferences`() {
+        PreferencesUtil.putInt(context, sharedName, "INT", 100)
+        PreferencesUtil.contains(context, sharedName, "INT") shouldBeEqualTo true
+    }
+
+    @Test
+    fun `should check the key if not used in shared preferences`() {
+        PreferencesUtil.putInt(context, sharedName, "INT", 100)
+        PreferencesUtil.contains(context, sharedName, "STRING") shouldBeEqualTo false
+    }
 }
