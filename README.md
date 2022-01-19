@@ -78,16 +78,25 @@ Logging conventions are:
 * Info: for SDK consumers. They should know, but is no problem.
 * Warn: for SDK consumers. An unexpected situation, that the SDK can recover from.
 * Error: for SDK consumers: An error that may cause the SDK to stop working.
- 
+
 By default only info, warn and error are logged. Debug is only logged if [Logger.setDebug] is called with `true`.
+
+The level of the stack trace to be logged is set by default to 5 (it's the trace level of the running thread when SDKUtils is implemented in an application). 
+You may need to upgrade the level using ```Logger.setDebugLevel(yourLevel)``` if SDKUtils is implemented in another SDK.
+
+```kotlin
+Logger.setDebugLevel(6)
+private val log = Logger(TAG)
+```
 
 All log calls come in 2 variants:
 
-* log(String template, Object.. args) - will use [String.format] to format the string.
-* log(Throwable cause, String template, Object.. args) - same as above, but will add a "Caused by" and stacktrace to the log.
+* ```log(String template, Object.. args)``` - will use ```String.format``` to format the string.
+* ```log(Throwable cause, String template, Object.. args)``` - same as above, but will add a "Caused by" and stacktrace to the log.
 
 ```kotlin
 private val log = Logger(MainActivity::class.java.simpleName)
+
 //enable debug logs (by default only info, warn and error are logged)
 Logger.setDebug(true)
 
@@ -107,6 +116,7 @@ PreferencesUtil.putString(appContext, preferencesFileName, key, value)
 
 // We can get int, string, float, long, string set and boolean to retrieve from preferences
 PreferencesUtil.getString(appContext, preferencesFileName, key, defaultValue)
+```
 
 ### Json Utility
 
@@ -191,6 +201,7 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 
 </li>
 </ul>
+
 ## Changelog
 
 ### v0.3.0 (In progress)

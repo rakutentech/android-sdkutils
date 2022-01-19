@@ -21,6 +21,13 @@ class PreferencesUtilSpec {
     @Test
     fun `should get default int value from shared preferences`() {
         PreferencesUtil.getInt(context, sharedName, "INT", 3) shouldBeEqualTo 3
+        PreferencesUtil.getInt(context, sharedName, "DEF_INT") shouldBeEqualTo -1
+    }
+
+    @Test
+    fun `should get default int value if there is a preference with this name that is not an int`() {
+        PreferencesUtil.putLong(context, sharedName, "NOT_INT", 100L)
+        PreferencesUtil.getInt(context, sharedName, "NOT_INT", 1) shouldBeEqualTo 1
     }
 
     @Test
@@ -35,6 +42,12 @@ class PreferencesUtilSpec {
     }
 
     @Test
+    fun `should get default long value if there is a preference with this name that is not a long`() {
+        PreferencesUtil.putInt(context, sharedName, "NOT_LONG", 200)
+        PreferencesUtil.getLong(context, sharedName, "NOT_LONG", 2) shouldBeEqualTo 2
+    }
+
+    @Test
     fun `should put boolean value to shared preferences`() {
         PreferencesUtil.putBoolean(context, sharedName, "BOOLEAN", true)
         PreferencesUtil.getBoolean(context, sharedName, "BOOLEAN") shouldBeEqualTo true
@@ -43,6 +56,12 @@ class PreferencesUtilSpec {
     @Test
     fun `should get default boolean value from shared preferences`() {
         PreferencesUtil.getBoolean(context, sharedName, "BOOLEAN", true) shouldBeEqualTo true
+    }
+
+    @Test
+    fun `should get get default boolean if there is a preference with this name that is not a boolean`() {
+        PreferencesUtil.putInt(context, sharedName, "NOT_BOOLEAN", 300)
+        PreferencesUtil.getBoolean(context, sharedName, "NOT_BOOLEAN", true) shouldBeEqualTo true
     }
 
     @Test
@@ -57,9 +76,21 @@ class PreferencesUtilSpec {
     }
 
     @Test
+    fun `should get get default float value if there is a preference with this name that is not a string`() {
+        PreferencesUtil.putInt(context, sharedName, "NOT_FLOAT", 400)
+        PreferencesUtil.getFloat(context, sharedName, "NOT_FLOAT", 100f) shouldBeEqualTo 100f
+    }
+
+    @Test
     fun `should put string value to shared preferences`() {
         PreferencesUtil.putString(context, sharedName, "STRING", "TestString")
         PreferencesUtil.getString(context, sharedName, "STRING", null) shouldBeEqualTo "TestString"
+    }
+
+    @Test
+    fun `should get get default string value if there is a preference with this name that is not a string`() {
+        PreferencesUtil.putInt(context, sharedName, "NOT_STRING", 400)
+        PreferencesUtil.getString(context, sharedName, "NOT_STRING", "TestString") shouldBeEqualTo "TestString"
     }
 
     @Test
@@ -95,6 +126,14 @@ class PreferencesUtilSpec {
     }
 
     @Test
+    fun `should get get default set value if there is a preference with this name that is not a set`() {
+        val stringSet: MutableSet<String> = HashSet()
+        stringSet.add("TestString")
+        PreferencesUtil.putInt(context, sharedName, "NOT_STRING_SET", 400)
+        PreferencesUtil.getStringSet(context, sharedName, "NOT_STRING_SET", stringSet) shouldBeEqualTo stringSet
+    }
+
+    @Test
     fun `should get null as default string set value from shared preferences`() {
         PreferencesUtil.getStringSet(context, sharedName, "STRING_SET", null)
             .toString() shouldBeEqualTo "null"
@@ -116,5 +155,17 @@ class PreferencesUtilSpec {
         PreferencesUtil.putString(context, sharedName, "STRING", "TestString")
         PreferencesUtil.clear(context, sharedName)
         PreferencesUtil.getString(context, sharedName, "STRING", null) shouldBeEqualTo null
+    }
+
+    @Test
+    fun `should check the key used in shared preferences`() {
+        PreferencesUtil.putInt(context, sharedName, "INT", 100)
+        PreferencesUtil.contains(context, sharedName, "INT") shouldBeEqualTo true
+    }
+
+    @Test
+    fun `should check the key if not used in shared preferences`() {
+        PreferencesUtil.putInt(context, sharedName, "INT", 100)
+        PreferencesUtil.contains(context, sharedName, "STRING") shouldBeEqualTo false
     }
 }
