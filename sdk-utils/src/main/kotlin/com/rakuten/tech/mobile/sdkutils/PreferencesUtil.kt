@@ -177,6 +177,17 @@ object PreferencesUtil {
         getSharedPreferences(context, name).edit().clear().apply()
     }
 
+    /**
+     * Checks whether the preferences contains a preference.
+     *
+     * @param key The name of the preference to check.
+     * @return Returns true if the preference exists in the preferences,
+     *         otherwise false.
+     */
+    fun contains(context: Context, name: String, key: String): Boolean {
+        return getSharedPreferences(context, name).contains(key)
+    }
+
     private fun getSharedPreferences(context: Context, name: String): SharedPreferences {
         return context.getSharedPreferences(name, Context.MODE_PRIVATE)
     }
