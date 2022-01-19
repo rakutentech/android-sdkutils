@@ -7,6 +7,6 @@
       android:name="com.rakuten.tech.mobile.sdkutils.SdkUtilsInitProvider"
       android:authorities="${applicationId}.SdkUtilsInitProvider"
       android:exported="false"
-      android:initOrder="160" />
+      android:initOrder="99" />
   </application>
 </manifest>

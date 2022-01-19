@@ -10,7 +10,6 @@ import org.robolectric.util.ReflectionHelpers
 import java.text.SimpleDateFormat
 
 @RunWith(RobolectricTestRunner::class)
-@Ignore
 class CommonUtilSpec {
     @Test
     fun `should get UTC date format`() {
