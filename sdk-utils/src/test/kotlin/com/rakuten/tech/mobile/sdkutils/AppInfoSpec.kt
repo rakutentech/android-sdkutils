@@ -8,9 +8,13 @@ import com.nhaarman.mockitokotlin2.mock
 import org.amshove.kluent.*
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
+import org.mockito.Mockito
 import org.mockito.Mockito.`when`
+import org.robolectric.RobolectricTestRunner
 
+@RunWith(RobolectricTestRunner::class)
 class AppInfoSpec {
 
     private val mockContext: Context = mock()
@@ -40,5 +44,13 @@ class AppInfoSpec {
         mockPackageInfo.versionName = "1.0.0"
 
         AppInfo.instance.version shouldBeEqualTo "1.0.0"
+    }
+
+    @Test
+    fun `should return null App Version`() {
+        `when`(mockContext.packageManager.getPackageInfo(Mockito.anyString(), Mockito.anyInt()))
+                .thenThrow(PackageManager.NameNotFoundException::class.java)
+        AppInfo.init(mockContext)
+        AppInfo.instance.version shouldBeEqualTo null
     }
 }
