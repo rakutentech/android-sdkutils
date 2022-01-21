@@ -39,7 +39,7 @@ class MainActivity : Activity() {
 
         // enable debug logs (by default only info, warn and error are logged)
         Logger.setDebug(true)
-        log.debug("simple debug log at %s", listOf(Date()))
+        log.debug("sample debug log at %s", listOf(Date()))
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

@@ -63,8 +63,20 @@ afterEvaluate {
   }
 }
 
+
+/*
+//publish snapshot to maven central
 def isSnapshot = project.version.contains('-')
 if (isSnapshot) {
   ext["MAVEN_CENTRAL_IS_SNAPSHOT"] = true
 }
-apply from: '../config/publish/maven-central.gradle'
+apply from: '../config/publish/maven-central.gradle'*/
+
+def isSnapshot = project.version.contains('-')
+if (isSnapshot) {
+  project.ext.ARTIFACTORY_URL=CONFIG.property("ARTIFACTORY_URL_SNAPSHOT")
+  project.ext.ARTIFACTORY_REPO=CONFIG.property("ARTIFACTORY_REPO_SNAPSHOT")
+  apply from: '../config/publish/artifactory.gradle'
+} else {
+  apply from: '../config/publish/maven-central.gradle'
+}
