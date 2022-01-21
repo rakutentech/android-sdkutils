@@ -24,6 +24,7 @@ class LoggerSpec {
     @Before
     fun setup() {
         logger = Logger(TAG)
+        Logger.setDebugLevel(3)
     }
 
     @Test
@@ -102,6 +103,19 @@ class LoggerSpec {
         Logger.setDebug(true)
 
         logger.debug(Throwable(), "test".repeat(1000))
+        assertThatLog().hasMessage(Log.DEBUG, TAG, "test")
+    }
+
+    @Test
+    fun `should display default trace line if not in level range`() {
+        Logger.setDebug(true)
+
+        Logger.setDebugLevel(100)
+        logger.debug(Throwable(), "test")
+        assertThatLog().hasMessage(Log.DEBUG, TAG, "test")
+
+        Logger.setDebugLevel(-1)
+        logger.debug(Throwable(), "test")
         assertThatLog().hasMessage(Log.DEBUG, TAG, "test")
     }
 
