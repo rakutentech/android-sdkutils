@@ -39,3 +39,5 @@ allprojects { proj ->
 
   proj.version = scmVersion.version
 }
+
+apply from: "$project.rootDir/sonar.gradle"
