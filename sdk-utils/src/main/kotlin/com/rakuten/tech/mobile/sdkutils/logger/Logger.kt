@@ -65,7 +65,13 @@ open class Logger(private val tag: String = "") {
         // Appends the location of the call to #debug, #info, etc…, i.e. 2 levels down the current.
         val st = Thread.currentThread().stackTrace
         var location: StackTraceElement? = null
-        for (i in min(2, st.size) until st.size) {
+
+        when {
+            stackTraceLevel >= st.size -> stackTraceLevel = st.size -1
+            stackTraceLevel < 0 -> stackTraceLevel = 0
+        }
+
+        for (i in min(stackTraceLevel, st.size) until st.size) {
             if (st[i].className != this.javaClass.name) {
                 location = st[i]
                 break
@@ -164,6 +170,14 @@ open class Logger(private val tag: String = "") {
         private var isDebug = false
 
         /**
+         * The level of the stack trace to be logged.
+         * Set by default to 5 (it's the trace level of the running thread when
+         * SDKUtils is implemented in an application). If the logger is used in another SDK
+         * you may need to upgrade it using [Logger.setDebug] to display the host SDK's logs.
+         */
+        private var stackTraceLevel = 5
+
+        /**
          * This method enables/disables debug logger.
          * By default only info, warn and error are logged. Debug is only logged
          * if [Logger.setDebug] is called with `true`.
@@ -171,6 +185,17 @@ open class Logger(private val tag: String = "") {
          */
         fun setDebug(debug: Boolean) {
             isDebug = debug
+        }
+
+        /**
+         * Set the level of the stack trace line to be logged.
+         * The element at the top of the stack (stackFramePosition = 0) represents the execution
+         * point at which the stack trace was generated.
+         *
+         * @param stackFramePosition the position of the stack trace element to be logged.
+         */
+        fun setDebugLevel(stackFramePosition: Int) {
+            this.stackTraceLevel = stackFramePosition
         }
     }
 }
