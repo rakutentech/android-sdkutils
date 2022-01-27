@@ -24,9 +24,9 @@ workflows:
         title: Run Check
         inputs:
         - content: ./gradlew check
-    - danger@2:
-        inputs:
-        - github_api_token: "$DANGER_GITHUB_API_TOKEN"
+    #- danger@2:
+    #    inputs:
+    #    - github_api_token: "$DANGER_GITHUB_API_TOKEN"
     - script@1:
         title: Assemble
         inputs:
@@ -39,21 +39,21 @@ workflows:
         title: Upload Code Coverage
         inputs:
         - content: bash <(curl -s https://codecov.io/bash)
-    - custom-test-results-export@0:
+    #- custom-test-results-export@0:
         # this add-on should export test artifacts as well, but currently not displayed.
-        inputs:
-        - test_name: Unit Tests (Debug)
-        - base_path: "$SDK_PATH/build/test-results/testDebugUnitTest/"
-        - search_pattern: "*"
-    - custom-test-results-export@0:
-        inputs:
-        - test_name: Unit Tests (Release)
-        - base_path: "$SDK_PATH/build/test-results/testReleaseUnitTest/"
-        - search_pattern: "*"
-    - deploy-to-bitrise-io@2:
-        inputs:
-        - deploy_path: $SDK_PATH/build/outputs/aar
-        - is_enable_public_page: 'false'
+     #   inputs:
+      #  - test_name: Unit Tests (Debug)
+       # - base_path: "$SDK_PATH/build/test-results/testDebugUnitTest/"
+       # - search_pattern: "*"
+    #- custom-test-results-export@0:
+     #   inputs:
+      #  - test_name: Unit Tests (Release)
+       # - base_path: "$SDK_PATH/build/test-results/testReleaseUnitTest/"
+        #- search_pattern: "*"
+    #- deploy-to-bitrise-io@2:
+     #   inputs:
+      #  - deploy_path: $SDK_PATH/build/outputs/aar
+       # - is_enable_public_page: 'false'
     - cache-push@2:
         inputs:
         - cache_paths: |-
