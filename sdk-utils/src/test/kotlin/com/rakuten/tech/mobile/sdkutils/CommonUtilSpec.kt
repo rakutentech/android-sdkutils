@@ -26,4 +26,19 @@ class CommonUtilSpec {
         val isoFormattedDate = CommonUtil.getUTCDateFormat().format(date!!)
         isoFormattedDate shouldBeEqualTo "2014-04-02T15:00:00"
     }
+
+    @Test
+    fun `should return 1 if cache size is less than 0`() {
+        CommonUtil.getMemoryCacheSize(-1).shouldBeEqualTo(1)
+    }
+
+    @Test
+    fun `should return 1 if cache size is equal 0`() {
+        CommonUtil.getMemoryCacheSize(0).shouldBeEqualTo(1)
+    }
+
+    @Test
+    fun `should return positive cache size`() {
+        CommonUtil.getMemoryCacheSize().shouldBePositive()
+    }
 }
