@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import androidx.annotation.ColorInt
+import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF16UrlEncoded
 import com.rakuten.tech.mobile.sdkutils.logger.Logger
+import java.io.UnsupportedEncodingException
 import java.math.BigInteger
 import java.net.URLEncoder
 import java.nio.charset.Charset
@@ -112,18 +114,28 @@ object StringExtension {
     /**
      * Get the URL encoded value of the string for charset "UTF-8".
      *
-     * @return UTF-8 URL encoded value
+     * @return UTF-8 URL encoded value, or empty string if an error was encountered
      */
     fun String.getUTF8UrlEncoded(): String {
-        return URLEncoder.encode(this, StandardCharsets.UTF_8.displayName())
+        return try {
+            URLEncoder.encode(this, StandardCharsets.UTF_8.displayName())
+        } catch (ex: UnsupportedEncodingException) {
+            logger.error(ex, "Unsupported encoding.")
+            ""
+        }
     }
 
     /**
      * Get the URL encoded value of the string for charset "UTF-16".
      *
-     * @return UTF-8 URL encoded value
+     * @return UTF-16 URL encoded value, or empty string if an error was encountered
      */
     fun String.getUTF16UrlEncoded(): String {
-        return URLEncoder.encode(this, StandardCharsets.UTF_16.displayName())
+        return try {
+            URLEncoder.encode(this, StandardCharsets.UTF_16.displayName())
+        } catch (ex: UnsupportedEncodingException) {
+            logger.error(ex, "Unsupported encoding.")
+            ""
+        }
     }
 }
