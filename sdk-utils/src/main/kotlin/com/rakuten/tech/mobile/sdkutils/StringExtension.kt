@@ -6,7 +6,9 @@ import android.os.Build
 import androidx.annotation.ColorInt
 import com.rakuten.tech.mobile.sdkutils.logger.Logger
 import java.math.BigInteger
+import java.net.URLEncoder
 import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
@@ -105,5 +107,23 @@ object StringExtension {
             logger.error(exception, "Failed to parse color", exception)
             -1
         }
+    }
+
+    /**
+     * Get the URL encoded value of the string for charset "UTF-8".
+     *
+     * @return UTF-8 URL encoded value
+     */
+    fun String.getUTF8UrlEncoded(): String {
+        return URLEncoder.encode(this, StandardCharsets.UTF_8.displayName())
+    }
+
+    /**
+     * Get the URL encoded value of the string for charset "UTF-16".
+     *
+     * @return UTF-8 URL encoded value
+     */
+    fun String.getUTF16UrlEncoded(): String {
+        return URLEncoder.encode(this, StandardCharsets.UTF_16.displayName())
     }
 }

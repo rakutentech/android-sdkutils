@@ -6,6 +6,9 @@ import com.rakuten.tech.mobile.sdkutils.StringExtension.getMD5HashData
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getSha256HashData
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTCDate
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF16ByteArray
+import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF16UrlEncoded
+import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF8ByteArray
+import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF8UrlEncoded
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -54,5 +57,25 @@ class StringExtensionSpec {
     @Test
     fun `should get UTF-16 Byte Array`() {
         "Test".getUTF16ByteArray() shouldBeEqualTo byteArrayOf(-2, -1, 0, 84, 0, 101, 0, 115, 0, 116)
+    }
+
+    @Test
+    fun `should get UTF-8 URL encoded value`() {
+        "this is a test".getUTF8UrlEncoded() shouldBeEqualTo "this+is+a+test"
+    }
+
+    @Test
+    fun `should get UTF-16 URL encoded value`() {
+        "this is a test".getUTF16UrlEncoded() shouldBeEqualTo "this+is+a+test"
+    }
+
+    @Test
+    fun `should get UTF-8 URL encoded value for empty string`() {
+        "".getUTF8UrlEncoded() shouldBeEqualTo ""
+    }
+
+    @Test
+    fun `should get UTF-16 URL encoded value for empty string`() {
+        "".getUTF16UrlEncoded() shouldBeEqualTo ""
     }
 }
