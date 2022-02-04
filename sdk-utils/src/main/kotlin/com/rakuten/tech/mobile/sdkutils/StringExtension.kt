@@ -48,11 +48,11 @@ object StringExtension {
                 "%032x",
                 BigInteger(
                     1,
-                    MessageDigest.getInstance("MD5")
-                        .digest(this.getUTF8ByteArray())
+                    MessageDigest.getInstance("MD5").digest(this.getUTF8ByteArray())
                 )
             )
-        } catch (swallowed: NoSuchAlgorithmException) {
+        } catch (e: NoSuchAlgorithmException) {
+            logger.debug(e, "MD5 not available, aborting hash")
             null
         }
     }
@@ -76,6 +76,7 @@ object StringExtension {
             }
             sb.toString()
         } catch (e: NoSuchAlgorithmException) {
+            logger.debug(e, "SHA-256 not available, aborting hash")
             null
         }
     }
