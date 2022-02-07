@@ -150,8 +150,9 @@ String.getSha256HashData("Test")
 
 // To get the MD5 digest data
 String.getMD5HashData("Test")
-
 ```
+
+Please see [StringExtension](./sdk-utils/src/main/kotlin/com/rakuten/tech/mobile/sdkutils/StringExtension.kt) and [ContextExtension](sdk-utils/src/main/kotlin/com/rakuten/tech/mobile/sdkutils/ContextExtension.kt) classes for available APIs.
 
 ### Networking Utility
 
@@ -204,14 +205,12 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 
 ## Changelog
 
-### v0.3.0 (In progress)
+### v1.0.0 (2022-02-07)
 
-* SDKCF-4686: Moved SharedPreferences handling and App/Env Info retrieval to SDKUtils. Please see [usage](#preferences-utility) section for details.
-* SDKCF-4685: Added APIs for:
-  1. logging facility, Please see [usage](#logging-utility) section for details.
-  2. Json deserializer utility, Please see [usage](#json-utility) section for details.
-* SDKCF-4688: Add common class extension to SDKUtils. Please see [usage](#common-utility) section for details.
-* SDKCF-4687: Added APIs for networking facility, Please see [usage](#networking-utility) section for details.
+* SDKCF-4686: Added SharedPreferences handling and App/Env Info retrieval utilities. Please see [usage](#preferences-utility) section for details.
+* SDKCF-4685: Added Logging facility and Json deserializer utility. Please see [Logging Utility](#logging-utility) and [JSON Utility](#json-utility) sections for details.
+* SDKCF-4688: Added String and Context class extension to SDKUtils. Please see [usage](#common-utility) section for details.
+* SDKCF-4687: Added APIs for networking facility. Please see [usage](#networking-utility) section for details.
 
 ### v0.2.0 (2021-03-05)
 
