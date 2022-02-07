@@ -205,7 +205,7 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 
 ## Changelog
 
-### v1.0.0 (2021-02-07)
+### v1.0.0 (2022-02-07)
 
 * SDKCF-4686: Added SharedPreferences handling and App/Env Info retrieval utilities. Please see [usage](#preferences-utility) section for details.
 * SDKCF-4685: Added Logging facility and Json deserializer utility. Please see [Logging Utility](#logging-utility) and [JSON Utility](#json-utility) sections for details.
