@@ -12,8 +12,8 @@ workflows:
   build-and-test:
     before_run:
     - _setup-env
-    # after_run:
-    # - _run-sonarqube-scanner
+    after_run:
+    - _run-sonarqube-scanner
     steps:
     - cache-pull@2: {}
     - script@1:
@@ -87,16 +87,43 @@ workflows:
         - set_java_version: '8'
     - git-clone@6:
         inputs:
+        - fetch_tags: 'yes'
+        - merge_pr: 'no'
         - update_submodules: 'yes'
-    - script@1:
-        title: Get Tags
-        inputs:
-        - content: git fetch --tags
   _run-sonarqube-scanner:
     steps:
     - set-java-version@1:
         inputs:
         - set_java_version: '11'
+    - script@1:
+        title: Prepare branches to feed in sonar.gradle
+        inputs:
+        - content: |-
+            #!/bin/bash
+            set -e
+            # Destination branch
+            git fetch --no-tags origin master
+
+            # Source branch
+            # For release
+            echo $BITRISE_TRIGGERED_WORKFLOW_ID
+            if [[ $BITRISE_TRIGGERED_WORKFLOW_ID == "release" ]]; then
+                echo "This is a release step, just making sure we are at master."
+                git fetch --no-tags origin master
+                git switch master
+            # For PRs
+            else
+                if [[ $BITRISEIO_PULL_REQUEST_REPOSITORY_URL != "" && \
+                    $GIT_REPOSITORY_URL != $BITRISEIO_PULL_REQUEST_REPOSITORY_URL ]]; then
+                    echo "This is a PR from a forked repo, will be creating temp branch with current hash:"
+                    git log --pretty=format:'%h%n' -n 1
+                    git switch -C $BITRISE_GIT_BRANCH
+                else
+                    echo "This is a PR from the repo, just making sure we are at the right branch"
+                    git fetch --no-tags origin $BITRISE_GIT_BRANCH
+                    git switch $BITRISE_GIT_BRANCH
+                fi
+            fi
     - script@1:
         run_if: '{{getenv "SONARQUBE_TOKEN" | ne ""}}'
         title: Run SonarQube Scanner

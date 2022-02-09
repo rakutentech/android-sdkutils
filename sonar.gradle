@@ -10,7 +10,7 @@ sonarqube {
         property 'sonar.login', System.getenv("SONARQUBE_TOKEN")
         property 'sonar.projectKey', System.getenv("SONARQUBE_PROJ_KEY")
         property 'sonar.projectVersion', scmVersion.version
-        if (branch == "master") {
+        if (branch == "master" || branch == "") {
             property 'sonar.branch.name', 'master'
         } else {
             property 'sonar.pullrequest.key', System.getenv("BITRISE_PULL_REQUEST").findAll(/\d+/)*.toInteger().last()
