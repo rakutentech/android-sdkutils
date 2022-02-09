@@ -25,7 +25,6 @@ workflows:
         inputs:
         - content: ./gradlew check
     - danger@2:
-        run_if: false # Temporarily disabled
         inputs:
         - github_api_token: "$DANGER_GITHUB_API_TOKEN"
     - script@1:
