@@ -1,0 +1,113 @@
+format_version: 11
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: android
+trigger_map:
+- push_branch: "master"
+  workflow: build-and-test
+- pull_request_source_branch: "*"
+  workflow: build-and-test
+- tag: "v*.*.*"
+  workflow: release
+workflows:
+  build-and-test:
+    before_run:
+    - _setup-env
+    # after_run:
+    # - _run-sonarqube-scanner
+    steps:
+    - cache-pull@2: {}
+    - script@1:
+        title: Download Dependencies
+        inputs:
+        - content: ./gradlew androidDependencies
+    - script@1:
+        title: Run Check
+        inputs:
+        - content: ./gradlew check
+    - danger@2:
+        run_if: false # Temporarily disabled
+        inputs:
+        - github_api_token: "$DANGER_GITHUB_API_TOKEN"
+    - script@1:
+        title: Assemble
+        inputs:
+        - content: ./gradlew assemble
+    - script@1:
+        title: Current Version
+        inputs:
+        - content: ./gradlew currentVersion
+    - script@1:
+        title: Upload Code Coverage
+        inputs:
+        - content: bash <(curl -s https://codecov.io/bash)
+    - custom-test-results-export@0:
+        # this add-on should export test artifacts as well, but currently not displayed.
+        inputs:
+        - test_name: Unit Tests (Debug)
+        - base_path: "$SDK_PATH/build/test-results/testDebugUnitTest/"
+        - search_pattern: "*"
+    - custom-test-results-export@0:
+        inputs:
+        - test_name: Unit Tests (Release)
+        - base_path: "$SDK_PATH/build/test-results/testReleaseUnitTest/"
+        - search_pattern: "*"
+    - deploy-to-bitrise-io@2:
+        inputs:
+        - deploy_path: $SDK_PATH/build/outputs/aar
+        - is_enable_public_page: 'false'
+    - cache-push@2:
+        inputs:
+        - cache_paths: |-
+            $HOME/.gradle
+            ./.gradle
+            $HOME/.m2
+        - ignore_check_on_paths: |-
+            $HOME/.gradle/caches/*.lock
+            ./.gradle/*.lock
+            ./.gradle/*.bin
+  release:
+    before_run:
+    - build-and-test
+    steps:
+    - script@1:
+        title: Retrieve Base64 PGP Key and save to file
+        inputs:
+        - content: |-
+            if [[ "$RELEASE_PGP_KEY_BASE64" != "" ]]; then
+              base64 -d <<< "$RELEASE_PGP_KEY_BASE64" > ./maven-central-key.gpg
+            fi
+    - script@1:
+        title: Publish Artifacts
+        inputs:
+        - content: ./gradlew publish
+  _setup-env:
+    steps:
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '8'
+    - git-clone@6:
+        inputs:
+        - update_submodules: 'yes'
+    - script@1:
+        title: Get Tags
+        inputs:
+        - content: git fetch --tags
+  _run-sonarqube-scanner:
+    steps:
+    - set-java-version@1:
+        inputs:
+        - set_java_version: '11'
+    - script@1:
+        run_if: '{{getenv "SONARQUBE_TOKEN" | ne ""}}'
+        title: Run SonarQube Scanner
+        inputs:
+        - content: ./gradlew sonarqube
+meta:
+  bitrise.io:
+    stack: linux-docker-android-20.04
+    machine_type_id: elite
+app:
+  envs:
+  - opts:
+      is_expand: false
+    SDK_PATH: sdk-utils
