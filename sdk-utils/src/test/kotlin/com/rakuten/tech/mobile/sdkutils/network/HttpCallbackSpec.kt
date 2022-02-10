@@ -40,7 +40,6 @@ class HttpCallbackSpec {
     fun `should return success response`() {
         var expectedResponse: Response? =  null
         var exception: java.lang.Exception? = null
-        server.enqueue(MockResponse().setResponseCode(200))
 
         getResponse( "https://example.com",
             { expectedResponse = it }, { exception = it })
