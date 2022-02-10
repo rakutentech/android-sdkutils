@@ -93,6 +93,7 @@ class StringExtensionSpec {
         "this is a test".getUTF16UrlEncoded() shouldBeEqualTo "this+is+a+test"
     }
 
+    @Test
     fun `should return empty when UTF-16 URL encoded value not available`() {
         StringExtension.stringForTest = "anyEncoding"
         "this is a test".getUTF16UrlEncoded() shouldBeEqualTo ""
