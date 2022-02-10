@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Build
 import androidx.annotation.ColorInt
-import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF16UrlEncoded
 import com.rakuten.tech.mobile.sdkutils.logger.Logger
 import java.io.UnsupportedEncodingException
 import java.math.BigInteger
@@ -18,6 +17,8 @@ import java.util.*
 
 object StringExtension {
     private val logger = Logger(StringExtension::class.java.simpleName)
+
+    internal var stringForTest: String? = null
 
     /**
      * Get the encoded byte array of string for charset "UTF-16"
@@ -48,7 +49,7 @@ object StringExtension {
                 "%032x",
                 BigInteger(
                     1,
-                    MessageDigest.getInstance("MD5").digest(this.getUTF8ByteArray())
+                    MessageDigest.getInstance(stringForTest ?: "MD5").digest(this.getUTF8ByteArray())
                 )
             )
         } catch (e: NoSuchAlgorithmException) {
@@ -64,7 +65,7 @@ object StringExtension {
      */
     fun String.getSha256HashData(): String? {
         return try {
-            val md = MessageDigest.getInstance("SHA-256")
+            val md = MessageDigest.getInstance(stringForTest ?: "SHA-256")
             val byteData = md.digest(this.getUTF8ByteArray())
             val sb = StringBuilder()
             for (b in byteData) {
@@ -119,7 +120,7 @@ object StringExtension {
      */
     fun String.getUTF8UrlEncoded(): String {
         return try {
-            URLEncoder.encode(this, StandardCharsets.UTF_8.displayName())
+            URLEncoder.encode(this, stringForTest ?: StandardCharsets.UTF_8.displayName())
         } catch (ex: UnsupportedEncodingException) {
             logger.error(ex, "Unsupported encoding.")
             ""
@@ -133,7 +134,7 @@ object StringExtension {
      */
     fun String.getUTF16UrlEncoded(): String {
         return try {
-            URLEncoder.encode(this, StandardCharsets.UTF_16.displayName())
+            URLEncoder.encode(this, stringForTest ?: StandardCharsets.UTF_16.displayName())
         } catch (ex: UnsupportedEncodingException) {
             logger.error(ex, "Unsupported encoding.")
             ""

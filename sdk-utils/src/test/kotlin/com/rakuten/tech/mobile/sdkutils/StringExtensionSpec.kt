@@ -7,9 +7,9 @@ import com.rakuten.tech.mobile.sdkutils.StringExtension.getSha256HashData
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTCDate
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF16ByteArray
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF16UrlEncoded
-import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF8ByteArray
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF8UrlEncoded
 import org.amshove.kluent.shouldBeEqualTo
+import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -19,6 +19,12 @@ import java.text.SimpleDateFormat
 
 @RunWith(RobolectricTestRunner::class)
 class StringExtensionSpec {
+
+    @After
+    fun tearDown() {
+        StringExtension.stringForTest = null
+    }
+
     @Test
     fun `should get color from valid color string`() {
         "#FF0000".getColorValue() shouldBeEqualTo -65536
@@ -35,8 +41,20 @@ class StringExtensionSpec {
     }
 
     @Test
+    fun `should return null when Sha256 hash data not available`() {
+        StringExtension.stringForTest = "anyAlgorithm"
+        "Test".getSha256HashData() shouldBeEqualTo null
+    }
+
+    @Test
     fun `should get MD5 hash data`() {
         "Test".getMD5HashData() shouldBeEqualTo "0cbc6611f5540bd0809a388dc95a615b"
+    }
+
+    @Test
+    fun `should return null when MD5 hash data not available`() {
+        StringExtension.stringForTest = "anyAlgorithm"
+        "Test".getMD5HashData() shouldBeEqualTo null
     }
 
     @Test
@@ -65,8 +83,20 @@ class StringExtensionSpec {
     }
 
     @Test
+    fun `should return empty when UTF-8 URL encoded value not available`() {
+        StringExtension.stringForTest = "anyEncoding"
+        "this is a test".getUTF8UrlEncoded() shouldBeEqualTo ""
+    }
+
+    @Test
     fun `should get UTF-16 URL encoded value`() {
         "this is a test".getUTF16UrlEncoded() shouldBeEqualTo "this+is+a+test"
+    }
+
+    @Test
+    fun `should return empty when UTF-16 URL encoded value not available`() {
+        StringExtension.stringForTest = "anyEncoding"
+        "this is a test".getUTF16UrlEncoded() shouldBeEqualTo ""
     }
 
     @Test
