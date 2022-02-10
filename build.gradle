@@ -14,6 +14,7 @@ buildscript {
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$CONFIG.versions.kotlin"
     classpath 'pl.allegro.tech.build:axion-release-plugin:1.10.2'
     classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
+    classpath 'org.owasp:dependency-check-gradle:6.5.3'
   }
 }
 
@@ -41,4 +42,5 @@ allprojects { proj ->
   proj.version = scmVersion.version
 }
 
+apply from: "$project.rootDir/dependency-check.gradle"
 apply from: "$project.rootDir/sonar.gradle"
