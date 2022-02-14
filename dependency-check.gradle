@@ -8,7 +8,6 @@ allprojects {
         failBuildOnCVSS = System.getenv("DEPENDENCY_CHECK_FAILBUID_CVSS") as Integer
         outputDirectory = 'build/reports/dependency-check'
         formats = ['JSON', 'HTML']
-        showSummary true
     }
 }
 
