@@ -156,10 +156,12 @@ Please see [StringExtension](./sdk-utils/src/main/kotlin/com/rakuten/tech/mobile
 
 ### Networking Utility
 
+See the following networking utility classes and extension functions for easier usage of networking framework.
+
 <ul>
 <li>
 
-```NetworkUtil```: a class that queries information about network connectivity state and capabilities.
+```NetworkUtil```: a class that queries network connectivity state and capabilities.
 
 ```kotlin
 val networkUtil = NetworkUtil(context)
@@ -167,8 +169,8 @@ val networkUtil = NetworkUtil(context)
 // Check whether device has network connectivity
 networkUtil.isOnline()
 
-// Check the network type - Wifi, 2G, 3G...
-networkUtil.networkType()
+// Get network capabilities
+networkUtil.networkCapabilities()
 ```
 
 </li>
