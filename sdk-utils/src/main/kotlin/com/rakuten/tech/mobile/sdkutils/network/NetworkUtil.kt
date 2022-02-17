@@ -47,7 +47,7 @@ class NetworkUtil internal constructor(context: Context,
     }
 
     /**
-     * Return whether the device has network connectivity.
+     * Returns whether the device has network connectivity.
      *
      * @return true if online, false otherwise.
      */
