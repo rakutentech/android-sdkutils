@@ -2,6 +2,7 @@ package com.rakuten.tech.mobile.sdkutils
 
 import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -73,6 +74,11 @@ object ContextExtension {
             }
         }
         return false
+    }
+
+    fun Context.hasPermission(permission: String): Boolean {
+        return this.packageManager.checkPermission(permission, this.packageName) ==
+                PackageManager.PERMISSION_GRANTED
     }
 
     /**

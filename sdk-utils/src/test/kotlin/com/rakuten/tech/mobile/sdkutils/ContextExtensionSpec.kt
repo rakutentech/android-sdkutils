@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import com.google.android.gms.common.GoogleApiAvailability
 import com.rakuten.tech.mobile.sdkutils.ContextExtension.checkPlayServices
 import com.rakuten.tech.mobile.sdkutils.ContextExtension.getAssetsFilePath
 import com.rakuten.tech.mobile.sdkutils.ContextExtension.getDrawableResourceId
 import com.rakuten.tech.mobile.sdkutils.ContextExtension.getRawResourceId
+import com.rakuten.tech.mobile.sdkutils.ContextExtension.hasPermission
 import com.rakuten.tech.mobile.sdkutils.ContextExtension.isDarkMode
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
@@ -17,6 +17,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
+import android.Manifest
 
 @RunWith(RobolectricTestRunner::class)
 class ContextExtensionSpec {
@@ -78,5 +79,10 @@ class ContextExtensionSpec {
     fun `should check play services`() {
         Robolectric.buildActivity(Activity::class.java, Intent()).get()
             .checkPlayServices() shouldBeEqualTo false
+    }
+
+    @Test
+    fun `should check permission`() {
+        context.hasPermission(Manifest.permission.ACCESS_WIFI_STATE) shouldBeEqualTo false
     }
 }
