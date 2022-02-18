@@ -12,29 +12,26 @@ import com.rakuten.tech.mobile.sdkutils.ContextExtension.hasPermission
 import com.rakuten.tech.mobile.sdkutils.logger.Logger
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.jvm.Throws
 
 @SuppressLint("MissingPermission")
-class NetworkUtil internal constructor(context: Context,
-                                       /*private val errorCallback: ((ex: Exception) -> Unit)?,*/
-                                       capabilities: NetworkCapabilities?) {
+class NetworkUtil internal constructor(context: Context, capabilities: NetworkCapabilities?) {
     private val logger = Logger(NetworkUtil::class.java.simpleName)
     private val appContext: Context = context.applicationContext
 
     private val netCapabilities = AtomicReference(capabilities)
     private val isNetworkAvailable = AtomicBoolean(false)
 
-    constructor(context: Context/*, errorCallback: ((ex: Exception) -> Unit)? = null*/):
-            this(context, /*errorCallback,*/ null) {
+    @Throws(Exception::class)
+    constructor(context: Context): this(context,null) {
         if (appContext.hasPermission(Manifest.permission.ACCESS_NETWORK_STATE)) {
             try {
                 registerNetworkCallback()
             } catch (ex: Exception) {
-//                errorCallback?.let {
-//                    it(RuntimeException("Network callback registration failed", ex))
-//                }
                 logger.debug("Network callback registration failed", ex)
                 isNetworkAvailable.set(false)
                 netCapabilities.set(null)
+                throw ex
             }
         }
     }
@@ -87,11 +84,9 @@ class NetworkUtil internal constructor(context: Context,
                         try {
                             netCapabilities.set(connectivityManager.getNetworkCapabilities(network))
                         } catch (ex: Exception) {
-//                            errorCallback?.let {
-//                                it(RuntimeException("Failed to load factory names", ex))
-//                            }
                             logger.debug("Network capabilities retrieval failed", ex)
                             netCapabilities.set(null)
+                            throw ex
                         }
                     }
                 }

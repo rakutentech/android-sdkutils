@@ -18,6 +18,7 @@ import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import java.lang.Exception
 
 @RunWith(RobolectricTestRunner::class)
 class NetworkUtilSpec {
@@ -37,17 +38,10 @@ class NetworkUtilSpec {
         networkUtil = NetworkUtil(context, fakeCapabilities)
     }
 
-    @Test
+    @Test(expected = Exception::class)
     fun `should detect unknown network when exception encountered in network callback`() {
         verifyRegisterException()
     }
-
-//    @Test
-//    fun `should call error callback when exception encountered in network callback`() {
-//        AnalyticsManager.setErrorCallback(mockCallback)
-//        verifyRegisterException()
-//        verifyCallback()
-//    }
 
     @Test
     fun `should set correct capabilities on network change`() {
@@ -74,19 +68,11 @@ class NetworkUtilSpec {
         networkUtil.isOnline().shouldBeTrue()
     }
 
-    @Test
+    @Test(expected = Exception::class)
     @Config(sdk = [Build.VERSION_CODES.N])
     fun `should set null capabilities on network available but encounter exception`() {
         verifyNetCapabilitiesException()
     }
-
-//    @Test
-//    @Config(sdk = [Build.VERSION_CODES.N])
-//    fun `should call error callback on network available but encounter exception`() {
-//        AnalyticsManager.setErrorCallback(mockCallback)
-//        verifyNetCapabilitiesException()
-//        verifyCallback()
-//    }
 
     private fun setupNetworkCapabilities(): ConnectivityManager.NetworkCallback? {
         var callback: ConnectivityManager.NetworkCallback? = null
@@ -96,7 +82,6 @@ class NetworkUtilSpec {
             any(),
             ArgumentMatchers.any(ConnectivityManager.NetworkCallback::class.java)
         )
-
         networkUtil = NetworkUtil(context)
         return callback
     }
@@ -119,10 +104,4 @@ class NetworkUtilSpec {
         networkUtil.networkCapabilities().shouldBeNull()
         networkUtil.isOnline().shouldBeTrue()
     }
-
-//    fun verifyCallback(callback: (ex: Exception) -> Unit, mode: VerificationMode = times(1)) {
-//        val captor = argumentCaptor<RuntimeException>()
-//        Mockito.verify(callback, mode).invoke(captor.capture())
-//        captor.firstValue shouldBeInstanceOf RuntimeException::class.java
-//    }
 }
