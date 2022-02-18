@@ -76,6 +76,11 @@ object ContextExtension {
         return false
     }
 
+    /**
+     * Checks whether a particular permission has been granted.
+     *
+     * @return true if permission is granted, false otherwise.
+     */
     fun Context.hasPermission(permission: String): Boolean {
         return this.packageManager.checkPermission(permission, this.packageName) ==
                 PackageManager.PERMISSION_GRANTED
