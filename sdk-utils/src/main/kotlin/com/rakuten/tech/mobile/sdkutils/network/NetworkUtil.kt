@@ -23,7 +23,7 @@ class NetworkUtil internal constructor(context: Context, capabilities: NetworkCa
     private val isNetworkAvailable = AtomicBoolean(false)
 
     @Throws(Exception::class)
-    constructor(context: Context): this(context,null) {
+    constructor(context: Context): this(context, null) {
         if (appContext.hasPermission(Manifest.permission.ACCESS_NETWORK_STATE)) {
             try {
                 registerNetworkCallback()
