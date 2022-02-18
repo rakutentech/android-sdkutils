@@ -53,15 +53,15 @@ class NetworkUtilSpec {
     fun `should set correct capabilities on network change`() {
         val callback: ConnectivityManager.NetworkCallback? = setupNetworkCapabilities()
         callback?.onCapabilitiesChanged(Mockito.mock(Network::class.java), fakeCapabilities)
-        networkUtil.netCapabilities.get().shouldNotBeNull()
+        networkUtil.networkCapabilities().shouldNotBeNull()
     }
 
     @Test
     fun `should set null capabilities on network lost`() {
         val callback: ConnectivityManager.NetworkCallback? = setupNetworkCapabilities()
         callback?.onLost(Mockito.mock(Network::class.java))
-        networkUtil.netCapabilities.get().shouldBeNull()
-        networkUtil.isNetworkAvailable.get().shouldBeFalse()
+        networkUtil.networkCapabilities().shouldBeNull()
+        networkUtil.isOnline().shouldBeFalse()
     }
 
     @Test
@@ -70,8 +70,8 @@ class NetworkUtilSpec {
         val callback: ConnectivityManager.NetworkCallback? = setupNetworkCapabilities()
         `when`(fakeConnectivity.getNetworkCapabilities(any())).thenReturn(fakeCapabilities)
         callback?.onAvailable(Mockito.mock(Network::class.java))
-        networkUtil.netCapabilities.get().shouldNotBeNull()
-        networkUtil.isNetworkAvailable.get().shouldBeTrue()
+        networkUtil.networkCapabilities().shouldNotBeNull()
+        networkUtil.isOnline().shouldBeTrue()
     }
 
     @Test
@@ -116,8 +116,8 @@ class NetworkUtilSpec {
         val callback: ConnectivityManager.NetworkCallback? = setupNetworkCapabilities()
         `when`(fakeConnectivity.getNetworkCapabilities(any())).thenThrow(IllegalArgumentException("test"))
         callback?.onAvailable(Mockito.mock(Network::class.java))
-        networkUtil.netCapabilities.get().shouldBeNull()
-        networkUtil.isNetworkAvailable.get().shouldBeTrue()
+        networkUtil.networkCapabilities().shouldBeNull()
+        networkUtil.isOnline().shouldBeTrue()
     }
 
 //    fun verifyCallback(callback: (ex: Exception) -> Unit, mode: VerificationMode = times(1)) {

@@ -20,8 +20,8 @@ class NetworkUtil internal constructor(context: Context,
     private val logger = Logger(NetworkUtil::class.java.simpleName)
     private val appContext: Context = context.applicationContext
 
-    internal val netCapabilities = AtomicReference(capabilities)
-    internal val isNetworkAvailable = AtomicBoolean(false)
+    private val netCapabilities = AtomicReference(capabilities)
+    private val isNetworkAvailable = AtomicBoolean(false)
 
     constructor(context: Context/*, errorCallback: ((ex: Exception) -> Unit)? = null*/):
             this(context, /*errorCallback,*/ null) {
@@ -47,8 +47,9 @@ class NetworkUtil internal constructor(context: Context,
     fun isOnline() = isNetworkAvailable.get()
 
     /**
+     * Returns the capabilities of the active network.
      *
-     * TODO: Description and UT
+     * @return NetworkCapabilities object
      */
     fun networkCapabilities() = netCapabilities.get()
 
