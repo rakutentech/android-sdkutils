@@ -22,6 +22,12 @@ class NetworkUtil internal constructor(context: Context, capabilities: NetworkCa
     private val netCapabilities = AtomicReference(capabilities)
     private val isNetworkAvailable = AtomicBoolean(false)
 
+    /**
+     * Initializes this class by registration to network callback.
+     *
+     * @throws Exception exception when net capabilities retrieval fails on versions on or before
+     * Android 8.
+     */
     @Throws(Exception::class)
     constructor(context: Context): this(context, null) {
         if (appContext.hasPermission(Manifest.permission.ACCESS_NETWORK_STATE)) {

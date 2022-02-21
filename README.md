@@ -164,6 +164,8 @@ See the following networking utility classes and extension functions for easier 
 ```NetworkUtil```: a class that queries network connectivity state and capabilities.
 
 ```kotlin
+// Init
+// Wrap in try-catch block since exception can be thrown when net cababilities cannot be retrieved.
 val networkUtil = NetworkUtil(context)
 
 // Check whether device has network connectivity
