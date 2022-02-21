@@ -227,6 +227,10 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 
 ## Changelog
 
+### v1.1.0 (In Progress)
+
+* SDKCF-4887: Added NetworkUtil for checking network connectivity and capabilities. Please see [usage](#networking-utility) section for details.
+
 ### v1.0.0 (2022-02-07)
 
 * SDKCF-4686: Added SharedPreferences handling and App/Env Info retrieval utilities. Please see [usage](#preferences-utility) section for details.
