@@ -166,9 +166,9 @@ See the following networking utility classes and extension functions for easier 
 ```kotlin
 // Init
 // Wrap in try-catch block since exception can be thrown when network callback registration fails.
-lateinit var networkUtil: NetworkUtil
+val networkUtil = NetworkUtil(context)
 try {
-  networkUtil = NetworkUtil(context)
+  networkUtil.initialize()
 } catch (ex: Exception) {
   // Call any error callback if needed.
 }

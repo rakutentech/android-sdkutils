@@ -36,6 +36,7 @@ class NetworkUtilSpec {
         `when`(fakePackageManager.checkPermission(Manifest.permission.ACCESS_NETWORK_STATE,
             context.packageName)).thenReturn(PackageManager.PERMISSION_GRANTED)
         networkUtil = NetworkUtil(context, fakeCapabilities)
+        networkUtil.initialize()
     }
 
     @Test(expected = Exception::class)
@@ -83,6 +84,7 @@ class NetworkUtilSpec {
             ArgumentMatchers.any(ConnectivityManager.NetworkCallback::class.java)
         )
         networkUtil = NetworkUtil(context)
+        networkUtil.initialize()
         return callback
     }
 
@@ -94,6 +96,7 @@ class NetworkUtilSpec {
             )
         ).thenThrow(SecurityException())
         networkUtil = NetworkUtil(context)
+        networkUtil.initialize()
         networkUtil.isOnline().shouldBeFalse()
     }
 
