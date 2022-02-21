@@ -165,8 +165,13 @@ See the following networking utility classes and extension functions for easier 
 
 ```kotlin
 // Init
-// Wrap in try-catch block since exception can be thrown when net cababilities cannot be retrieved.
-val networkUtil = NetworkUtil(context)
+// Wrap in try-catch block since exception can be thrown when network callback registration fails.
+lateinit var networkUtil: NetworkUtil
+try {
+  networkUtil = NetworkUtil(context)
+} catch (ex: Exception) {
+  // Call any error callback if needed.
+}
 
 // Check whether device has network connectivity
 networkUtil.isOnline()
