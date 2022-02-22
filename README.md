@@ -156,12 +156,34 @@ Please see [StringExtension](./sdk-utils/src/main/kotlin/com/rakuten/tech/mobile
 
 ### Networking Utility
 
-The following extension functions make networking framework easy to use, check the sample code to know more.
+See the following networking utility classes and extension functions for easier usage of networking framework.
 
 <ul>
 <li>
 
-```HttpCallback``` : a Callback Class that communicate the remote server response.
+```NetworkUtil```: a class that queries network connectivity state and capabilities.
+
+```kotlin
+// Init
+// Wrap in try-catch block since exception can be thrown when network callback registration fails.
+val networkUtil = NetworkUtil(context)
+try {
+  networkUtil.initialize()
+} catch (ex: Exception) {
+  // Call any error callback if needed.
+}
+
+// Check whether device has network connectivity
+networkUtil.isOnline()
+
+// Get network capabilities
+networkUtil.networkCapabilities()
+```
+
+</li>
+<li>
+
+```HttpCallback```: a Callback Class that communicate the remote server response.
 
  ```kotlin
 // by using an HttpCallback object:
@@ -204,6 +226,10 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 </ul>
 
 ## Changelog
+
+### v1.1.0 (In Progress)
+
+* SDKCF-4887: Added NetworkUtil for checking network connectivity and capabilities. Please see [usage](#networking-utility) section for details.
 
 ### v1.0.0 (2022-02-07)
 
