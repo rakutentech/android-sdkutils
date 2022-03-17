@@ -58,7 +58,7 @@ class MainActivity : Activity() {
     }
 
     fun onAppInfoButtonClick() {
-       showToast(StaticInfoUtil.getAppInfo())
+        showToast(StaticInfoUtil.getAppInfo())
     }
 
     fun onSendRasHeadersRequestClick() {
