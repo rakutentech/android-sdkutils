@@ -11,7 +11,7 @@ sonarqube {
         property 'sonar.login', System.getenv("SONARQUBE_TOKEN")
         property 'sonar.projectKey', System.getenv("SONARQUBE_PROJ_KEY")
         property 'sonar.projectVersion', scmVersion.version
-        if (branch == baseBranch || branch == "") {
+        if (branch == baseBranch || branch == "" || !branch) {
             property 'sonar.branch.name', baseBranch
         } else {
             property 'sonar.pullrequest.key', System.getenv("BITRISE_PULL_REQUEST").findAll(/\d+/)*.toInteger().last()
