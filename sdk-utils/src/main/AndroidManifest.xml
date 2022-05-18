@@ -3,10 +3,13 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
 
   <application>
+    <!-- It is not recommended to override the `initOrder`, however,
+    if you need to manually set it, make sure that it is initialized before your own
+    ContentProvider. -->
     <provider
       android:name="com.rakuten.tech.mobile.sdkutils.SdkUtilsInitProvider"
       android:authorities="${applicationId}.SdkUtilsInitProvider"
       android:exported="false"
-      android:initOrder="99" />
+      android:initOrder="9999" />
   </application>
 </manifest>
