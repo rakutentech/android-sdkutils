@@ -24,26 +24,26 @@ class LoggerSpec {
     @Before
     fun setup() {
         logger = Logger(TAG)
-        Logger.setDebugLevel(3)
+        logger.setDebugLevel(3)
     }
 
     @Test
     fun `should disable debug and verbose logging in set debug`() {
-        Logger.setDebug(false)
+        logger.setDebug(false)
         logger.debug("some debug log")
         assertThatLog().hasNoMoreMessages()
     }
 
     @Test
     fun `should enable debug and verbose logging in set debug`() {
-        Logger.setDebug(true)
+        logger.setDebug(true)
         logger.debug("some debug log")
         assertThatLog().hasSequentialMessage(Log.DEBUG, TAG, listOf("some debug log"))
     }
 
     @Test
     fun `should not affect info and above in set debug`() {
-        Logger.setDebug(false)
+        logger.setDebug(false)
         logger.info("info")
         logger.warn("warn")
         logger.error("error")
@@ -55,7 +55,7 @@ class LoggerSpec {
 
     @Test
     fun `should only print invocation location on debug logs`() {
-        Logger.setDebug(true)
+        logger.setDebug(true)
         val className = this.javaClass.name
         logger.debug("debug")
         logger.info("info")
@@ -71,7 +71,7 @@ class LoggerSpec {
 
     @Test
     fun `should print stacktrace debug`() {
-        Logger.setDebug(true)
+        logger.setDebug(true)
         logger.debug(Throwable(), "debug")
         assertThatLog().hasMessage(Log.DEBUG, TAG, "debug")
             .hasMessage(Log.DEBUG, TAG, "Caused by:")
@@ -100,7 +100,7 @@ class LoggerSpec {
 
     @Test
     fun `should print max log`() {
-        Logger.setDebug(true)
+        logger.setDebug(true)
 
         logger.debug(Throwable(), "test".repeat(1000))
         assertThatLog().hasMessage(Log.DEBUG, TAG, "test")
@@ -108,13 +108,13 @@ class LoggerSpec {
 
     @Test
     fun `should display default trace line if not in level range`() {
-        Logger.setDebug(true)
+        logger.setDebug(true)
 
-        Logger.setDebugLevel(100)
+        logger.setDebugLevel(100)
         logger.debug(Throwable(), "test")
         assertThatLog().hasMessage(Log.DEBUG, TAG, "test")
 
-        Logger.setDebugLevel(-1)
+        logger.setDebugLevel(-1)
         logger.debug(Throwable(), "test")
         assertThatLog().hasMessage(Log.DEBUG, TAG, "test")
     }
