@@ -8,7 +8,6 @@ import kotlin.math.min
 /**
  * Simple logging facility.
  *
- *
  * Logging conventions are:
  *  * Debug: for SDK developers. Will print source file, method and line.
  *  * Info: for SDK consumers. They should know, but is no problem.
@@ -16,16 +15,27 @@ import kotlin.math.min
  *  * Error: for SDK consumers: An error that may cause the SDK to stop working.
  *
  * By default only info, warn and error are logged. Debug is only logged
- * if [Logger.setDebug] is called with `true`.
+ * if `loggerInstance.setDebug(true)` is called.
  *
  * All log calls come in 2 variants:
  *  * log(String template, Object.. args) - will use [String.format] to format the string.
  *  * log(Throwable cause, String template, Object.. args) - same as above
  *  but will add a "Caused by" and stacktrace to the log.
  *
+ *  @param [tag] Optional identifier for the source of a log message. Default value is "".
  */
 @SuppressWarnings("TooManyFunctions", "SpreadOperator")
 open class Logger(private val tag: String = "") {
+
+    private var isDebug = false
+
+    /**
+     * The level of the stack trace to be logged.
+     * Set by default to 5 (it's the trace level of the running thread when
+     * SDKUtils is implemented in an application). If the logger is used in another SDK
+     * you may need to upgrade it using `loggerInstance.setDebug()` to display the host SDK's logs.
+     */
+    private var stackTraceLevel = 5
 
     @SuppressWarnings("LongMethod", "ComplexMethod", "NestedBlockDepth")
     @Synchronized
@@ -164,38 +174,30 @@ open class Logger(private val tag: String = "") {
         log(Log.ERROR, cause, message, *args)
     }
 
+    /**
+     * This method enables/disables debug logger.
+     * By default only info, warn and error are logged. Debug is only logged
+     * if `loggerInstance.setDebug(true)` is called.
+     *
+     * @param debug true to enable debug, false otherwise
+     */
+    fun setDebug(debug: Boolean) {
+        isDebug = debug
+    }
+
+    /**
+     * Set the level of the stack trace line to be logged.
+     * The element at the top of the stack (stackFramePosition = 0) represents the execution
+     * point at which the stack trace was generated.
+     *
+     * @param stackFramePosition the position of the stack trace element to be logged.
+     */
+    fun setDebugLevel(stackFramePosition: Int) {
+        this.stackTraceLevel = stackFramePosition
+    }
+
     companion object {
         private const val MAX_LOG_LENGTH = 4000
         private const val INITIAL_SIZE = 256
-        private var isDebug = false
-
-        /**
-         * The level of the stack trace to be logged.
-         * Set by default to 5 (it's the trace level of the running thread when
-         * SDKUtils is implemented in an application). If the logger is used in another SDK
-         * you may need to upgrade it using [Logger.setDebug] to display the host SDK's logs.
-         */
-        private var stackTraceLevel = 5
-
-        /**
-         * This method enables/disables debug logger.
-         * By default only info, warn and error are logged. Debug is only logged
-         * if [Logger.setDebug] is called with `true`.
-         * @param debug true to enable debug, false otherwise
-         */
-        fun setDebug(debug: Boolean) {
-            isDebug = debug
-        }
-
-        /**
-         * Set the level of the stack trace line to be logged.
-         * The element at the top of the stack (stackFramePosition = 0) represents the execution
-         * point at which the stack trace was generated.
-         *
-         * @param stackFramePosition the position of the stack trace element to be logged.
-         */
-        fun setDebugLevel(stackFramePosition: Int) {
-            this.stackTraceLevel = stackFramePosition
-        }
     }
 }

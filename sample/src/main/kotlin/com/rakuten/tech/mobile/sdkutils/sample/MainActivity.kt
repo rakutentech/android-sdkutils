@@ -38,7 +38,7 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // enable debug logs (by default only info, warn and error are logged)
-        Logger.setDebug(true)
+        log.setDebug(true)
         log.debug("sample debug log at %s", listOf(Date()))
 
         super.onCreate(savedInstanceState)

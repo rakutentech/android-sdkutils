@@ -77,14 +77,14 @@ Logging conventions are:
 * Warn: for SDK consumers. An unexpected situation, that the SDK can recover from.
 * Error: for SDK consumers: An error that may cause the SDK to stop working.
 
-By default only info, warn and error are logged. Debug is only logged if [Logger.setDebug] is called with `true`.
+By default only info, warn and error are logged. Debug is only logged if `loggerInstance.setDebug(true)` is called.
 
 The level of the stack trace to be logged is set by default to 5 (it's the trace level of the running thread when SDKUtils is implemented in an application). 
-You may need to upgrade the level using ```Logger.setDebugLevel(yourLevel)``` if SDKUtils is implemented in another SDK.
+You may need to upgrade the level using ```loggerInstance.setDebugLevel(yourLevel)``` if SDKUtils is implemented in another SDK.
 
 ```kotlin
-Logger.setDebugLevel(6)
 private val log = Logger(TAG)
+log.setDebugLevel(6)
 ```
 
 All log calls come in 2 variants:
@@ -96,7 +96,7 @@ All log calls come in 2 variants:
 private val log = Logger(MainActivity::class.java.simpleName)
 
 //enable debug logs (by default only info, warn and error are logged)
-Logger.setDebug(true)
+log.setDebug(true)
 
 //Examples:
 log.debug("simple debug log") // simple debug log  
@@ -224,6 +224,9 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 </ul>
 
 ## Changelog
+
+### v2.0.0 (in-progress)
+* SDKCF-5390: **Breaking Changes:** Moved `setDebugLevel()` and `setDebug()` APIs from static to `Logger` class APIs. This will allow multiple SDK app dependencies to have their own debug logging configuration.
 
 ### v1.2.0 (2022-05-19)
 * SDKCF-5292: Set initOrder of the content provider to a high value to make sure that it is initialized before the host app ContentProvider.
