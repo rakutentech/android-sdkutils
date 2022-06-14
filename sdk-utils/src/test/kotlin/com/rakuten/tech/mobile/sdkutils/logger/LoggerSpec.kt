@@ -35,6 +35,13 @@ class LoggerSpec {
     }
 
     @Test
+    fun `should not enable debug in set debug static api`() {
+        Logger.setDebug(true)
+        logger.debug("some debug log")
+        assertThatLog().hasNoMoreMessages()
+    }
+
+    @Test
     fun `should enable debug and verbose logging in set debug`() {
         logger.setDebug(true)
         logger.debug("some debug log")
@@ -115,6 +122,10 @@ class LoggerSpec {
         assertThatLog().hasMessage(Log.DEBUG, TAG, "test")
 
         logger.setDebugLevel(-1)
+        logger.debug(Throwable(), "test")
+        assertThatLog().hasMessage(Log.DEBUG, TAG, "test")
+
+        Logger.setDebugLevel(100)
         logger.debug(Throwable(), "test")
         assertThatLog().hasMessage(Log.DEBUG, TAG, "test")
     }

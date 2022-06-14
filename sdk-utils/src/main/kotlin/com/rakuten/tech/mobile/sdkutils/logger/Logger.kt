@@ -199,5 +199,26 @@ open class Logger(private val tag: String = "") {
     companion object {
         private const val MAX_LOG_LENGTH = 4000
         private const val INITIAL_SIZE = 256
+
+        /**
+         * This method enables/disables debug logger.
+         * By default only info, warn and error are logged. Debug is only logged
+         * if [Logger.setDebug] is called with `true`.
+         * @param debug true to enable debug, false otherwise
+         */
+        @Deprecated("Using this method will have no effect.",
+            ReplaceWith("`loggerInstance.setDebug(<true/false>)`"))
+        fun setDebug(debug: Boolean) = Unit
+
+        /**
+         * Set the level of the stack trace line to be logged.
+         * The element at the top of the stack (stackFramePosition = 0) represents the execution
+         * point at which the stack trace was generated.
+         *
+         * @param stackFramePosition the position of the stack trace element to be logged.
+         */
+        @Deprecated("Using this method will have no effect.",
+            ReplaceWith("`loggerInstance.setDebugLevel(<value>)`"))
+        fun setDebugLevel(stackFramePosition: Int) = Unit
     }
 }
