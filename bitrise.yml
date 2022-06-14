@@ -39,10 +39,6 @@ workflows:
         title: Current Version
         inputs:
         - content: ./gradlew currentVersion
-    - script@1:
-        title: Upload Code Coverage
-        inputs:
-        - content: bash <(curl -s https://codecov.io/bash)
     - custom-test-results-export@0:
         # this add-on should export test artifacts as well, but currently not displayed.
         inputs:
