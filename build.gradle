@@ -1,8 +1,7 @@
 buildscript {
   apply from: "config/index.gradle"
 
-  CONFIG.versions.kotlin = '1.6.10'
-  CONFIG.versions.java = '1.8'
+  CONFIG.versions.kotlin = '1.6.21'
   CONFIG.versions.okhttp = '3.12.3' // Higher versions require Java 8 to be enabled
 
   repositories {

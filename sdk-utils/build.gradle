@@ -77,7 +77,7 @@ def isSnapshot = project.version.contains('-')
 if (isSnapshot) {
   project.ext.ARTIFACTORY_URL=CONFIG.property("ARTIFACTORY_URL_SNAPSHOT")
   project.ext.ARTIFACTORY_REPO=CONFIG.property("ARTIFACTORY_REPO_SNAPSHOT")
-  apply from: '../config/publish/artifactory.gradle'
+  apply from: '../config/publish/repository.gradle'
 } else {
   apply from: '../config/publish/maven-central.gradle'
 }
