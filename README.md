@@ -225,6 +225,9 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 
 ## Changelog
 
+### v2.1.0 (In-Progress)
+* SDKCF-5307: Added version string resource which can be referenced by the name `sdk_utils__version`.
+
 ### v2.0.0 (2022-06-23)
 * SDKCF-5390: **Breaking Changes:** Moved `setDebugLevel()` and `setDebug()` APIs from static to `Logger` class APIs. This will allow multiple SDK app dependencies to have their own debug logging configuration.
   - Deprecated `Logger.setDebugLevel()` and `Logger.setDebug()` static APIs. These APIs will no longer work but not removed to avoid crashes on incompatible SDK versions.
