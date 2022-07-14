@@ -7,6 +7,10 @@ android {
     resValue 'string', 'sdk_utils__version', project.version
   }
 
+  lintOptions {
+    disable 'UnusedResources'
+  }
+
   sourceSets.each {
     it.java.srcDirs += "src/$it.name/kotlin"
   }
