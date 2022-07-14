@@ -67,7 +67,7 @@ open class Logger(private val tag: String = "") {
         var location: StackTraceElement? = null
 
         when {
-            stackTraceLevel >= st.size -> stackTraceLevel = st.size -1
+            stackTraceLevel >= st.size -> stackTraceLevel = st.size - 1
             stackTraceLevel < 0 -> stackTraceLevel = 0
         }
 

@@ -6,6 +6,7 @@ import androidx.annotation.VisibleForTesting
 /**
  * Standard headers that should be sent with all requests to RAS.
  */
+@SuppressWarnings("LongParameterList")
 class RasSdkHeaders private constructor(
     private val appId: Pair<String, String>,
     private val subscriptionKey: Pair<String, String>,

@@ -40,11 +40,11 @@ private data class RealAppInfo @VisibleForTesting constructor(
     constructor(context: Context) : this (
         name = context.packageName,
         version = try {
-                context.packageManager.getPackageInfo(context.packageName, 0).versionName
-            } catch (ex: PackageManager.NameNotFoundException) {
-                Logger(TAG).warn(ex, "Failed to load current app version")
-                null
-            }
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+        } catch (ex: PackageManager.NameNotFoundException) {
+            Logger(TAG).warn(ex, "Failed to load current app version")
+            null
+        }
 
     )
 

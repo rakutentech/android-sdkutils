@@ -49,7 +49,7 @@ class AppInfoSpec {
     @Test
     fun `should return null App Version`() {
         `when`(mockContext.packageManager.getPackageInfo(Mockito.anyString(), Mockito.anyInt()))
-                .thenThrow(PackageManager.NameNotFoundException::class.java)
+            .thenThrow(PackageManager.NameNotFoundException::class.java)
         AppInfo.init(mockContext)
         AppInfo.instance.version shouldBeEqualTo null
     }

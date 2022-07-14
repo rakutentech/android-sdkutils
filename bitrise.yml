@@ -87,7 +87,7 @@ workflows:
     steps:
     - set-java-version@1:
         inputs:
-        - set_java_version: '8'
+        - set_java_version: '11'
     - git-clone@6:
         inputs:
         - fetch_tags: 'yes'

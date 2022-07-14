@@ -7,6 +7,7 @@ import com.rakuten.tech.mobile.sdkutils.logger.Logger
 /**
  * Helper class to get/set values in shared preferences.
  */
+@SuppressWarnings("TooManyFunctions")
 object PreferencesUtil {
     private val TAG: String = PreferencesUtil::class.java.simpleName
 
@@ -20,13 +21,12 @@ object PreferencesUtil {
      * @return return the integer value
      */
     fun getInt(context: Context, name: String, key: String, defValue: Int = -1) = try {
-            getSharedPreferences(context, name).getInt(key, defValue)
-        } catch (e: ClassCastException) {
-            Logger(TAG)
-                .debug("There is a preference with this name that is not an int.", e)
-            defValue
-        }
-
+        getSharedPreferences(context, name).getInt(key, defValue)
+    } catch (e: ClassCastException) {
+        Logger(TAG)
+            .debug("There is a preference with this name that is not an int.", e)
+        defValue
+    }
 
     /**
      * Get long value from shared preferences.
@@ -38,12 +38,12 @@ object PreferencesUtil {
      * @return return the long value
      */
     fun getLong(context: Context, name: String, key: String, defValue: Long = -1) = try {
-            getSharedPreferences(context, name).getLong(key, defValue)
-        } catch (e: ClassCastException) {
-            Logger(TAG)
-                .debug("There is a preference with this name that is not a long.", e)
-            defValue
-        }
+        getSharedPreferences(context, name).getLong(key, defValue)
+    } catch (e: ClassCastException) {
+        Logger(TAG)
+            .debug("There is a preference with this name that is not a long.", e)
+        defValue
+    }
 
     /**
      * Get floating value from shared preferences.
@@ -55,12 +55,12 @@ object PreferencesUtil {
      * @return return the floating value
      */
     fun getFloat(context: Context, name: String, key: String, defValue: Float = -1.0f) = try {
-            getSharedPreferences(context, name).getFloat(key, defValue)
-        } catch (e: ClassCastException) {
-            Logger(TAG)
-                .debug("There is a preference with this name that is not a float.", e)
-            defValue
-        }
+        getSharedPreferences(context, name).getFloat(key, defValue)
+    } catch (e: ClassCastException) {
+        Logger(TAG)
+            .debug("There is a preference with this name that is not a float.", e)
+        defValue
+    }
 
     /**
      * Get boolean value from shared preferences.
@@ -72,12 +72,12 @@ object PreferencesUtil {
      * @return return the boolean value
      */
     fun getBoolean(context: Context, name: String, key: String, defValue: Boolean = false) = try {
-            getSharedPreferences(context, name).getBoolean(key, defValue)
-        } catch (e: ClassCastException) {
-            Logger(TAG)
-                .debug("There is a preference with this name that is not a boolean.", e)
-            defValue
-        }
+        getSharedPreferences(context, name).getBoolean(key, defValue)
+    } catch (e: ClassCastException) {
+        Logger(TAG)
+            .debug("There is a preference with this name that is not a boolean.", e)
+        defValue
+    }
 
     /**
      * Get string value from shared preferences.
@@ -89,12 +89,12 @@ object PreferencesUtil {
      * @return return the string value
      */
     fun getString(context: Context, name: String, key: String, defValue: String?) = try {
-            getSharedPreferences(context, name).getString(key, defValue)
-        } catch (e: ClassCastException) {
-            Logger(TAG)
-                .debug("There is a preference with this name that is not a String.", e)
-            defValue
-        }
+        getSharedPreferences(context, name).getString(key, defValue)
+    } catch (e: ClassCastException) {
+        Logger(TAG)
+            .debug("There is a preference with this name that is not a String.", e)
+        defValue
+    }
 
     /**
      * Get string set values from shared preferences.
@@ -116,7 +116,6 @@ object PreferencesUtil {
         Logger(TAG).debug("There is a preference with this name that is not a Set.", e)
         defValue
     }
-
 
     /**
      * Put integer value to shared preferences.
@@ -218,11 +217,9 @@ object PreferencesUtil {
      * @return Returns true if the preference exists in the preferences,
      *         otherwise false.
      */
-    fun contains(context: Context, name: String, key: String): Boolean {
-        return getSharedPreferences(context, name).contains(key)
-    }
+    fun contains(context: Context, name: String, key: String): Boolean =
+        getSharedPreferences(context, name).contains(key)
 
-    private fun getSharedPreferences(context: Context, name: String): SharedPreferences {
-        return context.getSharedPreferences(name, Context.MODE_PRIVATE)
-    }
+    private fun getSharedPreferences(context: Context, name: String): SharedPreferences =
+        context.getSharedPreferences(name, Context.MODE_PRIVATE)
 }

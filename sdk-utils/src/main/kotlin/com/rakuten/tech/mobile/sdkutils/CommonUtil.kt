@@ -4,8 +4,9 @@ import android.annotation.SuppressLint
 import android.os.Build
 import java.text.DateFormat
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.TimeZone
 
+@SuppressWarnings("LongParameterList", "UndocumentedPublicClass")
 object CommonUtil {
     /**
      * Get the UTC date format from the simple date format, i.e. "yyyy-MM-dd'T'HH:mm:ssX"
