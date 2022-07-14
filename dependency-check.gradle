@@ -6,7 +6,7 @@ allprojects {
         // set the Common Vulnerability Scoring System value
         // https://nvd.nist.gov/vuln-metrics/cvss
         failBuildOnCVSS = System.getenv("DEPENDENCY_CHECK_FAILBUID_CVSS") as Integer
-        outputDirectory = 'build/reports/dependency-check'
+        suppressionFile = 'dependency_check_suppressions.xml'
         formats = ['JSON', 'HTML']
     }
 }
