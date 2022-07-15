@@ -1,4 +1,5 @@
 apply from: '../config/android/library.gradle'
+apply from: '../config/quality/gitleaks/build.gradle'
 apply plugin: "kotlin-android"
 apply plugin: 'kotlin-kapt'
 
@@ -13,13 +14,8 @@ android {
     }
   }
 
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-
   kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_1_8.toString()
+    jvmTarget = JavaVersion.toVersion(CONFIG.versions.java).toString()
   }
 }
 
@@ -34,7 +30,7 @@ dependencies {
   implementation 'com.google.android.gms:play-services-base:17.0.0'
 
   testImplementation 'junit:junit:4.13.2'
-  testImplementation 'org.robolectric:robolectric:4.3'
+  testImplementation 'org.robolectric:robolectric:4.7.3'
   testImplementation "org.amshove.kluent:kluent-android:1.65"
   testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
   testImplementation "org.mockito:mockito-inline:3.2.0"
@@ -44,14 +40,18 @@ dependencies {
 
 apply from: "../config/quality/jacoco/android.gradle"
 jacoco {
-  toolVersion = "0.8.5"
+  toolVersion = "0.8.7"
 }
 
 apply from: "../config/quality/checkstyle/android.gradle"
 apply from: "../config/quality/detekt/android.gradle"
 dependencies {
   // Enable the KtLint rules
-  detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.16.0"
+  detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0"
+}
+
+detekt {
+  config = rootProject.files('detekt-config.yml')
 }
 
 apply from: '../config/publish/android.gradle'
@@ -76,7 +76,7 @@ def isSnapshot = project.version.contains('-')
 if (isSnapshot) {
   project.ext.ARTIFACTORY_URL=CONFIG.property("ARTIFACTORY_URL_SNAPSHOT")
   project.ext.ARTIFACTORY_REPO=CONFIG.property("ARTIFACTORY_REPO_SNAPSHOT")
-  apply from: '../config/publish/artifactory.gradle'
+  apply from: '../config/publish/repository.gradle'
 } else {
   apply from: '../config/publish/maven-central.gradle'
 }

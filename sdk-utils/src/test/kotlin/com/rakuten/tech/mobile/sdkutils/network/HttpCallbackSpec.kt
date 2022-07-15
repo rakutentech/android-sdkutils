@@ -4,7 +4,6 @@ import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
-import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldNotBeEqualTo
@@ -38,10 +37,10 @@ class HttpCallbackSpec {
 
     @Test
     fun `should return success response`() {
-        var expectedResponse: Response? =  null
+        var expectedResponse: Response? = null
         var exception: java.lang.Exception? = null
 
-        getResponse( "https://example.com",
+        getResponse("https://example.com",
             { expectedResponse = it }, { exception = it })
 
         server.takeRequest(5, TimeUnit.SECONDS)
@@ -51,10 +50,10 @@ class HttpCallbackSpec {
 
     @Test
     fun `should return exception`() {
-        var expectedResponse: Response? =  null
+        var expectedResponse: Response? = null
         var exception: java.lang.Exception? = null
 
-        getResponse( "https://invalid-url",
+        getResponse("https://invalid-url",
             { expectedResponse = it },
             { exception = it }
         )
@@ -64,10 +63,13 @@ class HttpCallbackSpec {
         exception shouldNotBeEqualTo null
     }
 
-    private fun getResponse(url: String, success: (response: Response) -> Unit, failure: (exception: Exception) -> Unit) {
+    private fun getResponse(
+        url: String,
+        success: (response: Response) -> Unit,
+        failure: (exception: Exception) -> Unit
+    ) {
         val request = Request.Builder().url(url).build()
         val client = OkHttpClient.Builder().build()
         client.newCall(request).enqueue(HttpCallback(success, failure))
     }
-
 }

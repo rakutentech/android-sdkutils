@@ -6,7 +6,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-
 /**
  * This method returns a reference of Retrofit.
  * Retrofit is handling API calls. Adding GsonConverterFactory for parsing returned JSON.

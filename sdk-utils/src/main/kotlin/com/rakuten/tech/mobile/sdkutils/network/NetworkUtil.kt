@@ -14,6 +14,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.jvm.Throws
 
+/**
+ * Network Utility Class.
+ */
 @SuppressLint("MissingPermission")
 class NetworkUtil internal constructor(context: Context, capabilities: NetworkCapabilities?) {
     private val logger = Logger(NetworkUtil::class.java.simpleName)
@@ -22,7 +25,7 @@ class NetworkUtil internal constructor(context: Context, capabilities: NetworkCa
     private val netCapabilities = AtomicReference(capabilities)
     private val isNetworkAvailable = AtomicBoolean(false)
 
-    constructor(context: Context): this(context, null)
+    constructor(context: Context) : this(context, null)
 
     /**
      * Initializes this class by registration to network callback.
@@ -32,6 +35,7 @@ class NetworkUtil internal constructor(context: Context, capabilities: NetworkCa
      * Android 8.
      */
     @Throws(Exception::class)
+    @SuppressWarnings("TooGenericExceptionCaught")
     fun initialize() {
         if (appContext.hasPermission(Manifest.permission.ACCESS_NETWORK_STATE)) {
             try {
@@ -55,7 +59,7 @@ class NetworkUtil internal constructor(context: Context, capabilities: NetworkCa
     /**
      * Returns the capabilities of the active network.
      *
-     * @return NetworkCapabilities object
+     * @return NetworkCapabilities object.
      */
     fun networkCapabilities() = netCapabilities.get()
 
@@ -83,6 +87,7 @@ class NetworkUtil internal constructor(context: Context, capabilities: NetworkCa
                     netCapabilities.set(null)
                 }
 
+                @SuppressWarnings("TooGenericExceptionCaught")
                 override fun onAvailable(network: Network) {
                     super.onAvailable(network)
                     isNetworkAvailable.set(true)

@@ -50,8 +50,8 @@ class HeaderInterceptorSpec {
     @Test
     fun `should attach all of the provided headers`() {
         val client = OkHttpClient.Builder().addHeaderInterceptor(
-                "test_header_name" to "test_header_value",
-                "test_header_name_2" to "test_header_value_2"
+            "test_header_name" to "test_header_value",
+            "test_header_name_2" to "test_header_value_2"
         ).build()
 
         client.newCall(

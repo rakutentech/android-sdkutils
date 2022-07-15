@@ -22,8 +22,8 @@ sonarqube {
 
         /* Dependency Check */
         property 'sonar.dependencyCheck.skip', System.getenv("SONAR_DEPENDENCYCHECK_SKIP")
-        property 'sonar.dependencyCheck.jsonReportPath', 'build/reports/dependency-check/dependency-check-report.json'
-        property 'sonar.dependencyCheck.htmlReportPath', 'build/reports/dependency-check/dependency-check-report.html'
+        property 'sonar.dependencyCheck.jsonReportPath', 'build/reports/dependency-check-report.json'
+        property 'sonar.dependencyCheck.htmlReportPath', 'build/reports/dependency-check-report.html'
     }
 }
 

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: ant-1.8.0.jar
+   ]]></notes>
+    <sha1>7b456ca6b93900f96e58cc8371f03d90a9c1c8d1</sha1>
+    <cve>CVE-2020-1945</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: ant-launcher-1.8.0.jar
+   ]]></notes>
+    <sha1>08b53ba16fa62fb1034da8f1de200ddc407c8381</sha1>
+    <cve>CVE-2020-1945</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: bcprov-jdk15on-1.52.jar
+   ]]></notes>
+    <sha1>88a941faf9819d371e3174b5ed56a3f3f7d73269</sha1>
+    <cve>CVE-2016-1000338</cve>
+    <cve>CVE-2016-1000339</cve>
+    <cve>CVE-2016-1000340</cve>
+    <cve>CVE-2016-1000341</cve>
+    <cve>CVE-2016-1000342</cve>
+    <cve>CVE-2016-1000343</cve>
+    <cve>CVE-2016-1000344</cve>
+    <cve>CVE-2016-1000345</cve>
+    <cve>CVE-2016-1000346</cve>
+    <cve>CVE-2016-1000352</cve>
+    <cve>CVE-2017-13098</cve>
+    <cve>CVE-2020-15522</cve>
+    <cve>CVE-2020-26939</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: bcprov-jdk15on-1.56.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov\-jdk15on@.*$</packageUrl>
+    <cve>CVE-2017-13098</cve>
+    <cve>CVE-2018-1000180</cve>
+    <cve>CVE-2018-1000613</cve>
+    <cve>CVE-2020-15522</cve>
+    <cve>CVE-2020-26939</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: builder-4.0.2.jar: desugar_deploy.jar (shaded: com.google.guava:guava:21.0)
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.google\.guava/guava@.*$</packageUrl>
+    <cve>CVE-2018-10237</cve>
+    <cve>CVE-2020-8908</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: checkstyle-8.18.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.puppycrawl\.tools/checkstyle@.*$</packageUrl>
+    <cve>CVE-2019-10782</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: commons-beanutils-1.9.3.jar
+   ]]></notes>
+    <cve>CVE-2014-0114</cve>
+    <cve>CVE-2019-10086</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: detekt-api-1.1.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.gitlab\.arturbosch\.detekt/detekt\-api@.*$</packageUrl>
+    <cve>CVE-2022-0272</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: detekt-api-1.16.0.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.gitlab\.arturbosch\.detekt/detekt\-api@.*$</packageUrl>
+    <cve>CVE-2022-0272</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: detekt-cli-1.1.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.gitlab\.arturbosch\.detekt/detekt\-cli@.*$</packageUrl>
+    <cve>CVE-2022-0272</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: detekt-core-1.1.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.gitlab\.arturbosch\.detekt/detekt\-core@.*$</packageUrl>
+    <cve>CVE-2022-0272</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: detekt-formatting-1.16.0.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.gitlab\.arturbosch\.detekt/detekt\-formatting@.*$</packageUrl>
+    <cve>CVE-2022-0272</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: detekt-psi-utils-1.16.0.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.gitlab\.arturbosch\.detekt/detekt\-psi\-utils@.*$</packageUrl>
+    <cve>CVE-2022-0272</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: detekt-rules-1.1.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.gitlab\.arturbosch\.detekt/detekt\-rules@.*$</packageUrl>
+    <cve>CVE-2022-0272</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: full.jar (project :sdk-utils)
+   ]]></notes>
+    <sha1>71420036a96b44093cca7075a25a9c6284c9d697</sha1>
+    <cve>CVE-2020-10517</cve>
+    <cve>CVE-2020-10518</cve>
+    <cve>CVE-2020-10519</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-compiler-embeddable-1.3.50.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-compiler\-embeddable@.*$</packageUrl>
+    <cve>CVE-2020-29582</cve>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-compiler-embeddable-1.4.21.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-compiler\-embeddable@.*$</packageUrl>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-daemon-embeddable-1.3.50.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-daemon\-embeddable@.*$</packageUrl>
+    <cve>CVE-2020-29582</cve>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-daemon-embeddable-1.4.21.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-daemon\-embeddable@.*$</packageUrl>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-reflect-1.3.50.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-reflect@.*$</packageUrl>
+    <cve>CVE-2020-29582</cve>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-reflect-1.4.21.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-reflect@.*$</packageUrl>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-script-runtime-1.3.50.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-script\-runtime@.*$</packageUrl>
+    <cve>CVE-2020-29582</cve>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-script-runtime-1.4.21.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-script\-runtime@.*$</packageUrl>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-stdlib-1.3.50.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-stdlib@.*$</packageUrl>
+    <cve>CVE-2020-29582</cve>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-stdlib-1.4.21.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-stdlib@.*$</packageUrl>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-stdlib-common-1.3.50.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-stdlib\-common@.*$</packageUrl>
+    <cve>CVE-2020-29582</cve>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: kotlin-stdlib-common-1.4.21.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.jetbrains\.kotlin/kotlin\-stdlib\-common@.*$</packageUrl>
+    <cve>CVE-2022-24329</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: maven-ant-tasks-2.1.3.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.maven/maven\-ant\-tasks@.*$</packageUrl>
+    <cve>CVE-2020-22475</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: maven-artifact-manager-2.2.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.maven/maven\-artifact\-manager@.*$</packageUrl>
+    <vulnerabilityName>CVE-2021-26291</vulnerabilityName>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: nekohtml-1.9.6.2.jar
+   ]]></notes>
+    <sha1>2d960be7b62ae6622dbbbe49ab4ffdc609f85c80</sha1>
+    <cve>CVE-2022-24839</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: okhttp-3.14.9.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.squareup\.okhttp3/okhttp@.*$</packageUrl>
+    <vulnerabilityName>CVE-2021-0341</vulnerabilityName>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: plexus-utils-1.5.15.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.codehaus\.plexus/plexus\-utils@.*$</packageUrl>
+    <cve>CVE-2017-1000487</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: protobuf-java-2.6.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.google\.protobuf/protobuf\-java@.*$</packageUrl>
+    <cve>CVE-2021-22569</cve>
+  </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: snakeyaml-1.24.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
+    <cve>CVE-2017-18640</cve>
+  </suppress>
+</suppressions>

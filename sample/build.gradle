@@ -1,4 +1,5 @@
 apply from: '../config/android/application.gradle'
+apply from: '../config/quality/gitleaks/build.gradle'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -18,13 +19,8 @@ android {
     enabled = true
   }
 
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-
   kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_1_8.toString()
+    jvmTarget = JavaVersion.toVersion(CONFIG.versions.java).toString()
   }
 
 }
@@ -40,5 +36,9 @@ dependencies {
 apply from: "../config/quality/detekt/android.gradle"
 dependencies {
   // Enable the KtLint rules
-  detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.1.1"
+  detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0"
+}
+
+detekt {
+  config = rootProject.files('detekt-config.yml')
 }

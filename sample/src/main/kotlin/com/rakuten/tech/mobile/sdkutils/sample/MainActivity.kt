@@ -53,8 +53,10 @@ class MainActivity : Activity() {
             this, "$packageName.shared", "TEST_STRING",
             "Test String"
         )
-        showToast(PreferencesUtil
-            .getString(this, "$packageName.shared", "TEST_STRING", null) ?: "")
+        showToast(
+            PreferencesUtil
+                .getString(this, "$packageName.shared", "TEST_STRING", null) ?: ""
+        )
     }
 
     fun onAppInfoButtonClick() {

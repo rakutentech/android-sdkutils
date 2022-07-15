@@ -231,6 +231,7 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 
 ### v1.2.0 (2022-05-19)
 * SDKCF-5292: Set initOrder of the content provider to a high value to make sure that it is initialized before the host app ContentProvider.
+* SDKCF-4921: Added support for building with Java 11.
 
 ### v1.1.0 (2022-03-17)
 

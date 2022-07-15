@@ -11,6 +11,9 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 
+/**
+ * android.content.Context Extensions.
+ */
 object ContextExtension {
     private const val PLAY_SERVICES_RESOLUTION_REQUEST = 9000
     private val logger = Logger(ContextExtension::class.java.simpleName)
@@ -18,29 +21,28 @@ object ContextExtension {
     /**
      * Get the resource id from drawable folder.
      *
-     * @param resourceName the resource name
-     * @return the drawable resource id
+     * @param resourceName the resource name.
+     * @return the drawable resource id.
      */
-    fun Context.getDrawableResourceId(resourceName: String?): Int {
-        return this.resources.getIdentifier(resourceName, "drawable", this.packageName)
-    }
+    fun Context.getDrawableResourceId(resourceName: String?): Int =
+        this.resources.getIdentifier(resourceName, "drawable", this.packageName)
 
     /**
      * Get the resource id from raw folder.
      *
-     * @param resourceName the resource name
-     * @return the raw resource id
+     * @param resourceName the resource name.
+     * @return the raw resource id.
      */
-    fun Context.getRawResourceId(resourceName: String?): Int {
-        return this.resources.getIdentifier(resourceName, "raw", this.packageName)
-    }
+    fun Context.getRawResourceId(resourceName: String?): Int =
+        this.resources.getIdentifier(resourceName, "raw", this.packageName)
 
     /**
      * Get the desired file path exists in assets folder.
      *
-     * @param fileName the file name
-     * @return the asset path of the file
+     * @param fileName the file name.
+     * @return the asset path of the file.
      */
+    @SuppressWarnings("ReturnCount", "NestedBlockDepth")
     fun Context.getAssetsFilePath(fileName: String?): String? {
         if (fileName != null) {
             val cacheFile = File(this.cacheDir, fileName)
@@ -60,18 +62,15 @@ object ContextExtension {
     }
 
     /**
-     * Get the device mode (Dark or Light)
+     * Get the device mode (Dark or Light).
      *
-     * @return true if dark mode otherwise false for light mode
+     * @return true if dark mode otherwise false for light mode.
      */
+    @SuppressWarnings("ReturnCount")
     fun Context.isDarkMode(): Boolean {
         when (this.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
-            Configuration.UI_MODE_NIGHT_NO -> {
-                return false
-            }
-            Configuration.UI_MODE_NIGHT_YES -> {
-                return true
-            }
+            Configuration.UI_MODE_NIGHT_NO -> return false
+            Configuration.UI_MODE_NIGHT_YES -> return true
         }
         return false
     }
@@ -83,7 +82,7 @@ object ContextExtension {
      */
     fun Context.hasPermission(permission: String): Boolean {
         return this.packageManager.checkPermission(permission, this.packageName) ==
-                PackageManager.PERMISSION_GRANTED
+            PackageManager.PERMISSION_GRANTED
     }
 
     /**
@@ -92,7 +91,7 @@ object ContextExtension {
      * If it doesn't, display a dialog that allows users to download the APK from the Google Play
      * Store or enable it in the device's system settings.
      *
-     * @return true if play services are available, false otherwise
+     * @return true if play services are available, false otherwise.
      */
     fun Activity.checkPlayServices(): Boolean {
         val googleApi = GoogleApiAvailability.getInstance()

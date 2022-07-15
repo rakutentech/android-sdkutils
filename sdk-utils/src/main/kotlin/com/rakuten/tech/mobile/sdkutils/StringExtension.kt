@@ -13,35 +13,35 @@ import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.TimeZone
 
+/**
+ * String Extensions.
+ * */
 object StringExtension {
     private val logger = Logger(StringExtension::class.java.simpleName)
 
     internal var stringForTest: String? = null
 
     /**
-     * Get the encoded byte array of string for charset "UTF-16"
+     * Get the encoded byte array of string for charset "UTF-16".
      *
-     * @return the ByteArray of the string
+     * @return the ByteArray of the string.
      */
-    fun String.getUTF16ByteArray(): ByteArray {
-        return this.toByteArray(Charset.forName("UTF-16"))
-    }
+    fun String.getUTF16ByteArray(): ByteArray = this.toByteArray(Charset.forName("UTF-16"))
 
     /**
-     * Get the encoded byte array of string for charset "UTF-8"
+     * Get the encoded byte array of string for charset "UTF-8".
      *
-     * @return the ByteArray of the string
+     * @return the ByteArray of the string.
      */
-    fun String.getUTF8ByteArray(): ByteArray {
-        return this.toByteArray(Charset.forName("UTF-8"))
-    }
+    fun String.getUTF8ByteArray(): ByteArray = this.toByteArray(Charset.forName("UTF-8"))
 
     /**
-     * Get the encoded MD5 digest string
+     * Get the encoded MD5 digest string.
      *
-     * @return the MD5 digest string
+     * @return the MD5 digest string.
      */
     fun String.getMD5HashData(): String? {
         return try {
@@ -59,10 +59,11 @@ object StringExtension {
     }
 
     /**
-     * Get the encoded Sha256 digest string
+     * Get the encoded Sha256 digest string.
      *
      * @return the encoded string
      */
+    @SuppressWarnings("MagicNumber")
     fun String.getSha256HashData(): String? {
         return try {
             val md = MessageDigest.getInstance(stringForTest ?: "SHA-256")
@@ -83,7 +84,7 @@ object StringExtension {
     }
 
     /**
-     * Get the UTC date from a sample date string
+     * Get the UTC date from a sample date string.
      *
      * @return the date object based on the date string
      */
@@ -104,6 +105,7 @@ object StringExtension {
      * @return the color int value
      */
     @ColorInt
+    @SuppressWarnings("TooGenericExceptionCaught")
     fun String.getColorValue(): Int {
         return try {
             Color.parseColor(this)
