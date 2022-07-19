@@ -4,6 +4,14 @@ apply plugin: "kotlin-android"
 apply plugin: 'kotlin-kapt'
 
 android {
+  defaultConfig {
+    resValue 'string', 'sdk_utils__version', project.version
+  }
+
+  lintOptions {
+    disable 'UnusedResources'
+  }
+
   sourceSets.each {
     it.java.srcDirs += "src/$it.name/kotlin"
   }
