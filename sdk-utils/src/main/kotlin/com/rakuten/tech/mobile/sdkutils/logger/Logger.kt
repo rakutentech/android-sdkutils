@@ -25,9 +25,8 @@ import kotlin.math.min
  *  @param [tag] Optional identifier for the source of a log message. Default value is "".
  */
 @SuppressWarnings("TooManyFunctions", "SpreadOperator")
-open class Logger(private val tag: String = "") {
-
-    private var isDebug = false
+open class Logger(
+    private val tag: String = "",
 
     /**
      * The level of the stack trace to be logged.
@@ -35,7 +34,10 @@ open class Logger(private val tag: String = "") {
      * SDKUtils is implemented in an application). If the logger is used in another SDK
      * you may need to upgrade it using `loggerInstance.setDebug()` to display the host SDK's logs.
      */
-    private var stackTraceLevel = 5
+    private var stackTraceLevel: Int = 5
+) {
+
+    private var isDebug = false
 
     @SuppressWarnings("LongMethod", "ComplexMethod", "NestedBlockDepth")
     @Synchronized

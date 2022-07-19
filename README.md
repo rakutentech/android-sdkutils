@@ -227,6 +227,7 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 
 ### v2.1.0 (In-Progress)
 * SDKCF-5307: Added version string resource which can be referenced by the name `sdk_utils__version`.
+* SDKCF-4921: Added support for building with Java 11.
 
 ### v2.0.0 (2022-06-23)
 * SDKCF-5390: **Breaking Changes:** Moved `setDebugLevel()` and `setDebug()` APIs from static to `Logger` class APIs. This will allow multiple SDK app dependencies to have their own debug logging configuration.
@@ -234,7 +235,6 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 
 ### v1.2.0 (2022-05-19)
 * SDKCF-5292: Set initOrder of the content provider to a high value to make sure that it is initialized before the host app ContentProvider.
-* SDKCF-4921: Added support for building with Java 11.
 
 ### v1.1.0 (2022-03-17)
 
