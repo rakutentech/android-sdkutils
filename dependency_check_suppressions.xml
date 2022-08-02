@@ -277,4 +277,11 @@
     <packageUrl regex="true">^pkg:maven/io\.github\.detekt\.sarif4k/sarif4k@.*$</packageUrl>
     <cve>CVE-2022-0272</cve>
   </suppress>
+  <suppress until="2022-09-30Z">
+    <notes><![CDATA[
+   file name: play-services-basement-17.0.0.aar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.google\.android\.gms/play\-services\-basement@.*$</packageUrl>
+    <vulnerabilityName>CVE-2022-1799</vulnerabilityName>
+  </suppress>
 </suppressions>
