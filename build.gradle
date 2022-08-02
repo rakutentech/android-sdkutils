@@ -12,7 +12,7 @@ buildscript {
   dependencies {
     classpath "com.android.tools.build:gradle:$CONFIG.versions.android.plugin"
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$CONFIG.versions.kotlin"
-    classpath 'pl.allegro.tech.build:axion-release-plugin:1.13.1'
+    classpath 'pl.allegro.tech.build:axion-release-plugin:1.13.6'
     classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
     classpath 'org.owasp:dependency-check-gradle:7.1.0.1'
   }
