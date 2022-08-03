@@ -225,7 +225,7 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 
 ## Changelog
 
-### v2.1.0 (in-progress)
+### v2.1.1 (in-progress)
 * Reverted `Logger` constructor to single parameter.
 
 ### v2.1.0 (2022-08-02)
