@@ -33,6 +33,7 @@ open class Logger(private val tag: String = "") {
      * SDKUtils is implemented in an application). If the logger is used in another SDK
      * you may need to upgrade it using `loggerInstance.setDebug()` to display the host SDK's logs.
      */
+    @SuppressWarnings("MagicNumber")
     private var stackTraceLevel = 5
     private var isDebug = false
 
