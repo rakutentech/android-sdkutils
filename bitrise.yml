@@ -17,10 +17,6 @@ workflows:
     steps:
     - cache-pull@2: {}
     - script@1:
-        title: Download Dependencies
-        inputs:
-        - content: ./gradlew androidDependencies
-    - script@1:
         title: Dependency Check
         inputs:
         - content: ./gradlew dependencyCheckAggregate
@@ -28,9 +24,12 @@ workflows:
         title: Run Check
         inputs:
         - content: ./gradlew check
-    - danger@2:
+    - script@1:
+        title: Danger
         inputs:
-        - github_api_token: "$DANGER_GITHUB_API_TOKEN"
+        - content: |-
+            bundle install
+            bundle exec danger --dangerfile=config/danger/Dangerfile
     - script@1:
         title: Assemble
         inputs:
