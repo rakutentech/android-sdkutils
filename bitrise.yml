@@ -40,6 +40,11 @@ workflows:
         - content: ./gradlew currentVersion
     - custom-test-results-export@0:
         inputs:
+        - test_name: "${SDK_PATH}_debug"
+        - base_path: "$SDK_PATH/build/test-results/testDebugUnitTest/"
+        - search_pattern: "*"
+    - custom-test-results-export@0:
+        inputs:
         - test_name: "${SDK_PATH}_release"
         - base_path: "$SDK_PATH/build/test-results/testReleaseUnitTest/"
         - search_pattern: "*"
