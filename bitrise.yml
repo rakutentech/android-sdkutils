@@ -40,8 +40,8 @@ workflows:
         - content: ./gradlew currentVersion
     - custom-test-results-export@0:
         inputs:
-        - test_name: "${SDK_PATH}_debug"
-        - base_path: "$SDK_PATH/build/test-results/testDebugUnitTest/"
+        - test_name: "${SDK_PATH}_release"
+        - base_path: "$SDK_PATH/build/test-results/testReleaseUnitTest/"
         - search_pattern: "*"
     - deploy-to-bitrise-io@2: {}
     - cache-push@2:
