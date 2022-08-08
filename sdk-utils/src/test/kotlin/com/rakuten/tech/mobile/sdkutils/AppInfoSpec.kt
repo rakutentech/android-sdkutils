@@ -53,4 +53,9 @@ class AppInfoSpec {
         AppInfo.init(mockContext)
         AppInfo.instance.version shouldBeEqualTo null
     }
+
+    @Test
+    fun `should fail`() {
+        true.shouldBeFalse()
+    }
 }

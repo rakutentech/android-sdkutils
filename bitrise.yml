@@ -39,20 +39,16 @@ workflows:
         inputs:
         - content: ./gradlew currentVersion
     - custom-test-results-export@0:
-        # this add-on should export test artifacts as well, but currently not displayed.
         inputs:
-        - test_name: Unit Tests (Debug)
+        - test_name: "${SDK_PATH}_debug"
         - base_path: "$SDK_PATH/build/test-results/testDebugUnitTest/"
         - search_pattern: "*"
     - custom-test-results-export@0:
         inputs:
-        - test_name: Unit Tests (Release)
+        - test_name: "${SDK_PATH}release"
         - base_path: "$SDK_PATH/build/test-results/testReleaseUnitTest/"
         - search_pattern: "*"
-    - deploy-to-bitrise-io@2:
-        inputs:
-        - deploy_path: $SDK_PATH/build/outputs/aar
-        - is_enable_public_page: 'false'
+    - deploy-to-bitrise-io@2: {}
     - cache-push@2:
         inputs:
         - cache_paths: |-
