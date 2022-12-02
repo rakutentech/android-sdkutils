@@ -66,6 +66,8 @@ workflows:
   release:
     before_run:
     - build-and-test
+    after_run:
+    - _create-github-release
     steps:
     - script@1:
         title: Retrieve Base64 PGP Key and save to file
@@ -127,6 +129,23 @@ workflows:
         title: Run SonarQube Scanner
         inputs:
         - content: ./gradlew sonarqube
+  _create-github-release:
+    steps:
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            set -ex
+
+            _CHANGELOG="${GIT_REPOSITORY_URL%.git}/tree/$BITRISE_GIT_TAG#changelog"
+            envman add --key CHANGELOG --value "$_CHANGELOG"
+    - github-release@0.11.0:
+        inputs:
+        - body: "$CHANGELOG"
+        - draft: 'no'
+        - username: "$PUBLISHER_GITHUB_USERNAME"
+        - api_token: "$PUBLISHER_GITHUB_API_TOKEN"
+        - name: "$BITRISE_GIT_TAG"
 meta:
   bitrise.io:
     stack: linux-docker-android-20.04
