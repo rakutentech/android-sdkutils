@@ -133,14 +133,22 @@ workflows:
             #!/usr/bin/env bash
             set -ex
 
-            _CHANGELOG="${GIT_REPOSITORY_URL%.git}/tree/$BITRISE_GIT_TAG#changelog"
-            envman add --key CHANGELOG --value "$_CHANGELOG"
-    - github-release@0.11.0:
+            RELEASE_VER_RAW=$BITRISE_GIT_TAG
+
+            awk "
+            /## $RELEASE_VER_RAW/{flag=1;next}
+            /## v[0-9]/{flag=0}
+            flag
+            " $USERGUIDE_PATH > _releasenotes.md
+
+            RELEASE_NOTES=$(cat _releasenotes.md)
+            envman add --key RELEASE_NOTES --value "$RELEASE_NOTES"
+    - github-release@0.11:
         inputs:
-        - body: "$CHANGELOG"
+        - body: "RELEASE_NOTES"
         - draft: 'no'
-        - username: "$PUBLISHER_GITHUB_USERNAME"
-        - api_token: "$PUBLISHER_GITHUB_API_TOKEN"
+        - username: "GITHUB_BOT_USERNAME"
+        - api_token: "GITHUB_BOT_API_TOKEN"
         - name: "$BITRISE_GIT_TAG"
 meta:
   bitrise.io:
