@@ -143,7 +143,7 @@ workflows:
 
             RELEASE_NOTES=$(cat _releasenotes.md)
             envman add --key RELEASE_NOTES --value "$RELEASE_NOTES"
-    - github-release@0.11.0:
+    - github-release@0.11:
         inputs:
         - body: "RELEASE_NOTES"
         - draft: 'no'
