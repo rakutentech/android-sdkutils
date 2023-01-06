@@ -220,6 +220,15 @@ object PreferencesUtil {
     fun contains(context: Context, name: String, key: String): Boolean =
         getSharedPreferences(context, name).contains(key)
 
+    /**
+     * Retrieve all values from the preferences.
+     *
+     * @param name the name of the shared file.
+     * @return Returns all values from the preferences.
+     */
+    fun all(context: Context, name: String): Map<String, Any?> =
+        getSharedPreferences(context, name).all
+
     private fun getSharedPreferences(context: Context, name: String): SharedPreferences =
         context.getSharedPreferences(name, Context.MODE_PRIVATE)
 }
