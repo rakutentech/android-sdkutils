@@ -110,6 +110,34 @@
   </suppress>
   <suppress until="2023-06-30Z">
     <notes><![CDATA[
+   file name: detekt-psi-utils-1.20.0.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.gitlab\.arturbosch\.detekt/detekt\-psi\-utils@.*$</packageUrl>
+    <cpe>cpe:2.3:a:detekt:detekt</cpe>
+    <cpe>cpe:2.3:a:utils_project:utils</cpe>
+    <cve>CVE-2021-4277</cve>
+  </suppress>
+  <suppress until="2023-06-30Z">
+    <notes><![CDATA[
+   file name: detekt-utils-1.20.0.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io\.gitlab\.arturbosch\.detekt/detekt\-utils@.*$</packageUrl>
+    <cpe>cpe:2.3:a:detekt:detekt</cpe>
+    <cpe>cpe:2.3:a:utils_project:utils</cpe>
+    <cve>CVE-2021-4277</cve>
+  </suppress>
+  <suppress until="2023-06-30Z">
+    <notes><![CDATA[
+   file name: snakeyaml-1.30.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.yaml/snakeyaml@.*$</packageUrl>
+    <cpe>cpe:2.3:a:snakeyaml_project:snakeyaml</cpe>
+    <cpe>cpe:2.3:a:yaml_project:yaml</cpe>
+    <cve>CVE-2022-3064</cve>
+    <cve>CVE-2021-4235</cve>
+  </suppress>
+  <suppress until="2023-06-30Z">
+    <notes><![CDATA[
    file name: detekt-rules-1.1.1.jar
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/io\.gitlab\.arturbosch\.detekt/detekt\-rules@.*$</packageUrl>
@@ -120,9 +148,26 @@
    file name: full.jar (project :sdk-utils)
    ]]></notes>
     <sha1>71420036a96b44093cca7075a25a9c6284c9d697</sha1>
+    <cpe>cpe:2.3:a:utils_project:utils</cpe>
     <cve>CVE-2020-10517</cve>
     <cve>CVE-2020-10518</cve>
     <cve>CVE-2020-10519</cve>
+    <cve>CVE-2021-4277</cve>
+  </suppress>
+  <suppress until="2023-06-30Z">
+    <notes><![CDATA[
+   file name: full.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/io.github.rakutentech.sdkutils/sdk-utils@.*$</packageUrl>
+    <cpe>cpe:2.3:a:utils_project:utils</cpe>
+    <cve>CVE-2021-4277</cve>
+  </suppress>
+  <suppress until="2023-06-30Z">
+    <notes><![CDATA[
+   file name: legacy-support-core-utils-1.0.0.aar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/androidx\.legacy/legacy\-support\-core\-utils@.*$</packageUrl>
+    <cve>CVE-2021-4277</cve>
   </suppress>
   <suppress until="2023-06-30Z">
     <notes><![CDATA[
