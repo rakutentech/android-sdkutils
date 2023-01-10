@@ -3,11 +3,13 @@ package com.rakuten.tech.mobile.sdkutils
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldContain
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
+@SuppressWarnings("LargeClass")
 class PreferencesUtilSpec {
     private val context: Context = ApplicationProvider.getApplicationContext<Context>()
     private val sharedName = "com.test.application.name.shared"
@@ -167,5 +169,33 @@ class PreferencesUtilSpec {
     fun `should check the key if not used in shared preferences`() {
         PreferencesUtil.putInt(context, sharedName, "INT", 100)
         PreferencesUtil.contains(context, sharedName, "STRING") shouldBeEqualTo false
+    }
+
+    @Test
+    fun `should retrieve the size of all values from the preferences`() {
+        PreferencesUtil.putInt(context, sharedName, "INT", 100)
+        PreferencesUtil.putInt(context, sharedName, "STRING", 100)
+        PreferencesUtil.all(context, sharedName).size shouldBeEqualTo 2
+    }
+
+    @Test
+    fun `should retrieve all keys from the preferences`() {
+        PreferencesUtil.putInt(context, sharedName, "INT", 100)
+        PreferencesUtil.putInt(context, sharedName, "STRING", 100)
+        PreferencesUtil.all(context, sharedName).keys shouldContain "STRING"
+        PreferencesUtil.all(context, sharedName).keys shouldContain "INT"
+    }
+
+    @Test
+    fun `should retrieve all values from the preferences`() {
+        PreferencesUtil.putInt(context, sharedName, "INT", 111)
+        PreferencesUtil.putInt(context, sharedName, "STRING", 222)
+        PreferencesUtil.all(context, sharedName).values shouldContain 111
+        PreferencesUtil.all(context, sharedName).values shouldContain 222
+    }
+
+    @Test
+    fun `should retrieve empty values from the preferences`() {
+        PreferencesUtil.all(context, sharedName) shouldBeEqualTo emptyMap()
     }
 }
