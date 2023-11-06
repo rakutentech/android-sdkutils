@@ -22,7 +22,7 @@ class CommonUtilSpec {
     @Test
     @Config(sdk = [Build.VERSION_CODES.M])
     fun `should get UTC date format for android 23`() {
-        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ssX")
+        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
         val date = simpleDateFormat.parse("02.04.2014 15:00:00+09")
         val isoFormattedDate = CommonUtil.getUTCDateFormat().format(date!!)
         isoFormattedDate shouldBeEqualTo "2014-04-02T06:00:00"
