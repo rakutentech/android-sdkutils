@@ -19,7 +19,13 @@ workflows:
     - script@1:
         title: Dependency Check
         inputs:
+        - timeout: 1800
         - content: ./gradlew dependencyCheckAggregate
+    - deploy-to-bitrise-io:
+        is_always_run: true
+        title: Deploy Dependency Check Report
+        inputs:
+          - deploy_path: "$SDK_PATH/build/reports/dependency-check-report.html"
     - script@1:
         title: Run Check
         inputs:
