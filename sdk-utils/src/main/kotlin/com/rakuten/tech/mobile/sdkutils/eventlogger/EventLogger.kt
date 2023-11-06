@@ -12,8 +12,8 @@ import android.content.Context
 object EventLogger {
 
     /**
-     * Initializes the event logging utility. Call this as early as possible in the application lifecycle. The
-     * Application's `onCreate` might be the most logical place.
+     * Initializes the event logging utility. Call this as early as possible in the application lifecycle, such as
+     * `onCreate` or other initialization methods.
      *
      * @param context Application context.
      */
