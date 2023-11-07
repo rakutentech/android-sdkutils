@@ -5,25 +5,29 @@ import org.amshove.kluent.*
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.util.ReflectionHelpers
+import org.robolectric.annotation.Config
 import java.text.SimpleDateFormat
+import java.util.*
 
 @RunWith(RobolectricTestRunner::class)
 class CommonUtilSpec {
     @Test
+    @Config(sdk = [Build.VERSION_CODES.N])
     fun `should get UTC date format`() {
-        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
-        val date = simpleDateFormat.parse("02.04.2014 15:00:00")
+        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ssX")
+        val date = simpleDateFormat.parse("02.04.2014 15:00:00+09")
         val isoFormattedDate = CommonUtil.getUTCDateFormat().format(date!!)
-        isoFormattedDate shouldBeEqualTo "2014-04-02T15:00:00Z"
+        isoFormattedDate shouldBeEqualTo "2014-04-02T06:00:00Z"
     }
 
     @Test
+    @Config(sdk = [Build.VERSION_CODES.M])
     fun `should get UTC date format for android 23`() {
-        ReflectionHelpers.setStaticField(Build.VERSION::class.java, "SDK_INT", 23)
-        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+        val simpleDateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss").apply {
+            timeZone = TimeZone.getTimeZone("JST")
+        }
         val date = simpleDateFormat.parse("02.04.2014 15:00:00")
         val isoFormattedDate = CommonUtil.getUTCDateFormat().format(date!!)
-        isoFormattedDate shouldBeEqualTo "2014-04-02T15:00:00"
+        isoFormattedDate shouldBeEqualTo "2014-04-02T06:00:00"
     }
 }
