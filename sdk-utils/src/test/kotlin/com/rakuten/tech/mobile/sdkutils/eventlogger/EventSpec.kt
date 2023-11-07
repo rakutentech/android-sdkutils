@@ -32,7 +32,7 @@ class EventSpec {
             firstOccurrenceMillis = 1699254206421
         )
 
-        testEvent.apply {
+        testEvent.run {
             eventType shouldBeEqualTo "0"
             appId shouldBeEqualTo "sdkutils.sample"
             appName shouldBeEqualTo "sdkutils.sample"
