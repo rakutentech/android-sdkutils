@@ -45,10 +45,10 @@ class EventBuilderSpec {
     fun `should build critical event with metadata`() {
         val event = eventBuilder.buildEvent(
             EventType.CRITICAL,
+            "push",
+            "3.0.0",
             "400",
             "invalid key",
-            "push",
-            "3.0.0"
         )
         event.run {
             eventType shouldBeEqualTo EventType.CRITICAL.displayName
@@ -63,10 +63,10 @@ class EventBuilderSpec {
     fun `should build warning event with metadata`() {
         val event = eventBuilder.buildEvent(
             EventType.WARNING,
+            "push",
+            "3.0.0",
             "400",
             "invalid key",
-            "push",
-            "3.0.0"
         )
         event.run {
             eventType shouldBeEqualTo EventType.WARNING.displayName
@@ -85,10 +85,10 @@ class EventBuilderSpec {
         val eventBuilder = EventBuilder(mockContext)
         val event = eventBuilder.buildEvent(
             EventType.CRITICAL,
+            "push",
+            "3.0.0",
             "400",
             "invalid key",
-            "push",
-            "3.0.0"
         )
 
         event.appVer shouldBeEqualTo ""
@@ -102,10 +102,10 @@ class EventBuilderSpec {
         val eventBuilder = EventBuilder(mockContext)
         val event = eventBuilder.buildEvent(
             EventType.CRITICAL,
+            "push",
+            "3.0.0",
             "400",
             "invalid key",
-            "push",
-            "3.0.0"
         )
 
         event.rmcSdks shouldBeEqualTo null
