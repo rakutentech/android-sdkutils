@@ -70,7 +70,8 @@ class EventSpec {
             "sdkVer",
             "errorCode",
             "errorMsg",
-            "rmcSdks"
+            "rmcSdks",
+            "occurrenceCount"
         )
     }
 
