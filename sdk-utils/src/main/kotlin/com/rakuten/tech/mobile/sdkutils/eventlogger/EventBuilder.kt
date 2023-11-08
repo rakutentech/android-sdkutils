@@ -2,6 +2,8 @@ package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
+import android.provider.Settings
 import com.google.gson.Gson
 
 @SuppressWarnings(
@@ -20,10 +22,10 @@ internal class EventBuilder(private val context: Context) {
             appId = metadata.appId,
             appName = metadata.appName,
             appVer = metadata.appVer,
-            osVer = "", // TODO
-            deviceModel = "", // TODO
-            deviceBrand = "", // TODO
-            deviceName = "", // TODO
+            osVer = metadata.osVer,
+            deviceModel = metadata.deviceModel,
+            deviceBrand = metadata.deviceBrand,
+            deviceName = metadata.deviceName,
             sdkName = sourceName,
             sdkVer = sourceVersion,
             errorCode = code,
@@ -48,7 +50,11 @@ internal class EventBuilder(private val context: Context) {
             appVer = packageInfo?.versionName.orEmpty(),
             rmcSdks = getRmcVersions()?.let {
                 Gson().toJson(it)
-            }
+            },
+            osVer = "Android ${Build.VERSION.RELEASE}",
+            deviceModel = Build.MODEL,
+            deviceBrand = Build.MANUFACTURER,
+            deviceName = Settings.Global.getString(context.contentResolver, "device_name").orEmpty()
         )
     }
 
@@ -81,6 +87,10 @@ internal class EventBuilder(private val context: Context) {
         val appId: String,
         val appName: String,
         val appVer: String,
-        val rmcSdks: String?
+        val rmcSdks: String?,
+        val osVer: String,
+        val deviceModel: String,
+        val deviceBrand: String,
+        val deviceName: String
     )
 }
