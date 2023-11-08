@@ -14,7 +14,7 @@ internal class EventBuilder(private val context: Context) {
     /**
      * Event builder that attaches application information to the event.
      */
-    fun buildEvent(type: EventType, code: String, message: String, sourceName: String, sourceVersion: String): Event {
+    fun buildEvent(type: EventType, sourceName: String, sourceVersion: String, code: String, message: String, ): Event {
         return Event(
             eventType = type.displayName,
             appId = metadata.appId,
@@ -33,7 +33,7 @@ internal class EventBuilder(private val context: Context) {
     }
 
     /**
-     * Retrieves information that is constant throughout the application lifecycle.
+     * Retrieves information that is typically constant throughout the application lifecycle.
      */
     private fun buildMetadata(): Metadata {
         val packageInfo = try {
