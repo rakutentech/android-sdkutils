@@ -14,7 +14,7 @@ internal class EventBuilder(private val context: Context) {
     private val metadata: Metadata = buildMetadata()
 
     /**
-     * Event builder that attaches application information to the event.
+     * Event builder that attaches application and device information to the event.
      */
     fun buildEvent(type: EventType, sourceName: String, sourceVersion: String, code: String, message: String, ): Event {
         return Event(
