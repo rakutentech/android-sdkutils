@@ -3,6 +3,7 @@ package com.rakuten.tech.mobile.sdkutils.eventlogger
 import android.content.Context
 import android.content.pm.PackageManager
 import com.google.gson.Gson
+import com.rakuten.tech.mobile.sdkutils.StringExtension.sanitize
 
 @SuppressWarnings(
     "SwallowedException"
@@ -14,7 +15,7 @@ internal class EventBuilder(private val context: Context) {
     /**
      * Event builder that attaches application information to the event.
      */
-    fun buildEvent(type: EventType, sourceName: String, sourceVersion: String, code: String, message: String, ): Event {
+    fun buildEvent(type: EventType, sourceName: String, sourceVersion: String, code: String, message: String): Event {
         return Event(
             eventType = type.displayName,
             appId = metadata.appId,
@@ -24,10 +25,10 @@ internal class EventBuilder(private val context: Context) {
             deviceModel = "", // TODO
             deviceBrand = "", // TODO
             deviceName = "", // TODO
-            sdkName = sourceName,
-            sdkVer = sourceVersion,
-            errorCode = code,
-            errorMsg = message,
+            sdkName = sourceName.sanitize(DEFAULT_EVENT_PARAM_LENGTH),
+            sdkVer = sourceVersion.sanitize(DEFAULT_EVENT_PARAM_LENGTH),
+            errorCode = code.sanitize(DEFAULT_EVENT_PARAM_LENGTH),
+            errorMsg = message.sanitize(MAX_EVENT_MESSAGE_LENGTH),
             rmcSdks = metadata.rmcSdks
         )
     }
@@ -83,4 +84,9 @@ internal class EventBuilder(private val context: Context) {
         val appVer: String,
         val rmcSdks: String?
     )
+
+    companion object {
+        private const val DEFAULT_EVENT_PARAM_LENGTH = 100
+        private const val MAX_EVENT_MESSAGE_LENGTH = 4000
+    }
 }

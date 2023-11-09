@@ -95,6 +95,7 @@ class EventBuilderSpec {
     }
 
     @Test
+    @SuppressWarnings("TooGenericExceptionThrown")
     fun `should set rmcSdks to null if not exists`() {
         `when`(mockContext.getString(anyInt()))
             .thenAnswer { throw Exception() }
