@@ -24,7 +24,7 @@ sonarqube {
         /* Branch analysis */
         else if (!pRBranch) {
             property 'sonar.branch.name', branch
-            /* PR analysis */
+        /* PR analysis */
         } else {
             property 'sonar.pullrequest.key', pRBranch.findAll(/\d+/)*.toInteger().last()
             property 'sonar.pullrequest.branch', branch
