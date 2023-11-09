@@ -1,7 +1,10 @@
 apply plugin: 'org.sonarqube'
 
 def branch = System.getenv("BITRISE_GIT_BRANCH")
-def baseBranch = 'master'
+def pRBranch = System.getenv("BITRISE_PULL_REQUEST")
+def pRTargetBranch = System.getenv("BITRISEIO_GIT_BRANCH_DEST")
+def tagName = System.getenv("BITRISE_GIT_TAG")
+def isRelease = tagName != null && tagName != ""
 
 sonarqube {
     properties {
@@ -11,12 +14,21 @@ sonarqube {
         property 'sonar.login', System.getenv("SONARQUBE_TOKEN")
         property 'sonar.projectKey', System.getenv("SONARQUBE_PROJ_KEY")
         property 'sonar.projectVersion', scmVersion.version
-        if (branch == baseBranch || branch == "" || !branch) {
-            property 'sonar.branch.name', baseBranch
+        /* Tags */
+        if (isRelease) {
+            // Since tags don't have an explicit branch and can point to any commit, let us use the tag name
+            // as branch name property. In Sonarqube, the tag is going to appear same level as other branches
+            // with its own analysis.
+            property 'sonar.branch.name', tagName
+        }
+        /* Branch analysis */
+        else if (!pRBranch) {
+            property 'sonar.branch.name', branch
+            /* PR analysis */
         } else {
-            property 'sonar.pullrequest.key', System.getenv("BITRISE_PULL_REQUEST").findAll(/\d+/)*.toInteger().last()
+            property 'sonar.pullrequest.key', pRBranch.findAll(/\d+/)*.toInteger().last()
             property 'sonar.pullrequest.branch', branch
-            property 'sonar.pullrequest.base', baseBranch
+            property 'sonar.pullrequest.base', pRTargetBranch
         }
         property 'sonar.qualitygate.wait', true
 
@@ -24,6 +36,11 @@ sonarqube {
         property 'sonar.dependencyCheck.skip', System.getenv("SONAR_DEPENDENCYCHECK_SKIP")
         property 'sonar.dependencyCheck.jsonReportPath', 'build/reports/dependency-check-report.json'
         property 'sonar.dependencyCheck.htmlReportPath', 'build/reports/dependency-check-report.html'
+        /* Dependency Check severity minimum score, will have the Sonarqube default values when not set */
+        property 'sonar.dependencyCheck.severity.blocker', System.getenv("SONAR_DEPENDENCYCHECK_SEVERITY_BLOCKER") ?: 8
+        property 'sonar.dependencyCheck.severity.critical', System.getenv("SONAR_DEPENDENCYCHECK_SEVERITY_CRITICAL") ?: 7
+        property 'sonar.dependencyCheck.severity.major', System.getenv("SONAR_DEPENDENCYCHECK_SEVERITY_MAJOR") ?: 4
+        property 'sonar.dependencyCheck.severity.minor', System.getenv("SONAR_DEPENDENCYCHECK_SEVERITY_MINOR") ?: 0
     }
 }
 
@@ -39,8 +56,12 @@ subprojects { subproject ->
                                             '**/.gradle/**, ' +
                                             '**/R.class'
             property 'sonar.test.inclusions', '**/test/**'
-            property 'sonar.coverage.jacoco.xmlReportPaths', 'build/reports/jacoco/jacocoReleaseReport/jacocoReleaseReport.xml'
-            property 'sonar.junit.reportPaths', 'build/test-results/testReleaseUnitTest'
+            property 'sonar.coverage.jacoco.xmlReportPaths',
+                    isRelease ? 'build/reports/jacoco/jacocoReleaseReport/jacocoReleaseReport.xml' :
+                            'build/reports/jacoco/jacocoDebugReport/jacocoDebugReport.xml'
+            property 'sonar.junit.reportPaths',
+                    isRelease ? 'build/test-results/testReleaseUnitTest' :
+                            'build/test-results/testDebugUnitTest'
         }
     }
 }
