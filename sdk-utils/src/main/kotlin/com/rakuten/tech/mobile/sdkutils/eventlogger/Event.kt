@@ -13,7 +13,7 @@ internal data class Event(
     val sdkVer: String,
     val errorCode: String,
     val errorMsg: String,
-    val rmcSdks: String? = null,
+    val rmcSdks: Map<String, String>? = null,
     var occurrenceCount: Int = 0,
     var firstOccurrenceMillis: Long? = null
 ) {

@@ -2,7 +2,6 @@ package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.content.Context
 import android.content.pm.PackageManager
-import com.google.gson.Gson
 import com.rakuten.tech.mobile.sdkutils.StringExtension.sanitize
 
 @SuppressWarnings(
@@ -47,9 +46,7 @@ internal class EventBuilder(private val context: Context) {
             appId = context.packageName,
             appName = context.applicationInfo.loadLabel(context.packageManager).toString(),
             appVer = packageInfo?.versionName.orEmpty(),
-            rmcSdks = getRmcVersions()?.let {
-                Gson().toJson(it)
-            }
+            rmcSdks = getRmcVersions()
         )
     }
 
@@ -82,7 +79,7 @@ internal class EventBuilder(private val context: Context) {
         val appId: String,
         val appName: String,
         val appVer: String,
-        val rmcSdks: String?
+        val rmcSdks: Map<String, String>?
     )
 
     companion object {

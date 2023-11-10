@@ -19,7 +19,7 @@ class EventSpec {
         "1.0.0",
         "500",
         "server error",
-        "push: 1.0.0",
+        mapOf("rmc_push" to "1.0.0"),
         2,
         1699254206421
     )
@@ -45,7 +45,7 @@ class EventSpec {
             sdkVer shouldBeEqualTo "1.0.0"
             errorCode shouldBeEqualTo "500"
             errorMsg shouldBeEqualTo "server error"
-            rmcSdks shouldBeEqualTo "push: 1.0.0"
+            rmcSdks shouldBeEqualTo mapOf("rmc_push" to "1.0.0")
             occurrenceCount shouldBeEqualTo 5
             firstOccurrenceMillis shouldBeEqualTo 1699254206421
             eventVer shouldBeEqualTo "1"

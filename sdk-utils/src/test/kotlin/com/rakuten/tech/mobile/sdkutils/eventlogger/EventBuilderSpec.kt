@@ -55,7 +55,7 @@ class EventBuilderSpec {
             appId shouldBeEqualTo "com.sdkutils"
             appName shouldBeEqualTo "sdk utils sample app"
             appVer shouldBeEqualTo "1.0.0"
-            rmcSdks shouldBeEqualTo """{"rmc_inappmessaging":"2.0.0"}"""
+            rmcSdks shouldBeEqualTo mapOf("rmc_inappmessaging" to "2.0.0")
         }
     }
 
@@ -73,7 +73,7 @@ class EventBuilderSpec {
             appId shouldBeEqualTo "com.sdkutils"
             appName shouldBeEqualTo "sdk utils sample app"
             appVer shouldBeEqualTo "1.0.0"
-            rmcSdks shouldBeEqualTo """{"rmc_inappmessaging":"2.0.0"}"""
+            rmcSdks shouldBeEqualTo mapOf("rmc_inappmessaging" to "2.0.0")
         }
     }
 
