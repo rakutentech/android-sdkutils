@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
-import com.google.gson.Gson
+import com.rakuten.tech.mobile.sdkutils.StringExtension.sanitize
 
 @SuppressWarnings(
     "SwallowedException"
@@ -16,7 +16,7 @@ internal class EventBuilder(private val context: Context) {
     /**
      * Event builder that attaches application and device information to the event.
      */
-    fun buildEvent(type: EventType, sourceName: String, sourceVersion: String, code: String, message: String, ): Event {
+    fun buildEvent(type: EventType, sourceName: String, sourceVersion: String, code: String, message: String): Event {
         return Event(
             eventType = type.displayName,
             appId = metadata.appId,
@@ -26,10 +26,10 @@ internal class EventBuilder(private val context: Context) {
             deviceModel = metadata.deviceModel,
             deviceBrand = metadata.deviceBrand,
             deviceName = metadata.deviceName,
-            sdkName = sourceName,
-            sdkVer = sourceVersion,
-            errorCode = code,
-            errorMsg = message,
+            sdkName = sourceName.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
+            sdkVer = sourceVersion.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
+            errorCode = code.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
+            errorMsg = message.sanitize(MAX_EVENT_MESSAGE_LENGTH),
             rmcSdks = metadata.rmcSdks
         )
     }
@@ -48,13 +48,11 @@ internal class EventBuilder(private val context: Context) {
             appId = context.packageName,
             appName = context.applicationInfo.loadLabel(context.packageManager).toString(),
             appVer = packageInfo?.versionName.orEmpty(),
-            rmcSdks = getRmcVersions()?.let {
-                Gson().toJson(it)
-            },
             osVer = "Android ${Build.VERSION.RELEASE}",
             deviceModel = Build.MODEL,
             deviceBrand = Build.MANUFACTURER,
-            deviceName = Settings.Global.getString(context.contentResolver, "device_name").orEmpty()
+            deviceName = Settings.Global.getString(context.contentResolver, "device_name").orEmpty(),
+            rmcSdks = getRmcVersions()
         )
     }
 
@@ -87,10 +85,15 @@ internal class EventBuilder(private val context: Context) {
         val appId: String,
         val appName: String,
         val appVer: String,
-        val rmcSdks: String?,
         val osVer: String,
         val deviceModel: String,
         val deviceBrand: String,
-        val deviceName: String
+        val deviceName: String,
+        val rmcSdks: Map<String, String>?
     )
+
+    companion object {
+        private const val MAX_EVENT_PARAM_LENGTH_DEFAULT = 100
+        private const val MAX_EVENT_MESSAGE_LENGTH = 4000
+    }
 }

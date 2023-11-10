@@ -56,7 +56,7 @@ class EventBuilderSpec {
             appId shouldBeEqualTo "com.sdkutils"
             appName shouldBeEqualTo "sdk utils sample app"
             appVer shouldBeEqualTo "1.0.0"
-            rmcSdks shouldBeEqualTo """{"rmc_inappmessaging":"2.0.0"}"""
+            rmcSdks shouldBeEqualTo mapOf("rmc_inappmessaging" to "2.0.0")
             osVer shouldBeEqualTo "Android ${Build.VERSION.RELEASE}"
             deviceModel shouldBeEqualTo Build.MODEL
             deviceBrand shouldBeEqualTo Build.MANUFACTURER
@@ -77,7 +77,7 @@ class EventBuilderSpec {
             appId shouldBeEqualTo "com.sdkutils"
             appName shouldBeEqualTo "sdk utils sample app"
             appVer shouldBeEqualTo "1.0.0"
-            rmcSdks shouldBeEqualTo """{"rmc_inappmessaging":"2.0.0"}"""
+            rmcSdks shouldBeEqualTo mapOf("rmc_inappmessaging" to "2.0.0")
             osVer shouldBeEqualTo "Android ${Build.VERSION.RELEASE}"
             deviceModel shouldBeEqualTo Build.MODEL
             deviceBrand shouldBeEqualTo Build.MANUFACTURER
@@ -102,6 +102,7 @@ class EventBuilderSpec {
     }
 
     @Test
+    @SuppressWarnings("TooGenericExceptionThrown")
     fun `should set rmcSdks to null if not exists`() {
         `when`(mockContext.getString(anyInt()))
             .thenAnswer { throw Exception() }
