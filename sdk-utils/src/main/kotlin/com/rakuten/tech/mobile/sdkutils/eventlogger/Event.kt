@@ -1,5 +1,7 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
+import com.rakuten.tech.mobile.sdkutils.StringExtension.getMD5HashData
+
 internal data class Event(
     val eventType: String,
     val appId: String,
@@ -21,6 +23,7 @@ internal data class Event(
     val platform = Platform.ANDROID.displayName
 }
 
+// ---------------------------- Event enums ----------------------------
 internal enum class EventType(val displayName: String) {
     CRITICAL("0"),
     WARNING("1")
@@ -28,4 +31,18 @@ internal enum class EventType(val displayName: String) {
 
 internal enum class Platform(val displayName: String) {
     ANDROID("Android")
+}
+
+// ---------------------------- Event extensions ----------------------------
+/**
+ * Returns the string hash based on some data from the [Event].
+ */
+internal fun Event.getIdentifier() = "${this.appVer}${this.sdkName}${this.errorCode}${this.errorMsg}"
+    .getMD5HashData()
+    .orEmpty()
+
+internal fun Event.incrementCount() = this.apply { this.occurrenceCount += 1 }
+
+internal fun Event.setFirstOccurrenceTimeToNow() = this.apply {
+    this.firstOccurrenceMillis = System.currentTimeMillis()
 }
