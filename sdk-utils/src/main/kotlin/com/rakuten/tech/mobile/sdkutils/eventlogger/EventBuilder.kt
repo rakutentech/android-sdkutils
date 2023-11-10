@@ -25,9 +25,9 @@ internal class EventBuilder(private val context: Context) {
             deviceModel = "", // TODO
             deviceBrand = "", // TODO
             deviceName = "", // TODO
-            sdkName = sourceName.sanitize(DEFAULT_EVENT_PARAM_LENGTH),
-            sdkVer = sourceVersion.sanitize(DEFAULT_EVENT_PARAM_LENGTH),
-            errorCode = code.sanitize(DEFAULT_EVENT_PARAM_LENGTH),
+            sdkName = sourceName.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
+            sdkVer = sourceVersion.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
+            errorCode = code.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
             errorMsg = message.sanitize(MAX_EVENT_MESSAGE_LENGTH),
             rmcSdks = metadata.rmcSdks
         )
@@ -86,7 +86,7 @@ internal class EventBuilder(private val context: Context) {
     )
 
     companion object {
-        private const val DEFAULT_EVENT_PARAM_LENGTH = 100
+        private const val MAX_EVENT_PARAM_LENGTH_DEFAULT = 100
         private const val MAX_EVENT_MESSAGE_LENGTH = 4000
     }
 }
