@@ -18,6 +18,7 @@ object EventLogger {
      * @param context Application context.
      */
     fun initialize(context: Context) {
+        // Intentionally left blank. Will be supported later.
     }
 
     /**
@@ -36,6 +37,7 @@ object EventLogger {
         errorCode: String,
         errorMessage: String
     ) {
+        // Intentionally left blank. Will be supported later.
     }
 
     /**
@@ -54,5 +56,6 @@ object EventLogger {
         errorCode: String,
         errorMessage: String
     ) {
+        // Intentionally left blank. Will be supported later.
     }
 }

@@ -54,6 +54,7 @@ class EventSpec {
     }
 
     @Test
+    @SuppressWarnings("LongMethod")
     fun `should serialize Event with correct json field names`() {
         Gson().toJson(testEvent) shouldContainAll listOf(
             "eventVer",
@@ -70,7 +71,8 @@ class EventSpec {
             "sdkVer",
             "errorCode",
             "errorMsg",
-            "rmcSdks"
+            "rmcSdks",
+            "occurrenceCount"
         )
     }
 
