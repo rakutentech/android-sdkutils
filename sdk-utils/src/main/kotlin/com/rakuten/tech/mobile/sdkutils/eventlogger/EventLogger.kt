@@ -1,6 +1,8 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.content.Context
+import com.rakuten.tech.mobile.sdkutils.BuildConfig
+import com.rakuten.tech.mobile.sdkutils.logger.Logger
 
 /**
  * A remote logging utility that sends events to the Event Logger platform.
@@ -10,6 +12,8 @@ import android.content.Context
     "EmptyFunctionBlock"
 )
 object EventLogger {
+
+    val log = Logger(EventLogger::class.java.simpleName).apply { setDebug(BuildConfig.DEBUG) }
 
     /**
      * Initializes the event logging utility. Call this as early as possible in the application lifecycle, such as
