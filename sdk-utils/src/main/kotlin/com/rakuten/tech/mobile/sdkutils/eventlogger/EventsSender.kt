@@ -1,6 +1,5 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
-import android.util.Log
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
