@@ -8,7 +8,9 @@ import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTCDate
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF16ByteArray
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF16UrlEncoded
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getUTF8UrlEncoded
+import com.rakuten.tech.mobile.sdkutils.StringExtension.sanitize
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldNotContain
 import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -107,5 +109,24 @@ class StringExtensionSpec {
     @Test
     fun `should get UTF-16 URL encoded value for empty string`() {
         "".getUTF16UrlEncoded() shouldBeEqualTo ""
+    }
+
+    @Test
+    fun `should remove unwanted tabs from string`() {
+        try {
+            3 / 0 // Force an ArithmeticException
+        } catch (e: Exception) {
+            e.stackTraceToString().sanitize() shouldNotContain "\t"
+        }
+    }
+
+    @Test
+    fun `should trim leading and trailing spaces`() {
+        "  this is a test   ".sanitize() shouldBeEqualTo "this is a test"
+    }
+
+    @Test
+    fun `should not crash when maxLength is negative`() {
+        "this is a test".sanitize(-1) shouldBeEqualTo "this is a test"
     }
 }
