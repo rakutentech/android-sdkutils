@@ -40,7 +40,7 @@ internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPref
     override fun getCount(): Int = sharedPref.all.keys.size
 
     /**
-     * Inserts the event to SharedPreferences and automatically setting its identifier, count, and occurrence time.
+     * Inserts the event to SharedPreferences which also automatically sets its identifier, count, and occurrence time.
      */
     override fun insertEvent(event: Event) {
         with(sharedPref.edit()) {

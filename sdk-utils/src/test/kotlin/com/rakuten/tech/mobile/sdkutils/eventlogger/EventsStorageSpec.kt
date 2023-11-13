@@ -82,6 +82,9 @@ class EventsStorageSpec {
         eventsStorage.deleteEvents(listOf(event1))
 
         eventsStorage.getCount() shouldBeEqualTo 1
+        val events = eventsStorage.getAllEvents()
+        events shouldContain event2
+        events shouldNotContain event1
     }
 
     @Test
