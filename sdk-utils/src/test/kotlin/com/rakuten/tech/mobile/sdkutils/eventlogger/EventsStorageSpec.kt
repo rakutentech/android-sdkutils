@@ -10,7 +10,6 @@ import org.junit.runner.RunWith
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.robolectric.RobolectricTestRunner
-import kotlin.random.Random
 
 @RunWith(RobolectricTestRunner::class)
 class EventsStorageSpec {
@@ -26,8 +25,8 @@ class EventsStorageSpec {
 
     @Test
     fun `getAllEvents should return all events`() {
-        eventsStorage.insertEvent(generateRandomEvent())
-        eventsStorage.insertEvent(generateRandomEvent())
+        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
+        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
 
         eventsStorage.getAllEvents() shouldHaveSize 2
     }
@@ -43,7 +42,7 @@ class EventsStorageSpec {
 
     @Test
     fun `getEventById should return correct event`() {
-        val event = generateRandomEvent()
+        val event = EventLoggerTestUtil.generateRandomEvent()
         eventsStorage.insertEvent(event)
 
         eventsStorage.getEventById(event.getIdentifier()) shouldBeEqualTo event
@@ -65,8 +64,8 @@ class EventsStorageSpec {
 
     @Test
     fun `getCount should return correct count`() {
-        eventsStorage.insertEvent(generateRandomEvent())
-        eventsStorage.insertEvent(generateRandomEvent())
+        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
+        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
 
         eventsStorage.getCount() shouldBeEqualTo 2
     }
@@ -82,7 +81,7 @@ class EventsStorageSpec {
 
     @Test
     fun `should insert event and automatically fill-in some attributes`() {
-        val event = generateRandomEvent()
+        val event = EventLoggerTestUtil.generateRandomEvent()
         eventsStorage.insertEvent(event)
         val storedEvent = eventsStorage.getEventById(event.getIdentifier())
 
@@ -93,7 +92,7 @@ class EventsStorageSpec {
 
     @Test
     fun `should update event`() {
-        val origEvent = generateRandomEvent()
+        val origEvent = EventLoggerTestUtil.generateRandomEvent()
         eventsStorage.insertEvent(origEvent)
 
         val updatedEvent = origEvent.incrementCount()
@@ -104,8 +103,8 @@ class EventsStorageSpec {
 
     @Test
     fun `should delete events`() {
-        val event1 = generateRandomEvent()
-        val event2 = generateRandomEvent()
+        val event1 = EventLoggerTestUtil.generateRandomEvent()
+        val event2 = EventLoggerTestUtil.generateRandomEvent()
         eventsStorage.insertEvent(event1)
         eventsStorage.insertEvent(event2)
 
@@ -119,8 +118,8 @@ class EventsStorageSpec {
 
     @Test
     fun `deleteOldEvents should delete old events based on max capacity`() {
-        val event1 = generateRandomEvent()
-        val event2 = generateRandomEvent()
+        val event1 = EventLoggerTestUtil.generateRandomEvent()
+        val event2 = EventLoggerTestUtil.generateRandomEvent()
         eventsStorage.insertEvent(event1)
         eventsStorage.insertEvent(event2)
 
@@ -134,8 +133,8 @@ class EventsStorageSpec {
 
     @Test
     fun `deleteOldEvents should not delete any event if within max capacity`() {
-        eventsStorage.insertEvent(generateRandomEvent())
-        eventsStorage.insertEvent(generateRandomEvent())
+        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
+        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
 
         eventsStorage.deleteOldEvents(5)
 
@@ -147,17 +146,5 @@ class EventsStorageSpec {
             clear()
             commit()
         }
-    }
-
-    private fun generateRandomEvent(): Event {
-        val randomText = System.currentTimeMillis().toString()
-        return EventBuilder(context)
-            .buildEvent(
-                EventType.values()[Random.nextInt(EventType.values().size)],
-                randomText,
-                randomText,
-                randomText,
-                randomText
-            )
     }
 }
