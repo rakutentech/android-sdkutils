@@ -1,11 +1,14 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.content.Context
+import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import org.amshove.kluent.*
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.robolectric.RobolectricTestRunner
 import kotlin.random.Random
 
@@ -30,6 +33,15 @@ class EventsStorageSpec {
     }
 
     @Test
+    fun `getAllEvents should not crash if exception occurs`() {
+        val mockSharedPrefs = mock(SharedPreferences::class.java)
+        `when`(mockSharedPrefs.all)
+            .thenThrow(NullPointerException())
+
+        SharedPreferencesEventsStorage(mockSharedPrefs).getAllEvents().shouldBeEmpty()
+    }
+
+    @Test
     fun `getEventById should return correct event`() {
         val event = generateRandomEvent()
         eventsStorage.insertEvent(event)
@@ -43,11 +55,29 @@ class EventsStorageSpec {
     }
 
     @Test
+    fun `getEventById should not crash if exception occurs`() {
+        val mockSharedPrefs = mock(SharedPreferences::class.java)
+        `when`(mockSharedPrefs.getString("test-id", null))
+            .thenThrow(ClassCastException())
+
+        SharedPreferencesEventsStorage(mockSharedPrefs).getEventById("test-id") shouldBeEqualTo null
+    }
+
+    @Test
     fun `getCount should return correct count`() {
         eventsStorage.insertEvent(generateRandomEvent())
         eventsStorage.insertEvent(generateRandomEvent())
 
         eventsStorage.getCount() shouldBeEqualTo 2
+    }
+
+    @Test
+    fun `getCount should not crash if exception occurs`() {
+        val mockSharedPrefs = mock(SharedPreferences::class.java)
+        `when`(mockSharedPrefs.all)
+            .thenThrow(NullPointerException())
+
+        SharedPreferencesEventsStorage(mockSharedPrefs).getCount() shouldBeEqualTo -1
     }
 
     @Test
@@ -96,6 +126,7 @@ class EventsStorageSpec {
 
         eventsStorage.deleteOldEvents(1)
 
+        eventsStorage.getCount() shouldBeEqualTo 1
         val events = eventsStorage.getAllEvents()
         events shouldContain event2
         events shouldNotContain event1

@@ -2,7 +2,6 @@ package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
-import com.google.gson.JsonSyntaxException
 
 internal interface EventsStorage {
     fun getAllEvents(): List<Event>
@@ -14,33 +13,50 @@ internal interface EventsStorage {
     fun deleteOldEvents(maxCapacity: Int)
 }
 
+@SuppressWarnings(
+    "TooGenericExceptionCaught",
+    "SwallowedException"
+)
 internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPreferences) : EventsStorage {
 
+    /**
+     * Retrieves the events, or empty if the operation fails.
+     */
     override fun getAllEvents(): List<Event> {
         val events = mutableListOf<Event>()
-
-        for (key in sharedPref.all.keys) {
-            val eventJson = getEventById(key) ?: continue
-            events.add(eventJson)
+        try {
+            for (key in sharedPref.all.keys) {
+                val eventJson = getEventById(key) ?: continue
+                events.add(eventJson)
+            }
+        } catch (_: Exception) {
         }
         return events
     }
 
-    @SuppressWarnings("SwallowedException")
     override fun getEventById(id: String): Event? {
-        val event = sharedPref.getString(id, null) ?: return null
-
         return try {
+            val event = sharedPref.getString(id, null) ?: return null
             Gson().fromJson(event, Event::class.java)
-        } catch (e: JsonSyntaxException) {
+        } catch (e: Exception) {
             null
         }
     }
 
-    override fun getCount(): Int = sharedPref.all.keys.size
+    /**
+     * Retrieves the event count based on the number of keys existing, or -1 if the operation fails.
+     */
+    override fun getCount(): Int {
+        return try {
+            sharedPref.all.keys.size
+        } catch (e: Exception) {
+            -1
+        }
+    }
 
     /**
-     * Inserts the event to SharedPreferences which also automatically sets its identifier, count, and occurrence time.
+     * Inserts the event which also automatically sets its identifier, count, and occurrence time.
+     * It will be inserted with the [Event.getIdentifier] as key and the [Event] in string format as value.
      */
     override fun insertEvent(event: Event) {
         with(sharedPref.edit()) {
@@ -58,6 +74,9 @@ internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPref
         }
     }
 
+    /**
+     * Removes events with matching [Event.getIdentifier].
+     */
     override fun deleteEvents(events: List<Event>) {
         with(sharedPref.edit()) {
             events.forEach {
