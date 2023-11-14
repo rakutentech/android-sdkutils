@@ -7,6 +7,11 @@ import retrofit2.http.POST
 import java.io.IOException
 
 internal interface EventsSender {
+
+    /**
+     * Thread-blocking operation that sends the supplied [events] to backend and invokes the optional [onSuccess]
+     * callback if succeeded.
+     */
     fun pushEvents(events: List<Event>, onSuccess: (() -> Unit)?)
 }
 
@@ -17,10 +22,6 @@ internal class RetrofitEventsSender(private val retrofitApi: Api) : EventsSender
         fun sendEvents(@Body events: List<Event>): Call<ResponseBody?>
     }
 
-    /**
-     * Thread-blocking operation that sends the supplied [events] to backend and invokes the optional [onSuccess]
-     * callback if succeeded.
-     */
     @SuppressWarnings(
         "TooGenericExceptionCaught",
         "SwallowedException"

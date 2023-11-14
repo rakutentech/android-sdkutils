@@ -24,7 +24,7 @@ class EventsSenderSpec {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(RetrofitEventsSender.Api::class.java)
-    private val eventsSender: EventsSender = RetrofitEventsSender(retrofitApi)
+    private val eventsSender = RetrofitEventsSender(retrofitApi)
 
     @Test
     fun `should do nothing if events list is empty`() {
