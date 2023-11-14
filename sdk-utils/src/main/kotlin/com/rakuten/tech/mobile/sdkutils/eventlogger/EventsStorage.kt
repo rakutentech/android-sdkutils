@@ -4,12 +4,41 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 
 internal interface EventsStorage {
+
+    /**
+     * Retrieves the events, or empty if the operation fails.
+     */
     fun getAllEvents(): List<Event>
+
+    /**
+     * Retrieves the event with matching [id] or the [Event.getIdentifier].
+     */
     fun getEventById(id: String): Event?
+
+    /**
+     * Retrieves the event count based on the number of existing keys in storage, or -1 if the operation fails.
+     */
     fun getCount(): Int
+
+    /**
+     * Inserts the event which also automatically sets its identifier, count, and occurrence time.
+     * It will be inserted with the [Event.getIdentifier] as key and the [Event] in string format as value.
+     */
     fun insertEvent(event: Event)
+
+    /**
+     * Updates the event with matching [Event.getIdentifier].
+     */
     fun updateEvent(event: Event)
+
+    /**
+     * Deletes the supplied [events].
+     */
     fun deleteEvents(events: List<Event>)
+
+    /**
+     * Deletes old events based on [Event.firstOccurrenceMillis] and retains a maximum of [maxCapacity] events.
+     */
     fun deleteOldEvents(maxCapacity: Int)
 }
 
@@ -19,9 +48,6 @@ internal interface EventsStorage {
 )
 internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPreferences) : EventsStorage {
 
-    /**
-     * Retrieves the events, or empty if the operation fails.
-     */
     override fun getAllEvents(): List<Event> {
         val events = mutableListOf<Event>()
         try {
@@ -43,9 +69,6 @@ internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPref
         }
     }
 
-    /**
-     * Retrieves the event count based on the number of keys existing, or -1 if the operation fails.
-     */
     override fun getCount(): Int {
         return try {
             sharedPref.all.keys.size
@@ -54,10 +77,6 @@ internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPref
         }
     }
 
-    /**
-     * Inserts the event which also automatically sets its identifier, count, and occurrence time.
-     * It will be inserted with the [Event.getIdentifier] as key and the [Event] in string format as value.
-     */
     override fun insertEvent(event: Event) {
         with(sharedPref.edit()) {
             event.incrementCount()
@@ -74,9 +93,6 @@ internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPref
         }
     }
 
-    /**
-     * Removes events with matching [Event.getIdentifier].
-     */
     override fun deleteEvents(events: List<Event>) {
         with(sharedPref.edit()) {
             events.forEach {
@@ -86,9 +102,6 @@ internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPref
         }
     }
 
-    /**
-     * Deletes old events based on [Event.firstOccurrenceMillis] and retains a maximum of [maxCapacity] events.
-     */
     override fun deleteOldEvents(maxCapacity: Int) {
         if (getCount() <= maxCapacity) {
             return
