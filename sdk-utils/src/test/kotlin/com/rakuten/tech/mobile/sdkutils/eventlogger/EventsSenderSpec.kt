@@ -1,10 +1,13 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
+import com.google.gson.GsonBuilder
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.amshove.kluent.shouldContainAll
+import org.amshove.kluent.shouldNotContain
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
@@ -21,7 +24,9 @@ class EventsSenderSpec {
     private val retrofitApi = Retrofit
         .Builder()
         .baseUrl(mockWebServer.url("").toString())
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(GsonConverterFactory.create(
+            GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+        ))
         .build()
         .create(RetrofitEventsSender.Api::class.java)
     private val eventsSender = RetrofitEventsSender(retrofitApi)
@@ -35,6 +40,38 @@ class EventsSenderSpec {
         )
 
         verify(callback, never()).invoke()
+    }
+
+    @Test
+    @SuppressWarnings("LongMethod")
+    fun `should send json body based on backend contract`() {
+        mockWebServer.enqueue(MockResponse()
+            .setResponseCode(HttpURLConnection.HTTP_OK))
+
+        eventsSender.pushEvents(
+            listOf(EventLoggerTestUtil.generateRandomEvent()),
+            null
+        )
+
+        val request = mockWebServer.takeRequest().body.readUtf8()
+        request shouldContainAll listOf(
+            "eventVer",
+            "eventType",
+            "appId",
+            "appName",
+            "appVer",
+            "platform",
+            "osVer",
+            "deviceModel",
+            "deviceBrand",
+            "deviceName",
+            "sdkName",
+            "sdkVer",
+            "errorCode",
+            "errorMsg",
+            "occurrenceCount"
+        )
+        request shouldNotContain "firstOccurrenceMillis"
     }
 
     @Test
