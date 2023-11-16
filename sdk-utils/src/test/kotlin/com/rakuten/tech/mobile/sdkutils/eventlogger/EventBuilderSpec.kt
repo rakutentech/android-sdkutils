@@ -5,6 +5,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Resources
+import android.os.Build
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -56,6 +57,9 @@ class EventBuilderSpec {
             appName shouldBeEqualTo "sdk utils sample app"
             appVer shouldBeEqualTo "1.0.0"
             rmcSdks shouldBeEqualTo mapOf("rmc_inappmessaging" to "2.0.0")
+            osVer shouldBeEqualTo "Android ${Build.VERSION.RELEASE}"
+            deviceModel shouldBeEqualTo Build.MODEL
+            deviceBrand shouldBeEqualTo Build.MANUFACTURER
         }
     }
 
@@ -74,6 +78,9 @@ class EventBuilderSpec {
             appName shouldBeEqualTo "sdk utils sample app"
             appVer shouldBeEqualTo "1.0.0"
             rmcSdks shouldBeEqualTo mapOf("rmc_inappmessaging" to "2.0.0")
+            osVer shouldBeEqualTo "Android ${Build.VERSION.RELEASE}"
+            deviceModel shouldBeEqualTo Build.MODEL
+            deviceBrand shouldBeEqualTo Build.MANUFACTURER
         }
     }
 

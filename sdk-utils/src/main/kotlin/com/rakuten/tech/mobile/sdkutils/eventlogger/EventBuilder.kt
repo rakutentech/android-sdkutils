@@ -2,6 +2,8 @@ package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.os.Build
+import android.provider.Settings
 import com.rakuten.tech.mobile.sdkutils.StringExtension.sanitize
 
 @SuppressWarnings(
@@ -12,7 +14,7 @@ internal class EventBuilder(private val context: Context) {
     private val metadata: Metadata = buildMetadata()
 
     /**
-     * Event builder that attaches application information to the event.
+     * Event builder that attaches application and device information to the event.
      */
     fun buildEvent(type: EventType, sourceName: String, sourceVersion: String, code: String, message: String): Event {
         return Event(
@@ -20,10 +22,10 @@ internal class EventBuilder(private val context: Context) {
             appId = metadata.appId,
             appName = metadata.appName,
             appVer = metadata.appVer,
-            osVer = "", // TODO
-            deviceModel = "", // TODO
-            deviceBrand = "", // TODO
-            deviceName = "", // TODO
+            osVer = metadata.osVer,
+            deviceModel = metadata.deviceModel,
+            deviceBrand = metadata.deviceBrand,
+            deviceName = metadata.deviceName,
             sdkName = sourceName.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
             sdkVer = sourceVersion.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
             errorCode = code.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
@@ -46,6 +48,10 @@ internal class EventBuilder(private val context: Context) {
             appId = context.packageName,
             appName = context.applicationInfo.loadLabel(context.packageManager).toString(),
             appVer = packageInfo?.versionName.orEmpty(),
+            osVer = "Android ${Build.VERSION.RELEASE}",
+            deviceModel = Build.MODEL,
+            deviceBrand = Build.MANUFACTURER,
+            deviceName = Settings.Global.getString(context.contentResolver, "device_name").orEmpty(),
             rmcSdks = getRmcVersions()
         )
     }
@@ -79,6 +85,10 @@ internal class EventBuilder(private val context: Context) {
         val appId: String,
         val appName: String,
         val appVer: String,
+        val osVer: String,
+        val deviceModel: String,
+        val deviceBrand: String,
+        val deviceName: String,
         val rmcSdks: Map<String, String>?
     )
 
