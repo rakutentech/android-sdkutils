@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
   defaultConfig {
+    consumerProguardFiles "proguard-rules.pro"
     resValue 'string', 'sdk_utils__version', project.version
   }
 

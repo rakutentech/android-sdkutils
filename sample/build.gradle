@@ -23,6 +23,12 @@ android {
     jvmTarget = JavaVersion.toVersion(CONFIG.versions.java).toString()
   }
 
+  buildTypes {
+    release {
+      minifyEnabled true
+      debuggable false
+    }
+  }
 }
 
 dependencies {
