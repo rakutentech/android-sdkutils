@@ -9,6 +9,7 @@ android {
   }
 
   defaultConfig {
+    consumerProguardFiles "proguard-rules.pro"
     resValue 'string', 'sdk_utils__version', project.version
 
     buildConfigField("String", "EVENT_LOGGER_PRD", "\"${property("EVENT_LOGGER_PRD")}\"")

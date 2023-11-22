@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainAll
 import org.amshove.kluent.shouldNotContain
 import org.junit.Test
@@ -29,7 +30,7 @@ class EventsSenderSpec {
         ))
         .build()
         .create(RetrofitEventsSender.Api::class.java)
-    private val eventsSender = RetrofitEventsSender(retrofitApi)
+    private val eventsSender = RetrofitEventsSender(retrofitApi, "mockApiKey")
 
     @Test
     fun `should do nothing if events list is empty`() {
@@ -44,7 +45,7 @@ class EventsSenderSpec {
 
     @Test
     @SuppressWarnings("LongMethod")
-    fun `should send json body based on backend contract`() {
+    fun `should send json request based on backend contract`() {
         mockWebServer.enqueue(MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_OK))
 
@@ -53,8 +54,10 @@ class EventsSenderSpec {
             null
         )
 
-        val request = mockWebServer.takeRequest().body.readUtf8()
-        request shouldContainAll listOf(
+        val request = mockWebServer.takeRequest()
+        request.getHeader(EventsSender.HEADER_CLIENT_API_KEY) shouldBeEqualTo "mockApiKey"
+        val requestBody = request.body.readUtf8()
+        requestBody shouldContainAll listOf(
             "eventVer",
             "eventType",
             "appId",
@@ -71,7 +74,7 @@ class EventsSenderSpec {
             "errorMsg",
             "occurrenceCount"
         )
-        request shouldNotContain "firstOccurrenceMillis"
+        requestBody shouldNotContain "firstOccurrenceMillis"
     }
 
     @Test
@@ -105,8 +108,8 @@ class EventsSenderSpec {
     @Test
     fun `should not invoke success callback if IOException occurred`() {
         val retrofitApi = mock(RetrofitEventsSender.Api::class.java)
-        val eventsSender = RetrofitEventsSender(retrofitApi)
-        `when`(retrofitApi.sendEvents(anyList()))
+        val eventsSender = RetrofitEventsSender(retrofitApi, "mockApiKey")
+        `when`(retrofitApi.sendEvents(anyString(), anyList()))
             .thenAnswer { throw IOException("") }
 
         val callback: () -> Unit = mock()
@@ -122,8 +125,8 @@ class EventsSenderSpec {
     @SuppressWarnings("TooGenericExceptionThrown")
     fun `should not invoke success callback if RuntimeException occurred`() {
         val retrofitApi = mock(RetrofitEventsSender.Api::class.java)
-        val eventsSender = RetrofitEventsSender(retrofitApi)
-        `when`(retrofitApi.sendEvents(anyList()))
+        val eventsSender = RetrofitEventsSender(retrofitApi, "mockApiKey")
+        `when`(retrofitApi.sendEvents(anyString(), anyList()))
             .thenAnswer { throw RuntimeException() }
 
         val callback: () -> Unit = mock()
