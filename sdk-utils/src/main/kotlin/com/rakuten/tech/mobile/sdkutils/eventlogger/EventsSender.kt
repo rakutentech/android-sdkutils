@@ -23,7 +23,7 @@ internal interface EventsSender {
 internal class RetrofitEventsSender(private val retrofitApi: Api, private val apiKey: String) : EventsSender {
 
     internal interface Api {
-        @POST("events")
+        @POST("external/logging/error")
         fun sendEvents(
             @Header(EventsSender.HEADER_CLIENT_API_KEY) apiKey: String,
             @Body events: List<Event>
