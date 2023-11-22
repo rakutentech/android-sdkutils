@@ -3,6 +3,7 @@ package com.rakuten.tech.mobile.sdkutils.eventlogger
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
+import retrofit2.http.Header
 import retrofit2.http.POST
 import java.io.IOException
 
@@ -13,13 +14,20 @@ internal interface EventsSender {
      * callback if succeeded.
      */
     fun pushEvents(events: List<Event>, onSuccess: (() -> Unit)?)
+
+    companion object {
+        const val HEADER_CLIENT_API_KEY = "x-client-apikey"
+    }
 }
 
-internal class RetrofitEventsSender(private val retrofitApi: Api) : EventsSender {
+internal class RetrofitEventsSender(private val retrofitApi: Api, private val apiKey: String) : EventsSender {
 
     internal interface Api {
         @POST("events")
-        fun sendEvents(@Body events: List<Event>): Call<ResponseBody?>
+        fun sendEvents(
+            @Header(EventsSender.HEADER_CLIENT_API_KEY) apiKey: String,
+            @Body events: List<Event>
+        ): Call<ResponseBody?>
     }
 
     @SuppressWarnings(
@@ -31,7 +39,7 @@ internal class RetrofitEventsSender(private val retrofitApi: Api) : EventsSender
             return
 
         try {
-            val request = retrofitApi.sendEvents(events).execute()
+            val request = retrofitApi.sendEvents(apiKey, events).execute()
             if (request.isSuccessful) {
                 EventLogger.log.debug("Successfully pushed ${events.size} events")
                 onSuccess?.invoke()
