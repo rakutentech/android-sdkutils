@@ -50,8 +50,7 @@ class EventsSenderSpec {
             .setResponseCode(HttpURLConnection.HTTP_OK))
 
         eventsSender.pushEvents(
-            listOf(EventLoggerTestUtil.generateRandomEvent()),
-            null
+            listOf(EventLoggerTestUtil.generateRandomEvent())
         )
 
         val request = mockWebServer.takeRequest()

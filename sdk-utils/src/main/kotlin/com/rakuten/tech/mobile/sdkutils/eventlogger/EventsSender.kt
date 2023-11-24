@@ -13,7 +13,7 @@ internal interface EventsSender {
      * Thread-blocking operation that sends the supplied [events] to backend and invokes the optional [onSuccess]
      * callback if succeeded.
      */
-    fun pushEvents(events: List<Event>, onSuccess: (() -> Unit)?)
+    fun pushEvents(events: List<Event>, onSuccess: (() -> Unit)? = null)
 
     companion object {
         const val HEADER_CLIENT_API_KEY = "x-client-apikey"
