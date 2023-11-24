@@ -62,13 +62,4 @@ object EventLogger {
     ) {
         // Intentionally left blank. Will be supported later.
     }
-
-    private object Configuration {
-        const val MAX_EVENTS_COUNT = 30
-        const val MAX_EVENTS_SENDING_RETRIES = 3
-        const val EVENT_TTL_MILLIS = 3600 * 1000 * 2 // 2 hours
-        const val EVENT_LOGGER_BASE_URL = BuildConfig.EVENT_LOGGER_API_URL
-        const val EVENT_LOGGER_API_KEY = BuildConfig.EVENT_LOGGER_API_KEY
-        const val EVENTS_STORAGE_FILENAME = "${BuildConfig.LIBRARY_PACKAGE_NAME}.eventlogger.events"
-    }
 }
