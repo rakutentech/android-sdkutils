@@ -13,7 +13,7 @@ import com.rakuten.tech.mobile.sdkutils.logger.Logger
 )
 object EventLogger {
 
-    val log = Logger(EventLogger::class.java.simpleName).apply { setDebug(BuildConfig.DEBUG) }
+    internal val log = Logger(EventLogger::class.java.simpleName).apply { setDebug(BuildConfig.DEBUG) }
 
     /**
      * Initializes the event logging utility. Call this as early as possible in the application lifecycle, such as
