@@ -27,6 +27,12 @@ android {
     jvmTarget = JavaVersion.toVersion(CONFIG.versions.java).toString()
   }
 
+  applicationVariants.all { variant ->
+    variant.outputs.all { output ->
+      outputFileName = "sdk-utils-sample-${variant.name}.apk"
+    }
+  }
+
   signingConfigs {
     release {
       storeFile file('../sdk-utils-sample-releasekey.keystore')

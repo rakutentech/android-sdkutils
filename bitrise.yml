@@ -65,12 +65,12 @@ workflows:
         is_always_run: false
         inputs:
         - is_enable_public_page: 'false'
-        - deploy_path: sample/build/outputs/apk/debug/sample-debug.apk
+        - deploy_path: sample/build/outputs/apk/debug/sdk-utils-sample-debug.apk
     - deploy-to-bitrise-io@2:
         is_always_run: false
         inputs:
         - is_enable_public_page: 'false'
-        - deploy_path: sample/build/outputs/apk/release/sample-release.apk
+        - deploy_path: sample/build/outputs/apk/release/sdk-utils-sample-release.apk
     - cache-push@2:
         inputs:
         - cache_paths: |-
