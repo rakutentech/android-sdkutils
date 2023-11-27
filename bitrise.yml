@@ -40,8 +40,8 @@ workflows:
         title: Retrieve sample app Base64 key and save to file
         inputs:
           - content: |-
-              if [[ "SAMPLE_APP_RELEASE_KEY_BASE64" != "" ]]; then
-                base64 -d <<< "SAMPLE_APP_RELEASE_KEY_BASE64" > ./sdk-utils-sample-releasekey.keystore
+              if [[ "$SAMPLE_APP_RELEASE_KEY_BASE64" != "" ]]; then
+                base64 -d <<< "$SAMPLE_APP_RELEASE_KEY_BASE64" > ./sdk-utils-sample-releasekey.keystore
               fi
     - script@1:
         title: Assemble
