@@ -16,6 +16,7 @@ internal class EventBuilder(private val context: Context) {
     /**
      * Event builder that attaches application and device information to the event.
      */
+    @SuppressWarnings("LongParameterList")
     fun buildEvent(
         type: EventType,
         sourceName: String,
