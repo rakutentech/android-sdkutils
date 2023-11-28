@@ -16,7 +16,14 @@ internal class EventBuilder(private val context: Context) {
     /**
      * Event builder that attaches application and device information to the event.
      */
-    fun buildEvent(type: EventType, sourceName: String, sourceVersion: String, code: String, message: String): Event {
+    fun buildEvent(
+        type: EventType,
+        sourceName: String,
+        sourceVersion: String,
+        code: String,
+        message: String,
+        info: Map<String, String>? = null
+    ): Event {
         return Event(
             eventType = type.displayName,
             appId = metadata.appId,
@@ -30,7 +37,8 @@ internal class EventBuilder(private val context: Context) {
             sdkVersion = sourceVersion.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
             errorCode = code.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
             errorMessage = message.sanitize(MAX_EVENT_MESSAGE_LENGTH),
-            rmcSdks = metadata.rmcSdks
+            rmcSdks = metadata.rmcSdks,
+            info = info
         )
     }
 

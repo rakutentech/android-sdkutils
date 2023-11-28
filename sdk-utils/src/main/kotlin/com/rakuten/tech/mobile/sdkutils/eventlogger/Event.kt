@@ -1,5 +1,6 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
+import com.google.gson.annotations.SerializedName
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getMD5HashData
 
 internal data class Event(
@@ -16,8 +17,9 @@ internal data class Event(
     val errorCode: String,
     val errorMessage: String,
     val rmcSdks: Map<String, String>? = null,
+    val info: Map<String, String>? = null,
     var occurrenceCount: Int = 0,
-    var firstOccurrenceMillis: Long? = null
+    @SerializedName("firstOccurrenceOn") var firstOccurrenceMillis: Long? = null
 ) {
     val eventVersion = "1.0"
     val platform = Platform.ANDROID.displayName
