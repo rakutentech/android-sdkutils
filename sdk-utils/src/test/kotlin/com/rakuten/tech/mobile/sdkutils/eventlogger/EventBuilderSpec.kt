@@ -55,9 +55,9 @@ class EventBuilderSpec {
             eventType shouldBeEqualTo EventType.CRITICAL.displayName
             appId shouldBeEqualTo "com.sdkutils"
             appName shouldBeEqualTo "sdk utils sample app"
-            appVer shouldBeEqualTo "1.0.0"
+            appVersion shouldBeEqualTo "1.0.0"
             rmcSdks shouldBeEqualTo mapOf("rmc_inappmessaging" to "2.0.0")
-            osVer shouldBeEqualTo "Android ${Build.VERSION.RELEASE}"
+            osVersion shouldBeEqualTo "Android ${Build.VERSION.RELEASE}"
             deviceModel shouldBeEqualTo Build.MODEL
             deviceBrand shouldBeEqualTo Build.MANUFACTURER
         }
@@ -76,9 +76,9 @@ class EventBuilderSpec {
             eventType shouldBeEqualTo EventType.WARNING.displayName
             appId shouldBeEqualTo "com.sdkutils"
             appName shouldBeEqualTo "sdk utils sample app"
-            appVer shouldBeEqualTo "1.0.0"
+            appVersion shouldBeEqualTo "1.0.0"
             rmcSdks shouldBeEqualTo mapOf("rmc_inappmessaging" to "2.0.0")
-            osVer shouldBeEqualTo "Android ${Build.VERSION.RELEASE}"
+            osVersion shouldBeEqualTo "Android ${Build.VERSION.RELEASE}"
             deviceModel shouldBeEqualTo Build.MODEL
             deviceBrand shouldBeEqualTo Build.MANUFACTURER
         }
@@ -98,7 +98,7 @@ class EventBuilderSpec {
             "invalid key",
         )
 
-        event.appVer shouldBeEqualTo ""
+        event.appVersion shouldBeEqualTo ""
     }
 
     @Test

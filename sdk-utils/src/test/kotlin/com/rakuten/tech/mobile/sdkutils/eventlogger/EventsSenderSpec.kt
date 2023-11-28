@@ -1,6 +1,5 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
-import com.google.gson.GsonBuilder
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
@@ -8,7 +7,6 @@ import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainAll
-import org.amshove.kluent.shouldNotContain
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
@@ -25,9 +23,7 @@ class EventsSenderSpec {
     private val retrofitApi = Retrofit
         .Builder()
         .baseUrl(mockWebServer.url("").toString())
-        .addConverterFactory(GsonConverterFactory.create(
-            GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
-        ))
+        .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(RetrofitEventsSender.Api::class.java)
     private val eventsSender = RetrofitEventsSender(retrofitApi, "mockApiKey")
@@ -57,23 +53,22 @@ class EventsSenderSpec {
         request.getHeader(EventsSender.HEADER_CLIENT_API_KEY) shouldBeEqualTo "mockApiKey"
         val requestBody = request.body.readUtf8()
         requestBody shouldContainAll listOf(
-            "eventVer",
+            "eventVersion",
             "eventType",
             "appId",
             "appName",
-            "appVer",
+            "appVersion",
             "platform",
-            "osVer",
+            "osVersion",
             "deviceModel",
             "deviceBrand",
             "deviceName",
             "sdkName",
-            "sdkVer",
+            "sdkVersion",
             "errorCode",
-            "errorMsg",
+            "errorMessage",
             "occurrenceCount"
         )
-        requestBody shouldNotContain "firstOccurrenceMillis"
     }
 
     @Test

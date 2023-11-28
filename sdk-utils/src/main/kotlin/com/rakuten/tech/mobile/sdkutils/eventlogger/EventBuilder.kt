@@ -21,15 +21,15 @@ internal class EventBuilder(private val context: Context) {
             eventType = type.displayName,
             appId = metadata.appId,
             appName = metadata.appName,
-            appVer = metadata.appVer,
-            osVer = metadata.osVer,
+            appVersion = metadata.appVer,
+            osVersion = metadata.osVer,
             deviceModel = metadata.deviceModel,
             deviceBrand = metadata.deviceBrand,
             deviceName = metadata.deviceName,
             sdkName = sourceName.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
-            sdkVer = sourceVersion.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
+            sdkVersion = sourceVersion.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
             errorCode = code.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
-            errorMsg = message.sanitize(MAX_EVENT_MESSAGE_LENGTH),
+            errorMessage = message.sanitize(MAX_EVENT_MESSAGE_LENGTH),
             rmcSdks = metadata.rmcSdks
         )
     }
