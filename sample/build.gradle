@@ -4,6 +4,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+  def property = { key ->
+    return System.getenv(key) ?: (project.hasProperty(key) ? project."$key" : "")
+  }
+
   defaultConfig {
     applicationId "com.rakuten.tech.mobile.sdkutils.sample"
     versionCode 1
@@ -23,6 +27,28 @@ android {
     jvmTarget = JavaVersion.toVersion(CONFIG.versions.java).toString()
   }
 
+  applicationVariants.all { variant ->
+    variant.outputs.all { output ->
+      outputFileName = "sdk-utils-sample-${variant.name}.apk"
+    }
+  }
+
+  signingConfigs {
+    release {
+      storeFile file('../sdk-utils-sample-releasekey.keystore')
+      storePassword property("SAMPLE_APP_RELEASE_PASSWORD")
+      keyAlias property("SAMPLE_APP_RELEASE_ALIAS")
+      keyPassword property("SAMPLE_APP_RELEASE_PASSWORD")
+    }
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled true
+      debuggable false
+      signingConfig signingConfigs.release
+    }
+  }
 }
 
 dependencies {

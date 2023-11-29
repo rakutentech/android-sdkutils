@@ -37,6 +37,13 @@ workflows:
             bundle install
             bundle exec danger --dangerfile=config/danger/Dangerfile
     - script@1:
+        title: Retrieve sample app Base64 key and save to file
+        inputs:
+          - content: |-
+              if [[ "$SAMPLE_APP_RELEASE_KEY_BASE64" != "" ]]; then
+                base64 -d <<< "$SAMPLE_APP_RELEASE_KEY_BASE64" > ./sdk-utils-sample-releasekey.keystore
+              fi
+    - script@1:
         title: Assemble
         inputs:
         - content: ./gradlew assemble
@@ -54,7 +61,16 @@ workflows:
         - test_name: "${SDK_PATH}_release"
         - base_path: "$SDK_PATH/build/test-results/testReleaseUnitTest/"
         - search_pattern: "*"
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2:
+        is_always_run: false
+        inputs:
+        - is_enable_public_page: 'false'
+        - deploy_path: sample/build/outputs/apk/debug/sdk-utils-sample-debug.apk
+    - deploy-to-bitrise-io@2:
+        is_always_run: false
+        inputs:
+        - is_enable_public_page: 'false'
+        - deploy_path: sample/build/outputs/apk/release/sdk-utils-sample-release.apk
     - cache-push@2:
         inputs:
         - cache_paths: |-
