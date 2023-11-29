@@ -1,5 +1,6 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
+import androidx.annotation.WorkerThread
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
@@ -13,6 +14,7 @@ internal interface EventsSender {
      * Thread-blocking operation that sends the supplied [events] to backend and invokes the optional [onSuccess]
      * callback if succeeded.
      */
+    @WorkerThread
     fun pushEvents(events: List<Event>, onSuccess: (() -> Unit)? = null)
 
     companion object {
