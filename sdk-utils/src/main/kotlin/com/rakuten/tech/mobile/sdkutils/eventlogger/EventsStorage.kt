@@ -56,6 +56,7 @@ internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPref
                 events.add(eventJson)
             }
         } catch (_: Exception) {
+            // return empty
         }
         return events
     }

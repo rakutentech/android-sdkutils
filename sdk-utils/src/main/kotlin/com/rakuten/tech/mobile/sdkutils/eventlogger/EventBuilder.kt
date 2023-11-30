@@ -16,21 +16,30 @@ internal class EventBuilder(private val context: Context) {
     /**
      * Event builder that attaches application and device information to the event.
      */
-    fun buildEvent(type: EventType, sourceName: String, sourceVersion: String, code: String, message: String): Event {
+    @SuppressWarnings("LongParameterList")
+    fun buildEvent(
+        type: EventType,
+        sourceName: String,
+        sourceVersion: String,
+        code: String,
+        message: String,
+        info: Map<String, String>? = null
+    ): Event {
         return Event(
             eventType = type.displayName,
             appId = metadata.appId,
             appName = metadata.appName,
-            appVer = metadata.appVer,
-            osVer = metadata.osVer,
+            appVersion = metadata.appVer,
+            osVersion = metadata.osVer,
             deviceModel = metadata.deviceModel,
             deviceBrand = metadata.deviceBrand,
             deviceName = metadata.deviceName,
             sdkName = sourceName.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
-            sdkVer = sourceVersion.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
+            sdkVersion = sourceVersion.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
             errorCode = code.sanitize(MAX_EVENT_PARAM_LENGTH_DEFAULT),
-            errorMsg = message.sanitize(MAX_EVENT_MESSAGE_LENGTH),
-            rmcSdks = metadata.rmcSdks
+            errorMessage = message.sanitize(MAX_EVENT_MESSAGE_LENGTH),
+            rmcSdks = metadata.rmcSdks,
+            info = info
         )
     }
 

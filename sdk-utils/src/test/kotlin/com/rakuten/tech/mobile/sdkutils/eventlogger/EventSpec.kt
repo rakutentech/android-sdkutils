@@ -20,6 +20,7 @@ class EventSpec {
         "500",
         "server error",
         mapOf("rmc_push" to "1.0.0"),
+        mapOf("file_name" to "MyFile.kt"),
         2,
         1699254206421
     )
@@ -36,19 +37,20 @@ class EventSpec {
             eventType shouldBeEqualTo "0"
             appId shouldBeEqualTo "sdkutils.sample"
             appName shouldBeEqualTo "sdkutils.sample"
-            appVer shouldBeEqualTo "1.0.0"
-            osVer shouldBeEqualTo "Android 10"
+            appVersion shouldBeEqualTo "1.0.0"
+            osVersion shouldBeEqualTo "Android 10"
             deviceModel shouldBeEqualTo "Galaxy"
             deviceBrand shouldBeEqualTo "Samsung"
             deviceName shouldBeEqualTo "S2"
             sdkName shouldBeEqualTo "inappmessaging"
-            sdkVer shouldBeEqualTo "1.0.0"
+            sdkVersion shouldBeEqualTo "1.0.0"
             errorCode shouldBeEqualTo "500"
-            errorMsg shouldBeEqualTo "server error"
+            errorMessage shouldBeEqualTo "server error"
             rmcSdks shouldBeEqualTo mapOf("rmc_push" to "1.0.0")
+            info shouldBeEqualTo mapOf("file_name" to "MyFile.kt")
             occurrenceCount shouldBeEqualTo 5
             firstOccurrenceMillis shouldBeEqualTo 1699254206421
-            eventVer shouldBeEqualTo "1"
+            eventVersion shouldBeEqualTo "1.0"
             platform shouldBeEqualTo "Android"
         }
     }
@@ -57,31 +59,37 @@ class EventSpec {
     @SuppressWarnings("LongMethod")
     fun `should serialize Event with correct json field names`() {
         Gson().toJson(testEvent) shouldContainAll listOf(
-            "eventVer",
+            "eventVersion",
             "eventType",
             "appId",
             "appName",
-            "appVer",
+            "appVersion",
             "platform",
-            "osVer",
+            "osVersion",
             "deviceModel",
             "deviceBrand",
             "deviceName",
             "sdkName",
-            "sdkVer",
+            "sdkVersion",
             "errorCode",
-            "errorMsg",
+            "errorMessage",
             "rmcSdks",
-            "occurrenceCount"
+            "info",
+            "occurrenceCount",
+            "firstOccurrenceOn"
         )
     }
 
     @Test
     fun `should not serialize null values`() {
         val testEvent = testEvent.copy(
-            rmcSdks = null
+            rmcSdks = null,
+            info = null
         )
-        Gson().toJson(testEvent) shouldNotContain "rmcSdks"
+        Gson().toJson(testEvent) shouldNotContainAll listOf(
+            "rmcSdks",
+            "info"
+        )
     }
 
     @Test
@@ -91,7 +99,7 @@ class EventSpec {
 
     @Test
     fun `should automatically set eventVer value`() {
-        testEvent.eventVer shouldNotBe null
+        testEvent.eventVersion shouldNotBe null
     }
 
     @Test

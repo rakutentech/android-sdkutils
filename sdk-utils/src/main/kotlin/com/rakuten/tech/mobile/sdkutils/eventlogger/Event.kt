@@ -1,25 +1,27 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
+import com.google.gson.annotations.SerializedName
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getMD5HashData
 
 internal data class Event(
     val eventType: String,
     val appId: String,
     val appName: String,
-    val appVer: String,
-    val osVer: String,
+    val appVersion: String,
+    val osVersion: String,
     val deviceModel: String,
     val deviceBrand: String,
     val deviceName: String,
     val sdkName: String,
-    val sdkVer: String,
+    val sdkVersion: String,
     val errorCode: String,
-    val errorMsg: String,
+    val errorMessage: String,
     val rmcSdks: Map<String, String>? = null,
+    val info: Map<String, String>? = null,
     var occurrenceCount: Int = 0,
-    var firstOccurrenceMillis: Long? = null
+    @SerializedName("firstOccurrenceOn") var firstOccurrenceMillis: Long? = null
 ) {
-    val eventVer = "1"
+    val eventVersion = "1.0"
     val platform = Platform.ANDROID.displayName
 }
 
@@ -37,7 +39,7 @@ internal enum class Platform(val displayName: String) {
 /**
  * Returns the string hash based on some data from the [Event].
  */
-internal fun Event.getIdentifier() = "${this.appVer}${this.sdkName}${this.errorCode}${this.errorMsg}"
+internal fun Event.getIdentifier() = "${this.appVersion}${this.sdkName}${this.errorCode}${this.errorMessage}"
     .getMD5HashData()
     .orEmpty()
 
