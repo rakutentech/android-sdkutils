@@ -2,6 +2,7 @@ package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import java.lang.ref.WeakReference
 import kotlin.random.Random
 
 internal object EventLoggerTestUtil {
@@ -10,7 +11,7 @@ internal object EventLoggerTestUtil {
 
     fun generateRandomEvent(): Event {
         val randomText = System.currentTimeMillis().toString()
-        return EventBuilder(context)
+        return EventLoggerHelper(WeakReference(context))
             .buildEvent(
                 EventType.values()[Random.nextInt(EventType.values().size)],
                 randomText,

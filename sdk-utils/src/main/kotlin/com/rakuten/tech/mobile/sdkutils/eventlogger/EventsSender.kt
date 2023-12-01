@@ -15,7 +15,7 @@ internal interface EventsSender {
      * callback if succeeded.
      */
     @WorkerThread
-    fun pushEvents(events: List<Event>, onSuccess: (() -> Unit)? = null)
+    fun pushEvents(events: List<Event>, onSuccess: (() -> Unit)? = null, onFailure: (() -> Unit)? = null)
 
     companion object {
         const val HEADER_CLIENT_API_KEY = "x-client-apikey"
@@ -36,7 +36,7 @@ internal class RetrofitEventsSender(private val retrofitApi: Api, private val ap
         "TooGenericExceptionCaught",
         "SwallowedException"
     )
-    override fun pushEvents(events: List<Event>, onSuccess: (() -> Unit)?) {
+    override fun pushEvents(events: List<Event>, onSuccess: (() -> Unit)?, onFailure: (() -> Unit)?) {
         if (events.isEmpty())
             return
 
@@ -45,6 +45,7 @@ internal class RetrofitEventsSender(private val retrofitApi: Api, private val ap
             if (request.isSuccessful) {
                 EventLogger.log.debug("Successfully pushed ${events.size} events")
                 onSuccess?.invoke()
+                return
             } else {
                 EventLogger.log.debug("Backend error: ${request.message()}")
                 // ToDo : Retry mechanism if applicable
@@ -55,5 +56,6 @@ internal class RetrofitEventsSender(private val retrofitApi: Api, private val ap
         } catch (re: RuntimeException) {
             // ToDo : Retry mechanism if applicable
         }
+        onFailure?.invoke()
     }
 }

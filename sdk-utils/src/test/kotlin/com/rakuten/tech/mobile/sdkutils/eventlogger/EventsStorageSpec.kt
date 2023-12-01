@@ -25,8 +25,8 @@ class EventsStorageSpec {
 
     @Test
     fun `getAllEvents should return all events`() {
-        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
-        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
+        eventsStorage.insertEvent("id1", EventLoggerTestUtil.generateRandomEvent())
+        eventsStorage.insertEvent("id2", EventLoggerTestUtil.generateRandomEvent())
 
         eventsStorage.getAllEvents() shouldHaveSize 2
     }
@@ -43,9 +43,9 @@ class EventsStorageSpec {
     @Test
     fun `getEventById should return correct event`() {
         val event = EventLoggerTestUtil.generateRandomEvent()
-        eventsStorage.insertEvent(event)
+        eventsStorage.insertEvent("id1", event)
 
-        eventsStorage.getEventById(event.getIdentifier()) shouldBeEqualTo event
+        eventsStorage.getEventById("id1") shouldBeEqualTo event
     }
 
     @Test
@@ -64,8 +64,8 @@ class EventsStorageSpec {
 
     @Test
     fun `getCount should return correct count`() {
-        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
-        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
+        eventsStorage.insertEvent("id1", EventLoggerTestUtil.generateRandomEvent())
+        eventsStorage.insertEvent("id2", EventLoggerTestUtil.generateRandomEvent())
 
         eventsStorage.getCount() shouldBeEqualTo 2
     }
@@ -80,48 +80,44 @@ class EventsStorageSpec {
     }
 
     @Test
-    fun `should insert event and automatically fill-in some attributes`() {
+    fun `should insert event`() {
         val event = EventLoggerTestUtil.generateRandomEvent()
-        eventsStorage.insertEvent(event)
-        val storedEvent = eventsStorage.getEventById(event.getIdentifier())
-
-        storedEvent!!.getIdentifier() shouldNotBeEqualTo null
-        storedEvent.occurrenceCount shouldBeGreaterThan 0
-        storedEvent.firstOccurrenceMillis shouldNotBeEqualTo null
+        eventsStorage.insertEvent("id1", event)
+        eventsStorage.getEventById("id1") shouldNotBeEqualTo null
     }
 
     @Test
     fun `should update event`() {
         val origEvent = EventLoggerTestUtil.generateRandomEvent()
-        eventsStorage.insertEvent(origEvent)
+        eventsStorage.insertEvent("id1", origEvent)
 
-        val updatedEvent = origEvent.incrementCount()
-        eventsStorage.updateEvent(updatedEvent)
+        val updatedEvent = origEvent
+            .incrementCount()
+            .incrementCount()
+            .incrementCount()
+        eventsStorage.updateEvent("id1", updatedEvent)
 
-        eventsStorage.getEventById(origEvent.getIdentifier())?.occurrenceCount shouldBeEqualTo 2
+        eventsStorage.getEventById("id1")?.occurrenceCount shouldBeEqualTo 3
     }
 
     @Test
-    fun `should delete events`() {
+    fun `should delete all events`() {
         val event1 = EventLoggerTestUtil.generateRandomEvent()
         val event2 = EventLoggerTestUtil.generateRandomEvent()
-        eventsStorage.insertEvent(event1)
-        eventsStorage.insertEvent(event2)
+        eventsStorage.insertEvent("id1", event1)
+        eventsStorage.insertEvent("id2", event2)
 
-        eventsStorage.deleteEvents(listOf(event1))
+        eventsStorage.deleteAllEvents()
 
-        eventsStorage.getCount() shouldBeEqualTo 1
-        val events = eventsStorage.getAllEvents()
-        events shouldContain event2
-        events shouldNotContain event1
+        eventsStorage.getCount() shouldBeEqualTo 0
     }
 
     @Test
     fun `deleteOldEvents should delete old events based on max capacity`() {
         val event1 = EventLoggerTestUtil.generateRandomEvent()
         val event2 = EventLoggerTestUtil.generateRandomEvent()
-        eventsStorage.insertEvent(event1)
-        eventsStorage.insertEvent(event2)
+        eventsStorage.insertEvent(event1.generateEventIdentifier(), event1)
+        eventsStorage.insertEvent(event2.generateEventIdentifier(), event2)
 
         eventsStorage.deleteOldEvents(1)
 
@@ -133,8 +129,8 @@ class EventsStorageSpec {
 
     @Test
     fun `deleteOldEvents should not delete any event if within max capacity`() {
-        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
-        eventsStorage.insertEvent(EventLoggerTestUtil.generateRandomEvent())
+        eventsStorage.insertEvent("id1", EventLoggerTestUtil.generateRandomEvent())
+        eventsStorage.insertEvent("id2", EventLoggerTestUtil.generateRandomEvent())
 
         eventsStorage.deleteOldEvents(5)
 

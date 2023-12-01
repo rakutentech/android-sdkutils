@@ -11,13 +11,14 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
 import org.robolectric.RobolectricTestRunner
+import java.lang.ref.WeakReference
 
 @RunWith(RobolectricTestRunner::class)
-class EventBuilderSpec {
+class EventLoggerHelperSpec {
 
     private val mockContext = mock(Context::class.java)
     private val mockPm = mock(PackageManager::class.java)
-    private val eventBuilder: EventBuilder
+    private val eventLoggerHelper: EventLoggerHelper
 
     init {
         val mockAppInfo = mock(ApplicationInfo::class.java)
@@ -39,12 +40,27 @@ class EventBuilderSpec {
             .thenReturn("2.0.0")
         mockPackageInfo.versionName = "1.0.0"
 
-        eventBuilder = EventBuilder(mockContext)
+        eventLoggerHelper = EventLoggerHelper(WeakReference(mockContext))
+    }
+
+    @Test
+    fun `should return metadata`() {
+        eventLoggerHelper.getMetadata() shouldBeEqualTo
+            EventLoggerHelper.Metadata(
+                "com.sdkutils",
+                "sdk utils sample app",
+                "1.0.0",
+                "Android ${Build.VERSION.RELEASE}",
+                Build.MODEL,
+                Build.MANUFACTURER,
+                "",
+                mapOf("rmc_inappmessaging" to "2.0.0")
+            )
     }
 
     @Test
     fun `should build critical event with metadata`() {
-        val event = eventBuilder.buildEvent(
+        val event = eventLoggerHelper.buildEvent(
             EventType.CRITICAL,
             "push",
             "3.0.0",
@@ -65,7 +81,7 @@ class EventBuilderSpec {
 
     @Test
     fun `should build warning event with metadata`() {
-        val event = eventBuilder.buildEvent(
+        val event = eventLoggerHelper.buildEvent(
             EventType.WARNING,
             "push",
             "3.0.0",
@@ -89,8 +105,8 @@ class EventBuilderSpec {
         `when`(mockPm.getPackageInfo(mockContext.packageName, 0))
             .thenThrow(PackageManager.NameNotFoundException())
 
-        val eventBuilder = EventBuilder(mockContext)
-        val event = eventBuilder.buildEvent(
+        val eventLoggerHelper = EventLoggerHelper(WeakReference(mockContext))
+        val event = eventLoggerHelper.buildEvent(
             EventType.CRITICAL,
             "push",
             "3.0.0",
@@ -107,8 +123,8 @@ class EventBuilderSpec {
         `when`(mockContext.getString(anyInt()))
             .thenAnswer { throw Exception() }
 
-        val eventBuilder = EventBuilder(mockContext)
-        val event = eventBuilder.buildEvent(
+        val eventLoggerHelper = EventLoggerHelper(WeakReference(mockContext))
+        val event = eventLoggerHelper.buildEvent(
             EventType.CRITICAL,
             "push",
             "3.0.0",

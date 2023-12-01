@@ -21,16 +21,14 @@ class EventSpec {
         "server error",
         mapOf("rmc_push" to "1.0.0"),
         mapOf("file_name" to "MyFile.kt"),
-        2,
-        1699254206421
+        2
     )
 
     @Test
     @SuppressWarnings("LongMethod")
     fun `should correctly map mutable and automatic fields`() {
         val testEvent = testEvent.copy(
-            occurrenceCount = 5,
-            firstOccurrenceMillis = 1699254206421
+            occurrenceCount = 5
         )
 
         testEvent.run {
@@ -49,7 +47,6 @@ class EventSpec {
             rmcSdks shouldBeEqualTo mapOf("rmc_push" to "1.0.0")
             info shouldBeEqualTo mapOf("file_name" to "MyFile.kt")
             occurrenceCount shouldBeEqualTo 5
-            firstOccurrenceMillis shouldBeEqualTo 1699254206421
             eventVersion shouldBeEqualTo "1.0"
             platform shouldBeEqualTo "Android"
         }
@@ -94,7 +91,7 @@ class EventSpec {
 
     @Test
     fun `should automatically set platform value`() {
-        testEvent.platform shouldBe Platform.ANDROID.displayName
+        testEvent.platform shouldBe "Android"
     }
 
     @Test
@@ -111,15 +108,6 @@ class EventSpec {
     }
 
     @Test
-    fun `Event firstOccurrenceMillis should be mutable`() {
-        val currMillis = System.currentTimeMillis()
-        val testEvent = testEvent.copy(
-            firstOccurrenceMillis = currMillis
-        )
-        testEvent.firstOccurrenceMillis shouldBeEqualTo currMillis
-    }
-
-    @Test
     fun `should set correct critical event type from enum`() {
         EventType.CRITICAL.displayName shouldBeEqualTo "0"
     }
@@ -130,7 +118,12 @@ class EventSpec {
     }
 
     @Test
-    fun `should set correct platform from enum`() {
-        Platform.ANDROID.displayName shouldBeEqualTo "Android"
+    fun `should update type`() {
+        val testEvent = testEvent.copy(
+            eventType = EventType.CRITICAL.displayName
+        )
+
+        testEvent.setType(EventType.WARNING.displayName)
+        testEvent.eventType shouldBeEqualTo EventType.WARNING.displayName
     }
 }
