@@ -161,18 +161,13 @@ object EventLogger {
         // ToDo
     }
 
-    private fun sendAllEventsInStorage(deleteOldEventsOnFailure: Boolean = false) {
+    private fun sendAllEventsInStorage() {
         val allEvents = eventsStorage.getAllEvents()
         sendEvents(
             events = allEvents.values.toList(),
             onSuccess = {
                 eventLoggerCache.setTtlReferenceTime(System.currentTimeMillis())
                 this.eventsStorage.deleteEvents(allEvents.keys.toList())
-            },
-            onFailure = {
-                if (deleteOldEventsOnFailure) {
-                    eventsStorage.deleteOldEvents(Config.MAX_EVENTS_COUNT)
-                }
             }
         )
     }
@@ -214,7 +209,7 @@ object EventLogger {
     }
 
     internal object Config {
-        const val MAX_EVENTS_COUNT = 30
+        const val MAX_EVENTS_COUNT = 50
         const val TTL_EXPIRY_MILLIS = 3600 * 1000 * 12 // 12 hours
         const val EVENT_LOGGER_BASE_URL = BuildConfig.EVENT_LOGGER_API_URL
         const val EVENT_LOGGER_API_KEY = BuildConfig.EVENT_LOGGER_API_KEY
