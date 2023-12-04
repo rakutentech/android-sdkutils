@@ -15,7 +15,7 @@ internal interface EventLoggerCache {
      * Updates the reference time in checking TTL expiry. Call this whenever all events were successfully sent to
      * server.
      */
-    fun setTtlReferenceTime(pushedTime: Long)
+    fun setTtlReferenceTime(pushedTimeMs: Long)
 }
 
 internal class SharedPreferencesEventLoggerCache(private val sharedPref: SharedPreferences) : EventLoggerCache {
@@ -28,9 +28,9 @@ internal class SharedPreferencesEventLoggerCache(private val sharedPref: SharedP
         }
     }
 
-    override fun setTtlReferenceTime(pushedTime: Long) {
+    override fun setTtlReferenceTime(pushedTimeMs: Long) {
         with(sharedPref.edit()) {
-            putLong(KEY_LAST_PUSHED_TIME, pushedTime)
+            putLong(KEY_LAST_PUSHED_TIME, pushedTimeMs)
             apply()
         }
     }

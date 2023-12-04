@@ -19,11 +19,10 @@ internal data class Event(
     val rmcSdks: Map<String, String>? = null,
     val info: Map<String, String>? = null,
     var occurrenceCount: Int = 0,
-) {
-    val eventVersion = "1.0"
-    val platform = "Android"
-    @SerializedName("firstOccurrenceOn") val createdOn = System.currentTimeMillis()
-}
+    val eventVersion: String = "1.0",
+    val platform: String = "Android",
+    @SerializedName("firstOccurrenceOn") val createdOn: Long = System.currentTimeMillis()
+)
 
 // ---------------------------- Event enums ----------------------------
 internal enum class EventType(val displayName: String) {

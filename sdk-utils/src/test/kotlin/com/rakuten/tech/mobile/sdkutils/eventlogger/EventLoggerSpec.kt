@@ -81,11 +81,13 @@ class ConfigureSpec : EventLoggerSpec() {
 
     @Test
     fun `should send all events when TTL expired and delete from storage afterwards`() {
-        val allEvents = listOf(EventLoggerTestUtil.generateRandomEvent())
+        val testEvent = EventLoggerTestUtil.generateRandomEvent()
+        val testEventId = testEvent.generateEventIdentifier()
+        val allEvents = listOf(testEvent)
         `when`(mockEventLoggerCache.getTtlReferenceTime())
             .thenReturn(TimeUnit.MILLISECONDS.toDays(30)) // simulate expiry
         `when`(mockEventsStorage.getAllEvents())
-            .thenReturn(allEvents)
+            .thenReturn(mapOf(testEventId to testEvent))
 
         configureWithMocks()
 
@@ -97,13 +99,13 @@ class ConfigureSpec : EventLoggerSpec() {
         )
         captor.firstValue.invoke()
 
-        verify(mockEventsStorage).deleteAllEvents()
+        verify(mockEventsStorage).deleteEvents(listOf(testEventId))
     }
 
     @Test
     fun `should not process if storage is empty`() {
         `when`(mockEventsStorage.getAllEvents())
-            .thenReturn(listOf())
+            .thenReturn(mapOf())
 
         configureWithMocks()
 

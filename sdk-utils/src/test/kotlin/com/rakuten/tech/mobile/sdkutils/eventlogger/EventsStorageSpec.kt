@@ -28,7 +28,7 @@ class EventsStorageSpec {
         eventsStorage.insertEvent("id1", EventLoggerTestUtil.generateRandomEvent())
         eventsStorage.insertEvent("id2", EventLoggerTestUtil.generateRandomEvent())
 
-        eventsStorage.getAllEvents() shouldHaveSize 2
+        eventsStorage.getAllEvents().size shouldBeEqualTo 2
     }
 
     @Test
@@ -101,13 +101,13 @@ class EventsStorageSpec {
     }
 
     @Test
-    fun `should delete all events`() {
+    fun `should delete events`() {
         val event1 = EventLoggerTestUtil.generateRandomEvent()
         val event2 = EventLoggerTestUtil.generateRandomEvent()
         eventsStorage.insertEvent("id1", event1)
         eventsStorage.insertEvent("id2", event2)
 
-        eventsStorage.deleteAllEvents()
+        eventsStorage.deleteEvents(listOf("id1", "id2"))
 
         eventsStorage.getCount() shouldBeEqualTo 0
     }
@@ -122,7 +122,7 @@ class EventsStorageSpec {
         eventsStorage.deleteOldEvents(1)
 
         eventsStorage.getCount() shouldBeEqualTo 1
-        val events = eventsStorage.getAllEvents()
+        val events = eventsStorage.getAllEvents().values
         events shouldContain event2
         events shouldNotContain event1
     }

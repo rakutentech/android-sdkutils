@@ -162,11 +162,12 @@ object EventLogger {
     }
 
     private fun sendAllEventsInStorage(deleteOldEventsOnFailure: Boolean = false) {
+        val allEvents = eventsStorage.getAllEvents()
         sendEvents(
-            events = this.eventsStorage.getAllEvents(),
+            events = allEvents.values.toList(),
             onSuccess = {
-                eventLoggerCache.setTtlReferenceTime(currentTime())
-                this.eventsStorage.deleteAllEvents()
+                eventLoggerCache.setTtlReferenceTime(System.currentTimeMillis())
+                this.eventsStorage.deleteEvents(allEvents.keys.toList())
             },
             onFailure = {
                 if (deleteOldEventsOnFailure) {
@@ -187,7 +188,7 @@ object EventLogger {
     }
 
     private fun isTtlExpired(): Boolean {
-        val currentTime = currentTime()
+        val currentTime = System.currentTimeMillis()
         val referenceTime = eventLoggerCache.getTtlReferenceTime()
 
         if (referenceTime == -1L) { // never pushed before
@@ -196,8 +197,6 @@ object EventLogger {
         }
         return currentTime - referenceTime >= Config.TTL_EXPIRY_MILLIS
     }
-
-    private fun currentTime() = System.currentTimeMillis()
 
     @SuppressWarnings(
         "SwallowedException",
