@@ -51,7 +51,6 @@ object EventLogger {
             return
         }
 
-        this.isConfigureCalled = true
         val (realApiUrl, realApiKey) = if (!apiUrl.isNullOrEmpty() && !apiKey.isNullOrEmpty()) {
             Pair(apiUrl, apiKey)
         } else {
@@ -136,6 +135,7 @@ object EventLogger {
      * Registers to the background to foreground app transition and if the TTL expired, will send all events in storage.
      */
     @VisibleForTesting
+    @Synchronized
     internal fun initialize(
         eventsSender: EventsSender,
         eventsStorage: EventsStorage,
@@ -148,6 +148,7 @@ object EventLogger {
         this.eventLoggerCache = eventLoggerCache
         this.eventLoggerHelper = eventLoggerHelper
         this.tasksQueue = tasksQueue
+        this.isConfigureCalled = true
 
         tasksQueue.safeExecute {
             registerToAppTransitions()
