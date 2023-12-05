@@ -42,15 +42,21 @@ internal fun Event.generateEventIdentifier() = generateEventIdentifier(
     errorMessage
 )
 
+/**
+ * Returns the MD5 hash data based off the combined string of the supplied parameters. In case it fails to generate hash
+ * data (which should not happen), the original combined string is returned trimmed to 32 characters.
+ */
+@SuppressWarnings("MagicNumber")
 internal fun generateEventIdentifier(
     eventType: String,
     appVersion: String,
     sdkName: String,
     errorCode: String,
     errorMessage: String
-) = "$eventType$appVersion$sdkName$errorCode$errorMessage"
-    .getMD5HashData()
-    .orEmpty()
+): String {
+    val origData = "$eventType$appVersion$sdkName$errorCode$errorMessage"
+    return origData.getMD5HashData() ?: origData.take(32)
+}
 
 internal fun Event.incrementCount() = apply { occurrenceCount += 1 }
 

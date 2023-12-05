@@ -1,10 +1,18 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import com.google.gson.Gson
+import com.rakuten.tech.mobile.sdkutils.StringExtension
+import com.rakuten.tech.mobile.sdkutils.StringExtension.getMD5HashData
 import org.amshove.kluent.*
+import org.junit.After
 import org.junit.Test
 
 class EventSpec {
+
+    @After
+    fun tearDown() {
+        StringExtension.stringForTest = null
+    }
 
     private val testEvent = Event(
         "0",
@@ -125,5 +133,28 @@ class EventSpec {
 
         testEvent.setType(EventType.WARNING.displayName)
         testEvent.eventType shouldBeEqualTo EventType.WARNING.displayName
+    }
+
+    @Test
+    fun `should return hash data`() {
+        generateEventIdentifier(
+            "a",
+            "b",
+            "c",
+            "d",
+            "e"
+        ) shouldBeEqualTo "abcde".getMD5HashData()
+    }
+
+    @Test
+    fun `should return original data when hashing fails`() {
+        StringExtension.stringForTest = "anyAlgorithm"
+        generateEventIdentifier(
+            "a",
+            "b",
+            "c",
+            "d",
+            "e"
+        ) shouldBeEqualTo "abcde"
     }
 }
