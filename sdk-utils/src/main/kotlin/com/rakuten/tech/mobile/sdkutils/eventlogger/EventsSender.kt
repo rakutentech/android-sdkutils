@@ -56,6 +56,7 @@ internal class RetrofitEventsSender(private val retrofitApi: Api, private val ap
         } catch (re: RuntimeException) {
             // ToDo : Retry mechanism if applicable
         }
+        EventLogger.log.debug("Unable to push events")
         onFailure?.invoke()
     }
 }

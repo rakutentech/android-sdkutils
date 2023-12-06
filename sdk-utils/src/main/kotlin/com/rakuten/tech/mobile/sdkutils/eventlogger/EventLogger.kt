@@ -103,9 +103,10 @@ object EventLogger {
     // ------------------------------------Internal APIs-----------------------------------------------
 
     private fun buildEventLoggerHttpClient(baseUrl: String): Retrofit {
+        val realUrl = if (baseUrl.endsWith('/')) baseUrl else "$baseUrl/"
         return Retrofit
             .Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(realUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
