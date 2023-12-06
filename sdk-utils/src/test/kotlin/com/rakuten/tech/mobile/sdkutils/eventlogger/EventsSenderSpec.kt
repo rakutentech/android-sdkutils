@@ -106,13 +106,16 @@ class EventsSenderSpec {
         `when`(retrofitApi.sendEvents(anyString(), anyList()))
             .thenAnswer { throw IOException("") }
 
-        val callback: () -> Unit = mock()
+        val callback1: () -> Unit = mock()
+        val callback2: () -> Unit = mock()
         eventsSender.pushEvents(
             listOf(EventLoggerTestUtil.generateRandomEvent()),
-            callback
+            callback1,
+            callback2
         )
 
-        verify(callback, never()).invoke()
+        verify(callback1, never()).invoke()
+        verify(callback2).invoke()
     }
 
     @Test
@@ -126,7 +129,8 @@ class EventsSenderSpec {
         val callback: () -> Unit = mock()
         eventsSender.pushEvents(
             listOf(EventLoggerTestUtil.generateRandomEvent()),
-            callback
+            callback,
+            null
         )
 
         verify(callback, never()).invoke()

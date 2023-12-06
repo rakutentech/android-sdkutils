@@ -3,15 +3,18 @@ package com.rakuten.tech.mobile.sdkutils.eventlogger
 import android.content.SharedPreferences
 import com.google.gson.Gson
 
+/**
+ * Interface to access events storage.
+ */
 internal interface EventsStorage {
 
     /**
      * Retrieves the events, or empty if the operation fails.
      */
-    fun getAllEvents(): List<Event>
+    fun getAllEvents(): Map<String, Event>
 
     /**
-     * Retrieves the event with matching [id] or the [Event.getIdentifier].
+     * Retrieves the event with matching [id].
      */
     fun getEventById(id: String): Event?
 
@@ -21,23 +24,22 @@ internal interface EventsStorage {
     fun getCount(): Int
 
     /**
-     * Inserts the event which also automatically sets its identifier, count, and occurrence time.
-     * It will be inserted with the [Event.getIdentifier] as key and the [Event] in string format as value.
+     * Inserts the event with [id] as its key and [Event] in string format.
      */
-    fun insertEvent(event: Event)
+    fun insertEvent(id: String, event: Event)
 
     /**
-     * Updates the event with matching [Event.getIdentifier].
+     * Updates the event with matching [id] key.
      */
-    fun updateEvent(event: Event)
+    fun updateEvent(id: String, event: Event)
 
     /**
-     * Deletes the supplied [events].
+     * Deletes the events with the supplied [ids].
      */
-    fun deleteEvents(events: List<Event>)
+    fun deleteEvents(ids: List<String>)
 
     /**
-     * Deletes old events based on [Event.firstOccurrenceMillis] and retains a maximum of [maxCapacity] events.
+     * Deletes old events based on [Event.createdOn] and retains a maximum of [maxCapacity] events.
      */
     fun deleteOldEvents(maxCapacity: Int)
 }
@@ -48,12 +50,12 @@ internal interface EventsStorage {
 )
 internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPreferences) : EventsStorage {
 
-    override fun getAllEvents(): List<Event> {
-        val events = mutableListOf<Event>()
+    override fun getAllEvents(): Map<String, Event> {
+        val events = mutableMapOf<String, Event>()
         try {
             for (key in sharedPref.all.keys) {
                 val eventJson = getEventById(key) ?: continue
-                events.add(eventJson)
+                events[key] = eventJson
             }
         } catch (_: Exception) {
             // return empty
@@ -78,26 +80,18 @@ internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPref
         }
     }
 
-    override fun insertEvent(event: Event) {
-        with(sharedPref.edit()) {
-            event.incrementCount()
-            event.setFirstOccurrenceTimeToNow()
-            putString(event.getIdentifier(), Gson().toJson(event))
-            apply()
-        }
+    override fun insertEvent(id: String, event: Event) {
+        insertOrUpdateEvent(id, event)
     }
 
-    override fun updateEvent(event: Event) {
-        with(sharedPref.edit()) {
-            putString(event.getIdentifier(), Gson().toJson(event))
-            apply()
-        }
+    override fun updateEvent(id: String, event: Event) {
+        insertOrUpdateEvent(id, event)
     }
 
-    override fun deleteEvents(events: List<Event>) {
+    override fun deleteEvents(ids: List<String>) {
         with(sharedPref.edit()) {
-            events.forEach {
-                remove(it.getIdentifier())
+            ids.forEach {
+                remove(it)
             }
             apply()
         }
@@ -108,8 +102,15 @@ internal class SharedPreferencesEventsStorage(private val sharedPref: SharedPref
             return
         }
 
-        val sortedEvents = getAllEvents().sortedBy { it.firstOccurrenceMillis }
-        val oldEvents = sortedEvents.take(0.coerceAtLeast(sortedEvents.size - maxCapacity))
-        deleteEvents(oldEvents)
+        val sortedKeys = getAllEvents().entries.toList().sortedBy { (_, event) -> event.createdOn }.map { it.key }
+        val oldKeys = sortedKeys.take(0.coerceAtLeast(sortedKeys.size - maxCapacity))
+        deleteEvents(oldKeys)
+    }
+
+    private fun insertOrUpdateEvent(id: String, event: Event) {
+        with(sharedPref.edit()) {
+            putString(id, Gson().toJson(event))
+            apply()
+        }
     }
 }

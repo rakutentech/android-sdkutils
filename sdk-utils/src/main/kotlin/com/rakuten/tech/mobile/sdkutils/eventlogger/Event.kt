@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import com.rakuten.tech.mobile.sdkutils.StringExtension.getMD5HashData
 
 internal data class Event(
-    val eventType: String,
+    var eventType: String,
     val appId: String,
     val appName: String,
     val appVersion: String,
@@ -19,11 +19,10 @@ internal data class Event(
     val rmcSdks: Map<String, String>? = null,
     val info: Map<String, String>? = null,
     var occurrenceCount: Int = 0,
-    @SerializedName("firstOccurrenceOn") var firstOccurrenceMillis: Long? = null
-) {
-    val eventVersion = "1.0"
-    val platform = Platform.ANDROID.displayName
-}
+    val eventVersion: String = "1.0",
+    val platform: String = "Android",
+    @SerializedName("firstOccurrenceOn") val createdOn: Long = System.currentTimeMillis()
+)
 
 // ---------------------------- Event enums ----------------------------
 internal enum class EventType(val displayName: String) {
@@ -31,20 +30,34 @@ internal enum class EventType(val displayName: String) {
     WARNING("1")
 }
 
-internal enum class Platform(val displayName: String) {
-    ANDROID("Android")
-}
-
 // ---------------------------- Event extensions ----------------------------
 /**
  * Returns the string hash based on some data from the [Event].
  */
-internal fun Event.getIdentifier() = "${this.appVersion}${this.sdkName}${this.errorCode}${this.errorMessage}"
-    .getMD5HashData()
-    .orEmpty()
+internal fun Event.generateEventIdentifier() = generateEventIdentifier(
+    eventType,
+    appVersion,
+    sdkName,
+    errorCode,
+    errorMessage
+)
 
-internal fun Event.incrementCount() = this.apply { this.occurrenceCount += 1 }
-
-internal fun Event.setFirstOccurrenceTimeToNow() = this.apply {
-    this.firstOccurrenceMillis = System.currentTimeMillis()
+/**
+ * Returns the MD5 hash data based off the combined string of the supplied parameters. In case it fails to generate hash
+ * data (which should not happen), the original combined string is returned trimmed to 32 characters.
+ */
+@SuppressWarnings("MagicNumber")
+internal fun generateEventIdentifier(
+    eventType: String,
+    appVersion: String,
+    sdkName: String,
+    errorCode: String,
+    errorMessage: String
+): String {
+    val origData = "$eventType$appVersion$sdkName$errorCode$errorMessage"
+    return origData.getMD5HashData() ?: origData.take(32)
 }
+
+internal fun Event.incrementCount() = apply { occurrenceCount += 1 }
+
+internal fun Event.setType(newType: String) = apply { eventType = newType }

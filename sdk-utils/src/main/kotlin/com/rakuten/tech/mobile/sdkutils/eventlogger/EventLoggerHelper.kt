@@ -5,16 +5,26 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
 import com.rakuten.tech.mobile.sdkutils.StringExtension.sanitize
+import java.lang.ref.WeakReference
 
+/**
+ * Utility class for the event logger feature.
+ */
 @SuppressWarnings(
     "SwallowedException"
 )
-internal class EventBuilder(private val context: Context) {
+internal class EventLoggerHelper(private val context: WeakReference<Context>) {
 
-    private val metadata: Metadata = buildMetadata()
+    private val metadata: Metadata = buildMetadata(context.get())
 
     /**
-     * Event builder that attaches application and device information to the event.
+     * Returns information that is typically constant throughout the application lifecycle such as application and
+     * device information.
+     */
+    fun getMetadata(): Metadata = metadata
+
+    /**
+     * Attaches metadata to the event.
      */
     @SuppressWarnings("LongParameterList")
     fun buildEvent(
@@ -43,24 +53,26 @@ internal class EventBuilder(private val context: Context) {
         )
     }
 
-    /**
-     * Retrieves information that is typically constant throughout the application lifecycle.
-     */
-    private fun buildMetadata(): Metadata {
-        val packageInfo = try {
-            context.packageManager.getPackageInfo(context.packageName, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
+    @SuppressWarnings("LongMethod")
+    private fun buildMetadata(context: Context?): Metadata {
+        val packageInfo = if (context != null) {
+            try {
+                context.packageManager?.getPackageInfo(context.packageName, 0)
+            } catch (e: PackageManager.NameNotFoundException) {
+                null
+            }
+        } else {
             null
         }
 
         return Metadata(
-            appId = context.packageName,
-            appName = context.applicationInfo.loadLabel(context.packageManager).toString(),
+            appId = context?.packageName.orEmpty(),
+            appName = context?.applicationInfo?.loadLabel(context.packageManager)?.toString().orEmpty(),
             appVer = packageInfo?.versionName.orEmpty(),
             osVer = "Android ${Build.VERSION.RELEASE}",
             deviceModel = Build.MODEL,
             deviceBrand = Build.MANUFACTURER,
-            deviceName = Settings.Global.getString(context.contentResolver, "device_name").orEmpty(),
+            deviceName = Settings.Global.getString(context?.contentResolver, "device_name").orEmpty(),
             rmcSdks = getRmcVersions()
         )
     }
@@ -71,7 +83,7 @@ internal class EventBuilder(private val context: Context) {
         listOf(
             "rmc_inappmessaging"
         ).forEach { sdkName ->
-            getVersionFromResource(sdkName)?.let { version ->
+            getVersionFromResource(context.get(), sdkName)?.let { version ->
                 versionMap[sdkName] = version
             }
         }
@@ -81,16 +93,20 @@ internal class EventBuilder(private val context: Context) {
     @SuppressWarnings(
         "TooGenericExceptionCaught"
     )
-    private fun getVersionFromResource(sdkName: String): String? {
-        return try {
-            context.getString(
-                context.resources.getIdentifier(sdkName + "__version", "string", context.packageName))
-        } catch (e: Exception) {
+    private fun getVersionFromResource(context: Context?, sdkName: String): String? {
+        return if (context != null) {
+            try {
+                context.getString(
+                    context.resources.getIdentifier(sdkName + "__version", "string", context.packageName))
+            } catch (e: Exception) {
+                null
+            }
+        } else {
             null
         }
     }
 
-    private data class Metadata(
+    internal data class Metadata(
         val appId: String,
         val appName: String,
         val appVer: String,
