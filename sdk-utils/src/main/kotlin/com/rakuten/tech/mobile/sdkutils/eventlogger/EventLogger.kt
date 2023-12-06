@@ -234,15 +234,19 @@ object EventLogger {
         event: Event,
         isNewEvent: Boolean
     ) {
-        val isFull = eventsStorage.getCount() >= Config.MAX_EVENTS_COUNT
-
-        if (isFull) {
+        // If full, send all of the events
+        if (eventsStorage.getCount() >= Config.MAX_EVENTS_COUNT) {
             sendAllEventsInStorage(isNewEvent)
             return
         }
 
+        if (!isNewEvent) {
+            return
+        }
+
         when (eventType) {
-            // send this single event immediately and convert to warning to avoid multiple server alerts
+            // Send the unique critical event immediately, and convert it to a warning type to prevent multiple
+            // alerts in server
             EventType.CRITICAL -> sendEvents(
                 events = listOf(event),
                 onSuccess = {
