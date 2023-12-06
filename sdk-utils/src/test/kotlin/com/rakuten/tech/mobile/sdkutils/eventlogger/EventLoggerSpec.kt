@@ -10,7 +10,6 @@ import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
-import org.mockito.ArgumentMatchers.*
 import org.mockito.Mockito.*
 import org.robolectric.RobolectricTestRunner
 import java.lang.ref.WeakReference
@@ -20,7 +19,6 @@ import java.util.concurrent.TimeUnit
 
 @RunWith(RobolectricTestRunner::class)
 @SuppressWarnings("UnnecessaryAbstractClass")
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 abstract class EventLoggerSpec {
 
     internal val mockContext = mock(Context::class.java)
@@ -134,6 +132,7 @@ class GeneralSpec : EventLoggerSpec() {
     }
 }
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class ConfigureSpec : EventLoggerSpec() {
 
     @Test
@@ -239,7 +238,7 @@ class SendCriticalSpec : EventLoggerSpec() {
         verify(mockEventsSender).pushEvents(anyList(), captor.capture(), any())
 
         captor.firstValue.invoke()
-//        verify(mockEventsStorage).updateEvent(anyString(), any(Event::class.java)) // TODO
+        verify(mockEventsStorage).updateEvent(anyString(), com.nhaarman.mockitokotlin2.any())
     }
 }
 
