@@ -131,6 +131,9 @@ object EventLogger {
             eventLoggerHelper = EventLoggerHelper(
                 WeakReference(context.applicationContext)
             ),
+            appLifecycleListener = AppLifecycleListener(
+                WeakReference(context.applicationContext)
+            ),
             tasksQueue = Executors.newSingleThreadExecutor()
         )
     }
@@ -145,6 +148,7 @@ object EventLogger {
         eventsStorage: EventsStorage,
         eventLoggerCache: EventLoggerCache,
         eventLoggerHelper: EventLoggerHelper,
+        appLifecycleListener: AppLifecycleListener,
         tasksQueue: ExecutorService
     ) {
         this.eventsSender = eventsSender
@@ -155,7 +159,7 @@ object EventLogger {
         this.isConfigureCalled = true
 
         tasksQueue.safeExecute {
-            registerToAppTransitions()
+            registerToAppTransitions(appLifecycleListener)
             if (isTtlExpired()) {
                 sendAllEventsInStorage()
             }
@@ -254,8 +258,16 @@ object EventLogger {
         }
     }
 
-    private fun registerToAppTransitions() {
-        // ToDo
+    private fun registerToAppTransitions(listener: AppLifecycleListener) {
+        listener.registerListener(object : LifecycleListener {
+            override fun becameForeground() {
+                tasksQueue.safeExecute {
+                    if (isTtlExpired()) {
+                        sendAllEventsInStorage()
+                    }
+                }
+            }
+        })
     }
 
     private fun sendAllEventsInStorage(deleteOldEventsOnFailure: Boolean = false) {
