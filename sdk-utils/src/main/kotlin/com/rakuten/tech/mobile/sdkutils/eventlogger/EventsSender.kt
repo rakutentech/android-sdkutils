@@ -32,10 +32,6 @@ internal class RetrofitEventsSender(private val retrofitApi: Api, private val ap
         ): Call<ResponseBody?>
     }
 
-    @SuppressWarnings(
-        "TooGenericExceptionCaught",
-        "SwallowedException"
-    )
     override fun pushEvents(events: List<Event>, onSuccess: (() -> Unit)?, onFailure: (() -> Unit)?) {
         if (events.isEmpty())
             return
