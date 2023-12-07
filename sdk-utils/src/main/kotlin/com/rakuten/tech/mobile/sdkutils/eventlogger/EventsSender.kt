@@ -1,24 +1,24 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
-import androidx.annotation.WorkerThread
+import com.rakuten.tech.mobile.sdkutils.network.enqueueWithRetriesOnNetworkError
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
-import java.io.IOException
+import java.util.concurrent.TimeUnit
 
 internal interface EventsSender {
 
     /**
-     * Thread-blocking operation that sends the supplied [events] to backend and invokes the optional [onSuccess]
-     * callback if succeeded.
+     * Asynchronously sends [events] to the server.
      */
-    @WorkerThread
     fun pushEvents(events: List<Event>, onSuccess: (() -> Unit)? = null, onFailure: (() -> Unit)? = null)
 
     companion object {
         const val HEADER_CLIENT_API_KEY = "x-client-apikey"
+        const val MAX_REQUEST_RETRIES = 2
+        const val INITIAL_RETRY_DELAY_MILLIS = 1000L * 15
     }
 }
 
@@ -40,23 +40,21 @@ internal class RetrofitEventsSender(private val retrofitApi: Api, private val ap
         if (events.isEmpty())
             return
 
-        try {
-            val request = retrofitApi.sendEvents(apiKey, events).execute()
-            if (request.isSuccessful) {
+        val call = retrofitApi.sendEvents(apiKey, events)
+        call.enqueueWithRetriesOnNetworkError(
+            maxRetries = EventsSender.MAX_REQUEST_RETRIES,
+            retryDelayMillis = EventsSender.INITIAL_RETRY_DELAY_MILLIS,
+            onRetry = { retryCount, delayMs ->
+                EventLogger.log.debug("Retry $retryCount after ${TimeUnit.MILLISECONDS.toSeconds(delayMs)}s")
+            },
+            onSuccess = {
                 EventLogger.log.debug("Successfully pushed ${events.size} events")
                 onSuccess?.invoke()
-                return
-            } else {
-                EventLogger.log.debug("Backend error: ${request.message()}")
-                // ToDo : Retry mechanism if applicable
+            },
+            onFailure = {
+                EventLogger.log.warn("Unable to push events")
+                onFailure?.invoke()
             }
-        } catch (ie: IOException) {
-            // Network error
-            // ToDo : Retry mechanism if applicable
-        } catch (re: RuntimeException) {
-            // ToDo : Retry mechanism if applicable
-        }
-        EventLogger.log.warn("Unable to push events")
-        onFailure?.invoke()
+        )
     }
 }
