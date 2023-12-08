@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Build
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeFalse
+import org.amshove.kluent.shouldBeTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
@@ -133,5 +135,29 @@ class EventLoggerHelperSpec {
         )
 
         event.rmcSdks shouldBeEqualTo null
+    }
+
+    @Test
+    fun `should return false when source info is invalid`() {
+        eventLoggerHelper.isEventValid(sourceName = "", sourceVersion = "test", "test", "test")
+            .shouldBeFalse()
+
+        eventLoggerHelper.isEventValid(sourceName = "test", sourceVersion = "", "test", "test")
+            .shouldBeFalse()
+    }
+
+    @Test
+    fun `should return false when error info is invalid`() {
+        eventLoggerHelper.isEventValid("test", "test", errorCode = "", errorMessage = "test")
+            .shouldBeFalse()
+
+        eventLoggerHelper.isEventValid("test", "", errorCode = "test", errorMessage = "")
+            .shouldBeFalse()
+    }
+
+    @Test
+    fun `should return true for valid event details`() {
+        eventLoggerHelper.isEventValid("test", "test", "test", "test")
+            .shouldBeTrue()
     }
 }

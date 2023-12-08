@@ -172,8 +172,11 @@ object EventLogger {
         errorMessage: String,
         info: Map<String, String>?
     ) {
-        if (!canProcessEvent(sourceName, sourceVersion, errorCode, errorMessage))
+        if (!isConfigureCalled ||
+            !eventLoggerHelper.isEventValid(sourceName, sourceVersion, errorCode, errorMessage)) {
+            log.warn("Event Logger is not configured or event contains an empty parameter, skip")
             return
+        }
 
         tasksQueue.safeExecute {
             val eventId = generateEventIdentifier(eventType.displayName, eventLoggerHelper.getMetadata().appVer,
@@ -187,29 +190,6 @@ object EventLogger {
             insertOrUpdateEvent(eventId, eventToProcess, isNewEvent)
             sendEventIfNeeded(eventType, eventId, eventToProcess, isNewEvent)
         }
-    }
-
-    /**
-     * Validates the incoming event.
-     *
-     * @return true if [EventLogger] was configured and all parameters are non-empty, otherwise false.
-     */
-    private fun canProcessEvent(
-        sourceName: String,
-        sourceVersion: String,
-        errorCode: String,
-        errorMessage: String
-    ): Boolean {
-        val isValidSourceInfo = sourceName.isNotEmpty() && sourceVersion.isNotEmpty()
-        val isValidErrorInfo = errorCode.isNotEmpty() && errorMessage.isNotEmpty()
-        if (isConfigureCalled &&
-            isValidSourceInfo &&
-            isValidErrorInfo) {
-            return true
-        }
-
-        log.warn("Event Logger is not configured or event contains an empty parameter, skip")
-        return false
     }
 
     private fun insertOrUpdateEvent(eventId: String, event: Event, isNewEvent: Boolean) {
