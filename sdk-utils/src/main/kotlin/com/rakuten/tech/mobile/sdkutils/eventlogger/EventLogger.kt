@@ -103,10 +103,9 @@ object EventLogger {
     // ------------------------------------Internal APIs-----------------------------------------------
 
     private fun buildEventLoggerHttpClient(baseUrl: String): Retrofit {
-        val realUrl = if (baseUrl.endsWith('/')) baseUrl else "$baseUrl/"
         return Retrofit
             .Builder()
-            .baseUrl(realUrl)
+            .baseUrl(if (baseUrl.endsWith('/')) baseUrl else "$baseUrl/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -193,31 +192,24 @@ object EventLogger {
     /**
      * Validates the incoming event.
      *
-     * @return false if [configure] wasn't called yet, or any of the supplied required [sendWarningEvent] or
-     * [sendCriticalEvent] parameter is null or empty, otherwise true.
+     * @return true if [EventLogger] was configured and all parameters are non-empty, otherwise false.
      */
-    @SuppressWarnings(
-        "ReturnCount"
-    )
     private fun canProcessEvent(
         sourceName: String,
         sourceVersion: String,
         errorCode: String,
         errorMessage: String
     ): Boolean {
-        if (!isConfigureCalled) {
-            log.debug("Event Logger is not configured, skip")
-            return false
-        }
-
         val isValidSourceInfo = sourceName.isNotEmpty() && sourceVersion.isNotEmpty()
         val isValidErrorInfo = errorCode.isNotEmpty() && errorMessage.isNotEmpty()
-        if (!isValidSourceInfo || !isValidErrorInfo) {
-            log.warn("Event contains an empty parameter, skip")
-            return false
+        if (isConfigureCalled &&
+            isValidSourceInfo &&
+            isValidErrorInfo) {
+            return true
         }
 
-        return true
+        log.warn("Event Logger is not configured or event contains an empty parameter, skip")
+        return false
     }
 
     private fun insertOrUpdateEvent(eventId: String, event: Event, isNewEvent: Boolean) {
