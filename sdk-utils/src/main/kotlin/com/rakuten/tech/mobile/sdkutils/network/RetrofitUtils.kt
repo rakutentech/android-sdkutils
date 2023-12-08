@@ -1,6 +1,6 @@
 package com.rakuten.tech.mobile.sdkutils.network
 
-import android.os.Looper
+import android.os.Handler
 import okhttp3.OkHttpClient
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,26 +40,27 @@ fun Retrofit.Builder.build(
  *
  * @param maxRetries the maximum retries after failure.
  * @param retryDelayMillis the initial retry delay after failure.
- * @param onRetry called when operation will be retried.
  * @param onSuccess called when operation succeeds.
  * @param onFailure called when operation fails even after retries.
+ * @param handler handler to use for delaying the retries.
  */
-fun <T> Call<T>.enqueueWithRetriesOnNetworkError(
+@SuppressWarnings("MagicNumber")
+fun <T> Call<T>.enqueueAndRetryOnNetworkError(
     maxRetries: Int = 3,
     retryDelayMillis: Long = 15 * 1000,
-    onRetry: (retryCount: Int, delayMillis: Long) -> Unit = { _, _ -> },
     onSuccess: (response: Response<T>) -> Unit = {},
-    onFailure: (t: Throwable) -> Unit = {}
+    onFailure: (t: Throwable) -> Unit = {},
+    handler: Handler
 ) {
     fun <T> Call<T>.enqueueWithDelay(delayMillis: Long, callback: Callback<T>) {
-        android.os.Handler(Looper.getMainLooper()).postDelayed(
+        handler.postDelayed(
             { enqueue(callback) },
             delayMillis
         )
     }
 
     fun calculateExponentialDelay(retryCount: Int, initialDelayMillis: Long): Long {
-        return initialDelayMillis * (1L shl (retryCount-1))
+        return initialDelayMillis * (1L shl (retryCount - 1))
     }
 
     /**
@@ -91,7 +92,6 @@ fun <T> Call<T>.enqueueWithRetriesOnNetworkError(
             if (shouldRetry(retryCount, t)) {
                 retryCount++
                 val delayMillis = calculateExponentialDelay(retryCount, retryDelayMillis)
-                onRetry(retryCount, delayMillis)
                 call.clone().enqueueWithDelay(delayMillis, this)
             } else {
                 onFailure(t)

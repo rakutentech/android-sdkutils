@@ -1,12 +1,13 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
-import com.rakuten.tech.mobile.sdkutils.network.enqueueWithRetriesOnNetworkError
+import android.os.Handler
+import android.os.Looper
+import com.rakuten.tech.mobile.sdkutils.network.enqueueAndRetryOnNetworkError
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
-import java.util.concurrent.TimeUnit
 
 internal interface EventsSender {
 
@@ -22,7 +23,11 @@ internal interface EventsSender {
     }
 }
 
-internal class RetrofitEventsSender(private val retrofitApi: Api, private val apiKey: String) : EventsSender {
+internal class RetrofitEventsSender(
+    private val retrofitApi: Api,
+    private val apiKey: String,
+    private val handler: Handler = Handler(Looper.getMainLooper())
+) : EventsSender {
 
     internal interface Api {
         @POST("external/logging/error")
@@ -37,20 +42,18 @@ internal class RetrofitEventsSender(private val retrofitApi: Api, private val ap
             return
 
         val call = retrofitApi.sendEvents(apiKey, events)
-        call.enqueueWithRetriesOnNetworkError(
+        call.enqueueAndRetryOnNetworkError(
             maxRetries = EventsSender.MAX_REQUEST_RETRIES,
             retryDelayMillis = EventsSender.INITIAL_RETRY_DELAY_MILLIS,
-            onRetry = { retryCount, delayMs ->
-                EventLogger.log.debug("Retry $retryCount after ${TimeUnit.MILLISECONDS.toSeconds(delayMs)}s")
-            },
             onSuccess = {
                 EventLogger.log.debug("Successfully pushed ${events.size} events")
                 onSuccess?.invoke()
             },
             onFailure = {
-                EventLogger.log.warn("Unable to push events")
+                EventLogger.log.warn("Unable to push events: ${it.message}")
                 onFailure?.invoke()
-            }
+            },
+            handler = handler
         )
     }
 }
