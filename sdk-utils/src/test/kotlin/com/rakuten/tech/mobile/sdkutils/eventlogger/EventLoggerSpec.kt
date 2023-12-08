@@ -69,17 +69,8 @@ class GeneralSpec : EventLoggerSpec() {
     }
 
     @Test
-    fun `should not process event with invalid source info`() {
+    fun `should not process event with missing details`() {
         EventLogger.sendCriticalEvent(sourceName = "", sourceVersion = "test", "test", "test")
-        EventLogger.sendCriticalEvent(sourceName = "test", sourceVersion = "", "test", "test")
-
-        verify(mockEventsStorage, never()).getEventById(anyString())
-    }
-
-    @Test
-    fun `should not process event with invalid error info`() {
-        EventLogger.sendWarningEvent("test", "test", errorCode = "", errorMessage = "test")
-        EventLogger.sendWarningEvent("test", "", errorCode = "test", errorMessage = "")
 
         verify(mockEventsStorage, never()).getEventById(anyString())
     }

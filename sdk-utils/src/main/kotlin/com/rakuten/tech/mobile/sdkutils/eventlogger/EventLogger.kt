@@ -103,10 +103,9 @@ object EventLogger {
     // ------------------------------------Internal APIs-----------------------------------------------
 
     private fun buildEventLoggerHttpClient(baseUrl: String): Retrofit {
-        val realUrl = if (baseUrl.endsWith('/')) baseUrl else "$baseUrl/"
         return Retrofit
             .Builder()
-            .baseUrl(realUrl)
+            .baseUrl(if (baseUrl.endsWith('/')) baseUrl else "$baseUrl/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -173,8 +172,11 @@ object EventLogger {
         errorMessage: String,
         info: Map<String, String>?
     ) {
-        if (!canProcessEvent(sourceName, sourceVersion, errorCode, errorMessage))
+        if (!isConfigureCalled ||
+            !eventLoggerHelper.isEventValid(sourceName, sourceVersion, errorCode, errorMessage)) {
+            log.warn("Event Logger is not configured or event contains an empty parameter, skip")
             return
+        }
 
         tasksQueue.safeExecute {
             val eventId = generateEventIdentifier(eventType.displayName, eventLoggerHelper.getMetadata().appVer,
@@ -188,36 +190,6 @@ object EventLogger {
             insertOrUpdateEvent(eventId, eventToProcess, isNewEvent)
             sendEventIfNeeded(eventType, eventId, eventToProcess, isNewEvent)
         }
-    }
-
-    /**
-     * Validates the incoming event.
-     *
-     * @return false if [configure] wasn't called yet, or any of the supplied required [sendWarningEvent] or
-     * [sendCriticalEvent] parameter is null or empty, otherwise true.
-     */
-    @SuppressWarnings(
-        "ReturnCount"
-    )
-    private fun canProcessEvent(
-        sourceName: String,
-        sourceVersion: String,
-        errorCode: String,
-        errorMessage: String
-    ): Boolean {
-        if (!isConfigureCalled) {
-            log.debug("Event Logger is not configured, skip")
-            return false
-        }
-
-        val isValidSourceInfo = sourceName.isNotEmpty() && sourceVersion.isNotEmpty()
-        val isValidErrorInfo = errorCode.isNotEmpty() && errorMessage.isNotEmpty()
-        if (!isValidSourceInfo || !isValidErrorInfo) {
-            log.warn("Event contains an empty parameter, skip")
-            return false
-        }
-
-        return true
     }
 
     private fun insertOrUpdateEvent(eventId: String, event: Event, isNewEvent: Boolean) {
