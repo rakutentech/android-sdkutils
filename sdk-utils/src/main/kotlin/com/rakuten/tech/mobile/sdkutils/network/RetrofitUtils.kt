@@ -40,6 +40,7 @@ fun Retrofit.Builder.build(
  *
  * @param maxRetries the maximum retries after failure.
  * @param retryDelayMillis the initial retry delay after failure.
+ * @param onRetry called when operation will be retried.
  * @param onSuccess called when operation succeeds.
  * @param onFailure called when operation fails even after retries.
  * @param handler handler to use for delaying the retries.
@@ -48,6 +49,7 @@ fun Retrofit.Builder.build(
 fun <T> Call<T>.enqueueAndRetryOnNetworkError(
     maxRetries: Int = 3,
     retryDelayMillis: Long = 15 * 1000,
+    onRetry: (retryCount: Int, delayMillis: Long) -> Unit = { _, _ -> },
     onSuccess: (response: Response<T>) -> Unit = {},
     onFailure: (t: Throwable) -> Unit = {},
     handler: Handler
@@ -92,6 +94,7 @@ fun <T> Call<T>.enqueueAndRetryOnNetworkError(
             if (shouldRetry(retryCount, t)) {
                 retryCount++
                 val delayMillis = calculateExponentialDelay(retryCount, retryDelayMillis)
+                onRetry(retryCount, delayMillis)
                 call.clone().enqueueWithDelay(delayMillis, this)
             } else {
                 onFailure(t)

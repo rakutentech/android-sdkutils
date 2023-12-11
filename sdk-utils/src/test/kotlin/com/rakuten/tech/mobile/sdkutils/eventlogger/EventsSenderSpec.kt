@@ -1,11 +1,14 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.os.Handler
+import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import okhttp3.ResponseBody
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import okhttp3.mockwebserver.SocketPolicy
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainAll
 import org.junit.Before
@@ -13,6 +16,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
 import org.robolectric.RobolectricTestRunner
+import retrofit2.Call
+import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
@@ -95,7 +100,7 @@ class EventsSenderSpec {
     }
 
     @Test
-    fun `should retry and invoke success callback if successful`() {
+    fun `should invoke failure callback if unsuccessful`() {
         mockWebServer.enqueue(MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_INTERNAL_ERROR))
 
@@ -110,12 +115,37 @@ class EventsSenderSpec {
     }
 
     @Test
-    fun `should invoke retry callback if server responded with error`() {
+    fun `should retry and invoke failure callback`() {
         mockWebServer.enqueue(MockResponse()
-            .setResponseCode(HttpURLConnection.HTTP_INTERNAL_ERROR))
+            .setSocketPolicy(SocketPolicy.NO_RESPONSE))
 
         val callback: () -> Unit = mock()
         eventsSender.pushEvents(
+            listOf(EventLoggerTestUtil.generateRandomEvent()),
+            null,
+            callback
+        )
+
+        verify(callback, timeout(Duration.ofMillis(500))).invoke()
+    }
+
+    @Test
+    fun a() {
+        val mockApi = mock(RetrofitEventsSender.Api::class.java)
+        val mockCall = mock(Call::class.java) as Call<ResponseBody?>
+        val sender = RetrofitEventsSender(mockApi, "mockApiKey", mockHandler)
+
+        `when`(mockApi.sendEvents(anyString(), anyList()))
+            .thenReturn(mockCall)
+        `when`(mockCall.enqueue(any()))
+            .thenAnswer {
+                val cb = it.arguments[0] as Callback<ResponseBody?>
+                cb.onFailure(mockCall, Throwable(""))
+                null
+            }
+
+        val callback: () -> Unit = mock()
+        sender.pushEvents(
             listOf(EventLoggerTestUtil.generateRandomEvent()),
             null,
             callback
