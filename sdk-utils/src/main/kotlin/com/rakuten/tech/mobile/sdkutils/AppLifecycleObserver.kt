@@ -1,4 +1,4 @@
-package com.rakuten.tech.mobile.sdkutils.eventlogger
+package com.rakuten.tech.mobile.sdkutils
 
 import android.app.Activity
 import android.app.Application
@@ -6,14 +6,14 @@ import android.content.Context
 import android.os.Bundle
 import java.lang.ref.WeakReference
 
-internal interface LifecycleListener {
+interface LifecycleListener {
     /**
      * Called when app transitioned from background to foreground.
      */
-    fun becameForeground()
+    fun becameForeground() {}
 }
 
-internal class AppLifecycleListener(private val context: WeakReference<Context>) {
+class AppLifecycleObserver(private val context: WeakReference<Context>) {
 
     private lateinit var lifecycleCallback: LifecycleCallback
     private val listeners = mutableListOf<LifecycleListener>()
@@ -22,7 +22,6 @@ internal class AppLifecycleListener(private val context: WeakReference<Context>)
      * Registers [listener] to be notified of app lifecycle callbacks.
      */
     fun registerListener(listener: LifecycleListener) {
-        EventLogger.log.debug("registerListener")
         if (!this::lifecycleCallback.isInitialized) {
             lifecycleCallback = LifecycleCallback()
 

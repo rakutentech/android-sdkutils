@@ -1,16 +1,19 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
+import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.util.concurrent.MoreExecutors
 import com.nhaarman.mockitokotlin2.argumentCaptor
+import com.rakuten.tech.mobile.sdkutils.AppLifecycleObserver
 import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.mockito.Mockito.*
+import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
 import java.lang.ref.WeakReference
 import java.util.concurrent.ExecutorService
@@ -26,6 +29,7 @@ abstract class EventLoggerSpec {
     internal val mockEventsStorage = mock(EventsStorage::class.java)
     internal val mockEventLoggerCache = mock(EventLoggerCache::class.java)
     internal val eventLoggerHelper = EventLoggerHelper(WeakReference(ApplicationProvider.getApplicationContext()))
+    internal val lifecycleListener = AppLifecycleObserver(WeakReference(ApplicationProvider.getApplicationContext()))
     internal val tasksQueue = MoreExecutors.newDirectExecutorService()
 
     init {
@@ -41,6 +45,7 @@ abstract class EventLoggerSpec {
             mockEventsStorage,
             mockEventLoggerCache,
             eventLoggerHelper,
+            lifecycleListener,
             tasksQueue
         )
     }
@@ -64,6 +69,7 @@ class GeneralSpec : EventLoggerSpec() {
             mockEventsStorage,
             mockEventLoggerCache,
             eventLoggerHelper,
+            lifecycleListener,
             mockTasksQueue
         )
     }
@@ -141,6 +147,7 @@ class ConfigureSpec : EventLoggerSpec() {
             any() ?: mockEventsStorage,
             any() ?: mockEventLoggerCache,
             any() ?: eventLoggerHelper,
+            any() ?: lifecycleListener,
             any() ?: tasksQueue
         )
     }
@@ -161,7 +168,7 @@ class ConfigureSpec : EventLoggerSpec() {
     }
 
     @Test
-    fun `should send events when TTL expired and delete from storage afterwards`() {
+    fun `should send events when TTL expired and delete from storage afterwards - configure`() {
         `when`(mockEventLoggerCache.getTtlReferenceTime())
             .thenReturn(TimeUnit.MILLISECONDS.toDays(30)) // simulate expiry
         `when`(mockEventsStorage.getAllEvents())
@@ -171,6 +178,35 @@ class ConfigureSpec : EventLoggerSpec() {
 
         val captor = argumentCaptor<() -> Unit>()
         verify(mockEventsSender).pushEvents(
+            anyList(),
+            captor.capture(),
+            any()
+        )
+        captor.firstValue.invoke()
+        verify(mockEventsStorage).deleteEvents(anyList())
+    }
+
+    @Test
+    fun `should send events when TTL expired and delete from storage afterwards - becameForeground`() {
+        `when`(mockEventLoggerCache.getTtlReferenceTime())
+            .thenReturn(TimeUnit.MILLISECONDS.toDays(30)) // simulate expiry
+        `when`(mockEventsStorage.getAllEvents())
+            .thenReturn(mapOf("id1" to EventLoggerTestUtil.generateRandomEvent()))
+
+        val activity = Robolectric.buildActivity(Activity::class.java)
+        val observer = AppLifecycleObserver(WeakReference(activity.get()))
+        EventLogger.initialize(
+            mockEventsSender,
+            mockEventsStorage,
+            mockEventLoggerCache,
+            eventLoggerHelper,
+            observer,
+            tasksQueue
+        )
+
+        activity.create().start().resume().pause().stop().resume() // simulate transition
+        val captor = argumentCaptor<() -> Unit>()
+        verify(mockEventsSender, atLeastOnce()).pushEvents(
             anyList(),
             captor.capture(),
             any()

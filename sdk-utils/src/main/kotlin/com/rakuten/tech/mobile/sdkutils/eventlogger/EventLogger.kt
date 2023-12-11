@@ -2,7 +2,9 @@ package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import com.rakuten.tech.mobile.sdkutils.AppLifecycleObserver
 import com.rakuten.tech.mobile.sdkutils.BuildConfig
+import com.rakuten.tech.mobile.sdkutils.LifecycleListener
 import com.rakuten.tech.mobile.sdkutils.logger.Logger
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -130,7 +132,7 @@ object EventLogger {
             eventLoggerHelper = EventLoggerHelper(
                 WeakReference(context.applicationContext)
             ),
-            appLifecycleListener = AppLifecycleListener(
+            appLifecycleObserver = AppLifecycleObserver(
                 WeakReference(context.applicationContext)
             ),
             tasksQueue = Executors.newSingleThreadExecutor()
@@ -147,7 +149,7 @@ object EventLogger {
         eventsStorage: EventsStorage,
         eventLoggerCache: EventLoggerCache,
         eventLoggerHelper: EventLoggerHelper,
-        appLifecycleListener: AppLifecycleListener,
+        appLifecycleObserver: AppLifecycleObserver,
         tasksQueue: ExecutorService
     ) {
         this.eventsSender = eventsSender
@@ -158,7 +160,7 @@ object EventLogger {
         this.isConfigureCalled = true
 
         tasksQueue.safeExecute {
-            registerToAppTransitions(appLifecycleListener)
+            registerToAppTransitions(appLifecycleObserver)
             if (isTtlExpired()) {
                 sendAllEventsInStorage()
             }
@@ -234,7 +236,7 @@ object EventLogger {
         }
     }
 
-    private fun registerToAppTransitions(listener: AppLifecycleListener) {
+    private fun registerToAppTransitions(listener: AppLifecycleObserver) {
         listener.registerListener(object : LifecycleListener {
             override fun becameForeground() {
                 tasksQueue.safeExecute {
