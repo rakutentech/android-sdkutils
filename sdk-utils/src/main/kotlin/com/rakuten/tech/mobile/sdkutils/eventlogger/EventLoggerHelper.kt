@@ -24,6 +24,21 @@ internal class EventLoggerHelper(private val context: WeakReference<Context>) {
     fun getMetadata(): Metadata = metadata
 
     /**
+     * Returns true if all event parameters are non-empty, otherwise false.
+     */
+    fun isEventValid(
+        sourceName: String,
+        sourceVersion: String,
+        errorCode: String,
+        errorMessage: String
+    ): Boolean {
+        val isValidSourceInfo = sourceName.isNotEmpty() && sourceVersion.isNotEmpty()
+        val isValidErrorInfo = errorCode.isNotEmpty() && errorMessage.isNotEmpty()
+
+        return isValidSourceInfo && isValidErrorInfo
+    }
+
+    /**
      * Attaches metadata to the event.
      */
     @SuppressWarnings("LongParameterList")

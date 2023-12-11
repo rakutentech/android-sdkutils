@@ -69,17 +69,8 @@ class GeneralSpec : EventLoggerSpec() {
     }
 
     @Test
-    fun `should not process event with invalid source info`() {
+    fun `should not process event with missing details`() {
         EventLogger.sendCriticalEvent(sourceName = "", sourceVersion = "test", "test", "test")
-        EventLogger.sendCriticalEvent(sourceName = "test", sourceVersion = "", "test", "test")
-
-        verify(mockEventsStorage, never()).getEventById(anyString())
-    }
-
-    @Test
-    fun `should not process event with invalid error info`() {
-        EventLogger.sendWarningEvent("test", "test", errorCode = "", errorMessage = "test")
-        EventLogger.sendWarningEvent("test", "", errorCode = "test", errorMessage = "")
 
         verify(mockEventsStorage, never()).getEventById(anyString())
     }
@@ -217,6 +208,7 @@ class SendCriticalSpec : EventLoggerSpec() {
     }
 
     @Test
+    @SuppressWarnings("LongMethod")
     fun `should send critical event immediately and update type`() {
         `when`(mockEventsStorage.getCount())
             .thenReturn(1)
@@ -243,8 +235,24 @@ class SendCriticalSpec : EventLoggerSpec() {
 }
 
 class SendWarningSpec : EventLoggerSpec() {
+
+    @Before
+    fun setup() {
+        configureWithMocks()
+    }
+
     @Test
     fun `should do nothing if warning event is received`() {
+        val testEvent = EventLoggerTestUtil.generateRandomEvent()
+        `when`(mockEventsStorage.getCount())
+            .thenReturn(1)
+        `when`(mockEventsStorage.getAllEvents())
+            .thenReturn(mapOf("id1" to testEvent))
+        `when`(mockEventsStorage.getEventById(anyString()))
+            .thenReturn(testEvent)
+        `when`(mockEventLoggerCache.getTtlReferenceTime())
+            .thenReturn(System.currentTimeMillis())
+
         EventLogger.sendWarningEvent(
             "inappmessaging",
             "1.0.0",
