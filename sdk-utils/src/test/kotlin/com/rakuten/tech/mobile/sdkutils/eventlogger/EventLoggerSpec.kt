@@ -130,6 +130,7 @@ class GeneralSpec : EventLoggerSpec() {
 }
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@SuppressWarnings("LongMethod")
 class ConfigureSpec : EventLoggerSpec() {
 
     @Test
@@ -236,6 +237,7 @@ class ConfigureSpec : EventLoggerSpec() {
     }
 }
 
+@SuppressWarnings("LongMethod")
 class SendCriticalSpec : EventLoggerSpec() {
 
     @Before
@@ -244,7 +246,6 @@ class SendCriticalSpec : EventLoggerSpec() {
     }
 
     @Test
-    @SuppressWarnings("LongMethod")
     fun `should send critical event immediately and update type`() {
         `when`(mockEventsStorage.getCount())
             .thenReturn(1)

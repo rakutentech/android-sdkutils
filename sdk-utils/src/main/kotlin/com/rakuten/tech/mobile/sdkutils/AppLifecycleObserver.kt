@@ -6,6 +6,10 @@ import android.content.Context
 import android.os.Bundle
 import java.lang.ref.WeakReference
 
+/**
+ * Listener that should be registered to the [AppLifecycleObserver.registerListener] to be notified
+ * of desired application lifecycle callbacks.
+ */
 interface LifecycleListener {
     /**
      * Called when app transitioned from background to foreground.
@@ -13,6 +17,9 @@ interface LifecycleListener {
     fun becameForeground() {}
 }
 
+/**
+ * Observes to application lifecycle callbacks.
+ */
 class AppLifecycleObserver(private val context: WeakReference<Context>) {
 
     private lateinit var lifecycleCallback: LifecycleCallback

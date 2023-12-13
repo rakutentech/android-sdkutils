@@ -9,6 +9,10 @@ import org.robolectric.RobolectricTestRunner
 import java.lang.ref.WeakReference
 
 @RunWith(RobolectricTestRunner::class)
+@SuppressWarnings(
+    "EmptyFunctionBlock",
+    "TooGenericExceptionThrown"
+)
 class AppLifecycleObserverSpec {
 
     private val activity = Robolectric.buildActivity(Activity::class.java)
@@ -26,7 +30,7 @@ class AppLifecycleObserverSpec {
     }
 
     @Test
-    fun `should not notify listener if in foreground but not from background transition`() {
+    fun `should not notify listener if in foreground but not from background`() {
         val listenerSpy = spy(object : LifecycleListener {
             override fun becameForeground() {}
         })

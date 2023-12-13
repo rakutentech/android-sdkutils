@@ -129,12 +129,8 @@ object EventLogger {
             eventLoggerCache = SharedPreferencesEventLoggerCache(
                 context.getSharedPreferences(Config.EVENT_LOGGER_GENERAL_CACHE_FILENAME, Context.MODE_PRIVATE)
             ),
-            eventLoggerHelper = EventLoggerHelper(
-                WeakReference(context.applicationContext)
-            ),
-            appLifecycleObserver = AppLifecycleObserver(
-                WeakReference(context.applicationContext)
-            ),
+            eventLoggerHelper = EventLoggerHelper(WeakReference(context.applicationContext)),
+            appLifecycleObserver = AppLifecycleObserver(WeakReference(context.applicationContext)),
             tasksQueue = Executors.newSingleThreadExecutor()
         )
     }
@@ -144,6 +140,9 @@ object EventLogger {
      */
     @VisibleForTesting
     @Synchronized
+    @SuppressWarnings(
+        "LongParameterList"
+    )
     internal fun initialize(
         eventsSender: EventsSender,
         eventsStorage: EventsStorage,
