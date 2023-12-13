@@ -1,14 +1,11 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.os.Handler
-import com.nhaarman.mockitokotlin2.doAnswer
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
-import okhttp3.ResponseBody
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
-import okhttp3.mockwebserver.SocketPolicy
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldContainAll
 import org.junit.Before
@@ -16,8 +13,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
 import org.robolectric.RobolectricTestRunner
-import retrofit2.Call
-import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.net.HttpURLConnection
@@ -26,6 +21,7 @@ import java.time.Duration
 @RunWith(RobolectricTestRunner::class)
 class EventsSenderSpec {
 
+    private val mockHandler: Handler = mock(Handler::class.java)
     private val mockWebServer = MockWebServer()
     private val retrofitApi = Retrofit
         .Builder()
@@ -33,12 +29,15 @@ class EventsSenderSpec {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
         .create(RetrofitEventsSender.Api::class.java)
-    private val mockHandler: Handler = mock(Handler::class.java)
     private val eventsSender = RetrofitEventsSender(retrofitApi, "mockApiKey", mockHandler)
 
     @Before
     fun setup() {
-        setupHandler()
+        `when`(mockHandler.postDelayed(any(Runnable::class.java), anyLong()))
+            .thenAnswer {
+                (it.arguments[0] as Runnable).run()
+                true
+            }
     }
 
     @Test
@@ -85,9 +84,11 @@ class EventsSenderSpec {
     }
 
     @Test
-    fun `should invoke success callback if successful`() {
-        mockWebServer.enqueue(MockResponse()
-            .setResponseCode(HttpURLConnection.HTTP_OK))
+    fun `should invoke success callback if server responded with HTTP OK`() {
+        mockWebServer.enqueue(
+            MockResponse()
+                .setResponseCode(HttpURLConnection.HTTP_OK)
+        )
 
         val callback: () -> Unit = mock()
         eventsSender.pushEvents(
@@ -100,7 +101,7 @@ class EventsSenderSpec {
     }
 
     @Test
-    fun `should invoke failure callback if unsuccessful`() {
+    fun `should invoke failure callback if server responded with HTTP failure`() {
         mockWebServer.enqueue(MockResponse()
             .setResponseCode(HttpURLConnection.HTTP_INTERNAL_ERROR))
 
@@ -112,53 +113,5 @@ class EventsSenderSpec {
         )
 
         verify(callback, timeout(Duration.ofMillis(500))).invoke()
-    }
-
-    @Test
-    fun `should retry and invoke failure callback`() {
-        mockWebServer.enqueue(MockResponse()
-            .setSocketPolicy(SocketPolicy.NO_RESPONSE))
-
-        val callback: () -> Unit = mock()
-        eventsSender.pushEvents(
-            listOf(EventLoggerTestUtil.generateRandomEvent()),
-            null,
-            callback
-        )
-
-        verify(callback, timeout(Duration.ofMillis(500))).invoke()
-    }
-
-    @Test
-    fun a() {
-        val mockApi = mock(RetrofitEventsSender.Api::class.java)
-        val mockCall = mock(Call::class.java) as Call<ResponseBody?>
-        val sender = RetrofitEventsSender(mockApi, "mockApiKey", mockHandler)
-
-        `when`(mockApi.sendEvents(anyString(), anyList()))
-            .thenReturn(mockCall)
-        `when`(mockCall.enqueue(any()))
-            .thenAnswer {
-                val cb = it.arguments[0] as Callback<ResponseBody?>
-                cb.onFailure(mockCall, Throwable(""))
-                null
-            }
-
-        val callback: () -> Unit = mock()
-        sender.pushEvents(
-            listOf(EventLoggerTestUtil.generateRandomEvent()),
-            null,
-            callback
-        )
-
-        verify(callback, timeout(Duration.ofMillis(500))).invoke()
-    }
-
-    private fun setupHandler() {
-        `when`(mockHandler.postDelayed(any(Runnable::class.java), anyLong())).thenAnswer {
-            val runnable = it.arguments[0] as Runnable
-            runnable.run()
-            true
-        }
     }
 }

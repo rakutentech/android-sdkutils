@@ -45,7 +45,10 @@ fun Retrofit.Builder.build(
  * @param onFailure called when operation fails even after retries.
  * @param handler handler to use for delaying the retries.
  */
-@SuppressWarnings("MagicNumber")
+@SuppressWarnings(
+    "MagicNumber",
+    "LongParameterList"
+)
 fun <T> Call<T>.enqueueAndRetryOnNetworkError(
     maxRetries: Int = 3,
     retryDelayMillis: Long = 15 * 1000,
