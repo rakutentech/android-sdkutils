@@ -1,6 +1,7 @@
 package com.rakuten.tech.mobile.sdkutils.sample
 
 import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -73,6 +74,11 @@ class MainActivity : Activity() {
                 showToast("Error: Failed to send request. Server returned: $it")
             }
         })
+    }
+
+    fun onEventLoggerButtonClick() {
+        val intent = Intent(this, EventLoggerActivity::class.java)
+        this.startActivity(intent)
     }
 
     private fun showToast(message: String) =
