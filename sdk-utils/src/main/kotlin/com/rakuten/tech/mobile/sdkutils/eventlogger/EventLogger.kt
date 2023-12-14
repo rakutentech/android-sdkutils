@@ -235,8 +235,9 @@ object EventLogger {
         }
     }
 
-    private fun registerToAppTransitions(listener: AppLifecycleObserver) {
-        listener.registerListener(object : LifecycleListener {
+    private fun registerToAppTransitions(observer: AppLifecycleObserver) {
+        observer.registerListener(object : LifecycleListener {
+            // When app transitioned to foreground, send all events if TTL expired
             override fun becameForeground() {
                 tasksQueue.safeExecute {
                     if (isTtlExpired()) {
