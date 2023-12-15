@@ -65,7 +65,7 @@ class EventLoggerActivity : Activity() {
             textBuilder.append(event.key)
             textBuilder.append("\n")
             textBuilder.append(
-                JSONObject(event.value.toString()).toString(2)
+                JSONObject(event.value.toString()).toString(4)
             )
             textBuilder.append("\n\n\n")
         }
