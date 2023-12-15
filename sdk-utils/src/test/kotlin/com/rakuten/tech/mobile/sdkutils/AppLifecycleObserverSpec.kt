@@ -1,6 +1,7 @@
 package com.rakuten.tech.mobile.sdkutils
 
 import android.app.Activity
+import android.os.Bundle
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
@@ -25,6 +26,7 @@ class AppLifecycleObserverSpec {
         })
         observer.registerListener(listenerSpy)
 
+        // simulate put to background and go back to screen
         activity.create().start().resume().pause().stop().resume()
         verify(listenerSpy).becameForeground()
     }
@@ -36,7 +38,14 @@ class AppLifecycleObserverSpec {
         })
         observer.registerListener(listenerSpy)
 
+        // simulate screen visited
         activity.create().start().resume()
+        verify(listenerSpy, never()).becameForeground()
+
+        // simulate screen closed and new screen displayed
+        activity.create().start().resume().saveInstanceState(Bundle()).destroy()
+        val newActivity = Robolectric.buildActivity(Activity::class.java)
+        newActivity.create().start().resume()
         verify(listenerSpy, never()).becameForeground()
     }
 
