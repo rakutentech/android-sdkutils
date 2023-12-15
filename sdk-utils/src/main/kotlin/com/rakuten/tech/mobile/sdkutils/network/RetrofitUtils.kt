@@ -69,7 +69,8 @@ fun <T> Call<T>.enqueueAndRetryOnNetworkError(
     }
 
     /**
-     * Returns true if within max retries and on network error.
+     * Returns true if within max retries and when [t] is an [IOException] which is typically thrown when there is
+     * network issue, such as device being offline.
      */
     fun shouldRetry(retryCount: Int, t: Throwable): Boolean {
         if (retryCount < maxRetries &&
