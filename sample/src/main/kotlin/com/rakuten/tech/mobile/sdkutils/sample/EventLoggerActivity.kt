@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import com.rakuten.tech.mobile.sdkutils.PreferencesUtil
 import com.rakuten.tech.mobile.sdkutils.eventlogger.EventLogger
 import com.rakuten.tech.mobile.sdkutils.sample.databinding.ActivityEventLoggerBinding
 import org.json.JSONObject
@@ -38,16 +37,16 @@ class EventLoggerActivity : Activity() {
 
         Toast.makeText(this,
             "sdkName: $sdkName,\n" +
-                    "sdkVersion: $sdkVersion,\n" +
-                    "errorCode: $errorCode,\n" +
-                    "errorMessage: $errorMessage,\n" +
-                    "sdkVersion: $sdkName,\n" +
-                    "numTimes: $numTimes,\n" +
-                    "eventType: $eventType",
+                "sdkVersion: $sdkVersion,\n" +
+                "errorCode: $errorCode,\n" +
+                "errorMessage: $errorMessage,\n" +
+                "sdkVersion: $sdkName,\n" +
+                "numTimes: $numTimes,\n" +
+                "eventType: $eventType",
             Toast.LENGTH_LONG
         ).show()
 
-        when(eventType) {
+        when (eventType) {
             "critical" -> {
                 repeat(numTimes) { EventLogger.sendCriticalEvent(sdkName, sdkVersion, errorCode, errorMessage) }
             }
