@@ -15,7 +15,6 @@ import java.util.concurrent.Executors
  * This is intended to be used internally by Rakuten's SDKs.
  */
 @SuppressWarnings(
-    "EmptyFunctionBlock",
     "TooManyFunctions",
     "LargeClass"
 )
@@ -27,7 +26,7 @@ object EventLogger {
     private lateinit var eventsStorage: EventsStorage
     private lateinit var eventLoggerCache: EventLoggerCache
     private lateinit var eventLoggerHelper: EventLoggerHelper
-    private lateinit var tasksQueue: ExecutorService
+    private lateinit var executorService: ExecutorService
     @Volatile private var isConfigureCalled = false
 
     // ------------------------------------Public APIs-----------------------------------------------
@@ -68,14 +67,16 @@ object EventLogger {
      * @param errorCode Source' error code or HTTP backend response code e.g. "500".
      * @param errorMessage Description of the error. Make it as descriptive as possible, for example, the stacktrace
      * of an exception.
+     * @param info Optional parameter to attach other useful key-value pair, such as filename, method, line number, etc.
      */
-    fun critical(
+    fun sendCriticalEvent(
         sourceName: String,
         sourceVersion: String,
         errorCode: String,
-        errorMessage: String
+        errorMessage: String,
+        info: Map<String, String>? = null
     ) {
-        // Intentionally left blank. Will be supported later.
+        logEvent(EventType.CRITICAL, sourceName, sourceVersion, errorCode, errorMessage, info)
     }
 
     /**
@@ -87,14 +88,16 @@ object EventLogger {
      * @param errorCode Source' error code or HTTP backend response code e.g. "500".
      * @param errorMessage Description of the error. Make it as descriptive as possible, for example, the stacktrace
      * of an exception.
+     * @param info Optional parameter to attach other useful key-value pair, such as filename, method, line number, etc.
      */
-    fun warning(
+    fun sendWarningEvent(
         sourceName: String,
         sourceVersion: String,
         errorCode: String,
-        errorMessage: String
+        errorMessage: String,
+        info: Map<String, String>? = null
     ) {
-        // Intentionally left blank. Will be supported later.
+        logEvent(EventType.WARNING, sourceName, sourceVersion, errorCode, errorMessage, info)
     }
 
     // ------------------------------------Internal APIs-----------------------------------------------
@@ -102,7 +105,7 @@ object EventLogger {
     private fun buildEventLoggerHttpClient(baseUrl: String): Retrofit {
         return Retrofit
             .Builder()
-            .baseUrl(baseUrl)
+            .baseUrl(if (baseUrl.endsWith('/')) baseUrl else "$baseUrl/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
@@ -127,7 +130,7 @@ object EventLogger {
             eventLoggerHelper = EventLoggerHelper(
                 WeakReference(context.applicationContext)
             ),
-            tasksQueue = Executors.newSingleThreadExecutor()
+            executorService = Executors.newSingleThreadExecutor()
         )
     }
 
@@ -141,16 +144,16 @@ object EventLogger {
         eventsStorage: EventsStorage,
         eventLoggerCache: EventLoggerCache,
         eventLoggerHelper: EventLoggerHelper,
-        tasksQueue: ExecutorService
+        executorService: ExecutorService
     ) {
         this.eventsSender = eventsSender
         this.eventsStorage = eventsStorage
         this.eventLoggerCache = eventLoggerCache
         this.eventLoggerHelper = eventLoggerHelper
-        this.tasksQueue = tasksQueue
+        this.executorService = executorService
         this.isConfigureCalled = true
 
-        tasksQueue.safeExecute {
+        executorService.safeExecute {
             registerToAppTransitions()
             if (isTtlExpired()) {
                 sendAllEventsInStorage()
@@ -158,17 +161,91 @@ object EventLogger {
         }
     }
 
+    @SuppressWarnings(
+        "LongParameterList"
+    )
+    private fun logEvent(
+        eventType: EventType,
+        sourceName: String,
+        sourceVersion: String,
+        errorCode: String,
+        errorMessage: String,
+        info: Map<String, String>?
+    ) {
+        if (!isConfigureCalled ||
+            !eventLoggerHelper.isEventValid(sourceName, sourceVersion, errorCode, errorMessage)) {
+            log.warn("Event Logger is not configured or event contains an empty parameter, skip")
+            return
+        }
+
+        executorService.safeExecute {
+            val eventId = generateEventIdentifier(eventType.displayName, eventLoggerHelper.getMetadata().appVer,
+                sourceName, errorCode, errorMessage)
+            val storedEvent = eventsStorage.getEventById(eventId)
+            val eventToProcess = (storedEvent ?: eventLoggerHelper.buildEvent(eventType, sourceName, sourceVersion,
+                errorCode, errorMessage, info))
+                .incrementCount()
+
+            val isNewEvent = storedEvent == null
+            insertOrUpdateEvent(eventId, eventToProcess, isNewEvent)
+            sendEventIfNeeded(eventType, eventId, eventToProcess, isNewEvent)
+        }
+    }
+
+    private fun insertOrUpdateEvent(eventId: String, event: Event, isNewEvent: Boolean) {
+        if (isNewEvent) {
+            eventsStorage.insertEvent(eventId, event)
+        } else {
+            eventsStorage.updateEvent(eventId, event)
+        }
+    }
+
+    private fun sendEventIfNeeded(
+        eventType: EventType,
+        eventId: String,
+        event: Event,
+        isNewEvent: Boolean
+    ) {
+        // If full, send all of the events
+        if (eventsStorage.getCount() >= Config.MAX_EVENTS_COUNT) {
+            sendAllEventsInStorage(isNewEvent)
+            return
+        }
+
+        if (!isNewEvent) {
+            return
+        }
+
+        when (eventType) {
+            // Send the unique critical event immediately, and convert it to a warning type to prevent multiple
+            // alerts in server
+            EventType.CRITICAL -> sendEvents(
+                events = listOf(event),
+                onSuccess = {
+                    eventsStorage.updateEvent(eventId, event.setType(EventType.WARNING.displayName))
+                }
+            )
+            // do nothing
+            else -> {}
+        }
+    }
+
     private fun registerToAppTransitions() {
         // ToDo
     }
 
-    private fun sendAllEventsInStorage() {
+    private fun sendAllEventsInStorage(deleteOldEventsOnFailure: Boolean = false) {
         val allEvents = eventsStorage.getAllEvents()
         sendEvents(
             events = allEvents.values.toList(),
             onSuccess = {
                 eventLoggerCache.setTtlReferenceTime(System.currentTimeMillis())
                 this.eventsStorage.deleteEvents(allEvents.keys.toList())
+            },
+            onFailure = {
+                if (deleteOldEventsOnFailure) {
+                    eventsStorage.deleteOldEvents(Config.MAX_EVENTS_COUNT)
+                }
             }
         )
     }
