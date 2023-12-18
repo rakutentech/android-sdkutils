@@ -230,8 +230,7 @@ object EventLogger {
                     eventsStorage.updateEvent(eventId, event.setType(EventType.WARNING.displayName))
                 }
             )
-            // do nothing
-            else -> Unit
+            else -> { /* do nothing */ }
         }
     }
 
