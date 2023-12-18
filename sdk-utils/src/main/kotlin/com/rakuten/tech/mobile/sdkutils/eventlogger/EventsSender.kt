@@ -9,6 +9,7 @@ import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
 
+@SuppressWarnings("kotlin:S6517")
 internal interface EventsSender {
 
     /**
@@ -29,6 +30,7 @@ internal class RetrofitEventsSender(
     private val handler: Handler = Handler(Looper.getMainLooper())
 ) : EventsSender {
 
+    @SuppressWarnings("kotlin:S6517")
     internal interface Api {
         @POST("external/logging/error")
         fun sendEvents(
