@@ -26,7 +26,7 @@ object EventLogger {
     private lateinit var eventsStorage: EventsStorage
     private lateinit var eventLoggerCache: EventLoggerCache
     private lateinit var eventLoggerHelper: EventLoggerHelper
-    private lateinit var tasksQueue: ExecutorService
+    private lateinit var executorService: ExecutorService
     @Volatile private var isConfigureCalled = false
 
     // ------------------------------------Public APIs-----------------------------------------------
@@ -130,7 +130,7 @@ object EventLogger {
             eventLoggerHelper = EventLoggerHelper(
                 WeakReference(context.applicationContext)
             ),
-            tasksQueue = Executors.newSingleThreadExecutor()
+            executorService = Executors.newSingleThreadExecutor()
         )
     }
 
@@ -144,16 +144,16 @@ object EventLogger {
         eventsStorage: EventsStorage,
         eventLoggerCache: EventLoggerCache,
         eventLoggerHelper: EventLoggerHelper,
-        tasksQueue: ExecutorService
+        executorService: ExecutorService
     ) {
         this.eventsSender = eventsSender
         this.eventsStorage = eventsStorage
         this.eventLoggerCache = eventLoggerCache
         this.eventLoggerHelper = eventLoggerHelper
-        this.tasksQueue = tasksQueue
+        this.executorService = executorService
         this.isConfigureCalled = true
 
-        tasksQueue.safeExecute {
+        executorService.safeExecute {
             registerToAppTransitions()
             if (isTtlExpired()) {
                 sendAllEventsInStorage()
@@ -178,7 +178,7 @@ object EventLogger {
             return
         }
 
-        tasksQueue.safeExecute {
+        executorService.safeExecute {
             val eventId = generateEventIdentifier(eventType.displayName, eventLoggerHelper.getMetadata().appVer,
                 sourceName, errorCode, errorMessage)
             val storedEvent = eventsStorage.getEventById(eventId)
