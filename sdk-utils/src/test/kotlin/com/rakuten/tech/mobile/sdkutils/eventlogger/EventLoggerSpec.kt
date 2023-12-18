@@ -6,7 +6,10 @@ import android.content.SharedPreferences
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.util.concurrent.MoreExecutors
 import com.nhaarman.mockitokotlin2.argumentCaptor
+<<<<<<< HEAD
 import com.rakuten.tech.mobile.sdkutils.AppLifecycleObserver
+=======
+>>>>>>> afcf5c2ee9f24dca9163d90a3521b46aef647a03
 import org.junit.Before
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -246,6 +249,7 @@ class SendCriticalSpec : EventLoggerSpec() {
     }
 
     @Test
+    @SuppressWarnings("LongMethod")
     fun `should send critical event immediately and update type`() {
         `when`(mockEventsStorage.getCount())
             .thenReturn(1)
