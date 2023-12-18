@@ -231,7 +231,7 @@ object EventLogger {
                 }
             )
             // do nothing
-            else -> {}
+            else -> Unit
         }
     }
 
