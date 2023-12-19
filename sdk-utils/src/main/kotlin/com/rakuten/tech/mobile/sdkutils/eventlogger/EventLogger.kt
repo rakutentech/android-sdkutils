@@ -2,7 +2,9 @@ package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.content.Context
 import androidx.annotation.VisibleForTesting
+import com.rakuten.tech.mobile.sdkutils.AppLifecycleObserver
 import com.rakuten.tech.mobile.sdkutils.BuildConfig
+import com.rakuten.tech.mobile.sdkutils.LifecycleListener
 import com.rakuten.tech.mobile.sdkutils.logger.Logger
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -127,9 +129,8 @@ object EventLogger {
             eventLoggerCache = SharedPreferencesEventLoggerCache(
                 context.getSharedPreferences(Config.EVENT_LOGGER_GENERAL_CACHE_FILENAME, Context.MODE_PRIVATE)
             ),
-            eventLoggerHelper = EventLoggerHelper(
-                WeakReference(context.applicationContext)
-            ),
+            eventLoggerHelper = EventLoggerHelper(WeakReference(context.applicationContext)),
+            appLifecycleObserver = AppLifecycleObserver(WeakReference(context.applicationContext)),
             executorService = Executors.newSingleThreadExecutor()
         )
     }
@@ -139,11 +140,15 @@ object EventLogger {
      */
     @VisibleForTesting
     @Synchronized
+    @SuppressWarnings(
+        "LongParameterList"
+    )
     internal fun initialize(
         eventsSender: EventsSender,
         eventsStorage: EventsStorage,
         eventLoggerCache: EventLoggerCache,
         eventLoggerHelper: EventLoggerHelper,
+        appLifecycleObserver: AppLifecycleObserver,
         executorService: ExecutorService
     ) {
         this.eventsSender = eventsSender
@@ -154,7 +159,7 @@ object EventLogger {
         this.isConfigureCalled = true
 
         executorService.safeExecute {
-            registerToAppTransitions()
+            registerToAppTransitions(appLifecycleObserver)
             if (isTtlExpired()) {
                 sendAllEventsInStorage()
             }
@@ -225,13 +230,21 @@ object EventLogger {
                     eventsStorage.updateEvent(eventId, event.setType(EventType.WARNING.displayName))
                 }
             )
-            // do nothing
-            else -> {}
+            else -> { /* do nothing */ }
         }
     }
 
-    private fun registerToAppTransitions() {
-        // ToDo
+    private fun registerToAppTransitions(observer: AppLifecycleObserver) {
+        observer.registerListener(object : LifecycleListener {
+            // When app transitioned to foreground, send all events if TTL expired
+            override fun becameForeground() {
+                executorService.safeExecute {
+                    if (isTtlExpired()) {
+                        sendAllEventsInStorage()
+                    }
+                }
+            }
+        })
     }
 
     private fun sendAllEventsInStorage(deleteOldEventsOnFailure: Boolean = false) {
