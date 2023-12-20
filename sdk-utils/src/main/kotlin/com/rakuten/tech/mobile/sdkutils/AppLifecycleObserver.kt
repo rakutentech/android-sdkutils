@@ -14,7 +14,7 @@ interface LifecycleListener {
     /**
      * Called when app transitioned from background to foreground.
      */
-    fun becameForeground() {}
+    fun becameForeground() { /* default: do nothing */ }
 }
 
 /**
