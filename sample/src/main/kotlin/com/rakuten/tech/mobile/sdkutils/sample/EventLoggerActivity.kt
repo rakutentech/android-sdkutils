@@ -33,7 +33,6 @@ class EventLoggerActivity : Activity() {
         val numTimes = binding.numTimesText.text.toString().toIntOrNull() ?: 1
         val eventTypeRadId = binding.eventTypeRadioGrp.checkedRadioButtonId
         val eventType = findViewById<RadioButton>(eventTypeRadId).text.toString().lowercase()
-        // TODO: how about the info? should it have a limit
 
         Toast.makeText(this,
             "sdkName: $sdkName,\n" +
