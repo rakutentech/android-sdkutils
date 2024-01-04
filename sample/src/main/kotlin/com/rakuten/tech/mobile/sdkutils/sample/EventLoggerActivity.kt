@@ -20,6 +20,7 @@ class EventLoggerActivity : Activity() {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_event_logger)
         binding.activity = this
+        setHints()
 
         // EventLogger: use default API Key+URL
         EventLogger.configure(this)
@@ -69,5 +70,13 @@ class EventLoggerActivity : Activity() {
         }
 
         binding.eventsStorageText.text = textBuilder
+    }
+
+    private fun setHints() {
+        binding.apply {
+            sdkNameText.hint = "sdkutils (if not specified)"
+            sdkVerText.hint = "${com.rakuten.tech.mobile.sdkutils.BuildConfig.VERSION_NAME} (if not specified)"
+            numTimesText.hint = "1 (by default)"
+        }
     }
 }
