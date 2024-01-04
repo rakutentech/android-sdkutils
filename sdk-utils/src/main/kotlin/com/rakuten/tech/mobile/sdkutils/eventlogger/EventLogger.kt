@@ -28,7 +28,7 @@ object EventLogger {
     private lateinit var eventsStorage: EventsStorage
     private lateinit var eventLoggerCache: EventLoggerCache
     private lateinit var eventLoggerHelper: EventLoggerHelper
-    private lateinit var tasksQueue: ExecutorService
+    private lateinit var executorService: ExecutorService
     @Volatile private var isConfigureCalled = false
 
     // ------------------------------------Public APIs-----------------------------------------------
@@ -131,7 +131,7 @@ object EventLogger {
             ),
             eventLoggerHelper = EventLoggerHelper(WeakReference(context.applicationContext)),
             appLifecycleObserver = AppLifecycleObserver(WeakReference(context.applicationContext)),
-            tasksQueue = Executors.newSingleThreadExecutor()
+            executorService = Executors.newSingleThreadExecutor()
         )
     }
 
@@ -149,16 +149,16 @@ object EventLogger {
         eventLoggerCache: EventLoggerCache,
         eventLoggerHelper: EventLoggerHelper,
         appLifecycleObserver: AppLifecycleObserver,
-        tasksQueue: ExecutorService
+        executorService: ExecutorService
     ) {
         this.eventsSender = eventsSender
         this.eventsStorage = eventsStorage
         this.eventLoggerCache = eventLoggerCache
         this.eventLoggerHelper = eventLoggerHelper
-        this.tasksQueue = tasksQueue
+        this.executorService = executorService
         this.isConfigureCalled = true
 
-        tasksQueue.safeExecute {
+        executorService.safeExecute {
             registerToAppTransitions(appLifecycleObserver)
             if (isTtlExpired()) {
                 sendAllEventsInStorage()
@@ -183,7 +183,7 @@ object EventLogger {
             return
         }
 
-        tasksQueue.safeExecute {
+        executorService.safeExecute {
             val eventId = generateEventIdentifier(eventType.displayName, eventLoggerHelper.getMetadata().appVer,
                 sourceName, errorCode, errorMessage)
             val storedEvent = eventsStorage.getEventById(eventId)
@@ -230,8 +230,7 @@ object EventLogger {
                     eventsStorage.updateEvent(eventId, event.setType(EventType.WARNING.displayName))
                 }
             )
-            // do nothing
-            else -> {}
+            else -> { /* do nothing */ }
         }
     }
 
@@ -239,7 +238,7 @@ object EventLogger {
         observer.registerListener(object : LifecycleListener {
             // When app transitioned to foreground, send all events if TTL expired
             override fun becameForeground() {
-                tasksQueue.safeExecute {
+                executorService.safeExecute {
                     if (isTtlExpired()) {
                         sendAllEventsInStorage()
                     }

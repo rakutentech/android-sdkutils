@@ -246,6 +246,7 @@ class SendCriticalSpec : EventLoggerSpec() {
     }
 
     @Test
+    @SuppressWarnings("LongMethod")
     fun `should send critical event immediately and update type`() {
         `when`(mockEventsStorage.getCount())
             .thenReturn(1)

@@ -14,7 +14,7 @@ interface LifecycleListener {
     /**
      * Called when app transitioned from background to foreground.
      */
-    fun becameForeground() {}
+    fun becameForeground() { /* default: do nothing */ }
 }
 
 /**
@@ -54,13 +54,9 @@ class AppLifecycleObserver(private val context: WeakReference<Context>) {
     private inner class LifecycleCallback : Application.ActivityLifecycleCallbacks {
         private var isInBackground = false
 
-        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-            // do nothing
-        }
+        override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) = Unit
 
-        override fun onActivityStarted(activity: Activity) {
-            // do nothing
-        }
+        override fun onActivityStarted(activity: Activity) = Unit
 
         override fun onActivityResumed(activity: Activity) {
             if (isInBackground) {
@@ -69,22 +65,16 @@ class AppLifecycleObserver(private val context: WeakReference<Context>) {
             }
         }
 
-        override fun onActivityPaused(activity: Activity) {
-            // do nothing
-        }
+        override fun onActivityPaused(activity: Activity) = Unit
 
         override fun onActivityStopped(activity: Activity) {
-            if (!activity.isChangingConfigurations) {
-                isInBackground = true
-            }
+            isInBackground = true
         }
 
-        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-            // do nothing
-        }
+        override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) = Unit
 
         override fun onActivityDestroyed(activity: Activity) {
-            // do nothing
+            isInBackground = false
         }
     }
 }
