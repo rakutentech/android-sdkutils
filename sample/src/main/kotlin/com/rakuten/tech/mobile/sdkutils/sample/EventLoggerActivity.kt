@@ -10,6 +10,10 @@ import com.rakuten.tech.mobile.sdkutils.eventlogger.EventLogger
 import com.rakuten.tech.mobile.sdkutils.sample.databinding.ActivityEventLoggerBinding
 import org.json.JSONObject
 
+@Suppress(
+    "UndocumentedPublicClass",
+    "UndocumentedPublicFunction"
+)
 class EventLoggerActivity : Activity() {
 
     private lateinit var binding: ActivityEventLoggerBinding
@@ -28,36 +32,27 @@ class EventLoggerActivity : Activity() {
 
     fun onLogEventButtonClick() {
         val sdkName = binding.sdkNameText.text.toString().ifEmpty { "sdkutils" }
-        val sdkVersion = binding.sdkVerText.text.toString().ifEmpty { com.rakuten.tech.mobile.sdkutils.BuildConfig.VERSION_NAME }
+        val sdkVersion = binding.sdkVerText.text.toString().ifEmpty {
+            com.rakuten.tech.mobile.sdkutils.BuildConfig.VERSION_NAME }
         val errorCode = binding.errorCodeText.text.toString()
         val errorMessage = binding.errorMsgText.text.toString()
         val numTimes = binding.numTimesText.text.toString().toIntOrNull() ?: 1
         val eventTypeRadId = binding.eventTypeRadioGrp.checkedRadioButtonId
         val eventType = findViewById<RadioButton>(eventTypeRadId).text.toString().lowercase()
 
-        Toast.makeText(this,
-            "sdkName: $sdkName,\n" +
-                "sdkVersion: $sdkVersion,\n" +
-                "errorCode: $errorCode,\n" +
-                "errorMessage: $errorMessage,\n" +
-                "sdkVersion: $sdkName,\n" +
-                "numTimes: $numTimes,\n" +
-                "eventType: $eventType",
-            Toast.LENGTH_LONG
-        ).show()
+        Toast.makeText(this, "Event processed!", Toast.LENGTH_LONG).show()
 
         when (eventType) {
-            "critical" -> {
-                repeat(numTimes) { EventLogger.sendCriticalEvent(sdkName, sdkVersion, errorCode, errorMessage) }
-            }
-            "warning" -> {
-                repeat(numTimes) { EventLogger.sendWarningEvent(sdkName, sdkVersion, errorCode, errorMessage) }
-            }
+            "critical" -> repeat(numTimes) {
+                EventLogger.sendCriticalEvent(sdkName, sdkVersion, errorCode, errorMessage) }
+            "warning" -> repeat(numTimes) { EventLogger.sendWarningEvent(sdkName, sdkVersion, errorCode, errorMessage) }
         }
     }
 
+    @Suppress("MagicNumber")
     fun onShowEventsCacheClick() {
-        val eventsCache = this.getSharedPreferences("com.rakuten.tech.mobile.sdkutils.eventlogger.events", Context.MODE_PRIVATE)
+        val eventsCache = this
+            .getSharedPreferences("com.rakuten.tech.mobile.sdkutils.eventlogger.events", Context.MODE_PRIVATE)
 
         val textBuilder = StringBuilder(0)
         for (event in eventsCache.all) {
