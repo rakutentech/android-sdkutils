@@ -47,7 +47,7 @@ class EventLoggerHelperSpec {
 
     @Test
     fun `should return metadata`() {
-        eventLoggerHelper.getMetadata() shouldBeEqualTo
+        eventLoggerHelper.metadata shouldBeEqualTo
             EventLoggerHelper.Metadata(
                 "com.sdkutils",
                 "sdk utils sample app",

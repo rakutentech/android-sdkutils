@@ -10,6 +10,7 @@ import java.lang.ref.WeakReference
  * Listener that should be registered to the [AppLifecycleObserver.registerListener] to be notified
  * of desired application lifecycle callbacks.
  */
+@SuppressWarnings("kotlin:S6517")
 interface LifecycleListener {
     /**
      * Called when app transitioned from background to foreground.

@@ -15,13 +15,12 @@ import java.lang.ref.WeakReference
 )
 internal class EventLoggerHelper(private val context: WeakReference<Context>) {
 
-    private val metadata: Metadata = buildMetadata(context.get())
-
     /**
-     * Returns information that is typically constant throughout the application lifecycle such as application and
+     * Information that is typically constant throughout the application lifecycle such as application and
      * device information.
      */
-    fun getMetadata(): Metadata = metadata
+    var metadata: Metadata = buildMetadata(context.get())
+        private set
 
     /**
      * Returns true if all event parameters are non-empty, otherwise false.

@@ -145,6 +145,21 @@
                     </RadioGroup>
                 </TableRow>
 
+                <TableRow>
+                    <TextView
+                        android:id="@+id/addtnl_info_label"
+                        android:layout_weight="1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:text="Additional Info" />
+
+                    <EditText
+                        android:id="@+id/addtnl_info_text"
+                        android:layout_weight="2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"/>
+                </TableRow>
+
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >

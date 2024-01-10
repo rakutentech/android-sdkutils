@@ -184,7 +184,7 @@ object EventLogger {
         }
 
         executorService.safeExecute {
-            val eventId = generateEventIdentifier(eventType.displayName, eventLoggerHelper.getMetadata().appVer,
+            val eventId = generateEventIdentifier(eventType.displayName, eventLoggerHelper.metadata.appVer,
                 sourceName, errorCode, errorMessage)
             val storedEvent = eventsStorage.getEventById(eventId)
             val eventToProcess = (storedEvent ?: eventLoggerHelper.buildEvent(eventType, sourceName, sourceVersion,
