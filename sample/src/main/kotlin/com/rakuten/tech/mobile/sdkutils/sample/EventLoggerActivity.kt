@@ -11,12 +11,12 @@ import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.rakuten.tech.mobile.sdkutils.eventlogger.EventLogger
 import com.rakuten.tech.mobile.sdkutils.sample.databinding.ActivityEventLoggerBinding
-import kotlinx.android.synthetic.main.activity_event_logger.*
 import org.json.JSONObject
 
 @Suppress(
     "UndocumentedPublicClass",
-    "UndocumentedPublicFunction"
+    "UndocumentedPublicFunction",
+    "MagicNumber"
 )
 class EventLoggerActivity : Activity() {
 
@@ -34,9 +34,10 @@ class EventLoggerActivity : Activity() {
         EventLogger.configure(this)
     }
 
+    @SuppressWarnings("LongMethod")
     fun onLogEventButtonClick() {
 
-        val infoString = addtnl_info_text.text.toString()
+        val infoString = binding.addtnlInfoText.text.toString()
         val info = if (infoString.isEmpty()) {
             null
         } else {
@@ -63,7 +64,7 @@ class EventLoggerActivity : Activity() {
         }
     }
 
-    fun onCustomErrorMessageButtonClick() {
+    fun onCustomButtonClick() {
         binding.errorMsgText.setText("")
     }
 
@@ -75,7 +76,7 @@ class EventLoggerActivity : Activity() {
 
     fun onException2ButtonClick() {
         binding.errorMsgText.setText(
-            IllegalArgumentException().stackTraceToString().take(1000)
+            IllegalArgumentException("Testing").stackTraceToString().take(1000)
         )
     }
 
@@ -106,6 +107,7 @@ class EventLoggerActivity : Activity() {
         }
     }
 
+    @SuppressWarnings("SwallowedException")
     private fun jsonStringToMap(jsonString: String): Map<String, String>? {
         val type = object : TypeToken<Map<String, String>>() {}.type
         return try {
