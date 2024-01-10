@@ -30,6 +30,7 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
+
                     <TextView
                         android:id="@+id/sdk_name_label"
                         android:layout_weight="1"
@@ -81,6 +82,7 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
+
                     <TextView
                         android:id="@+id/error_msg_label"
                         android:layout_weight="1"
@@ -88,11 +90,52 @@
                         android:layout_height="wrap_content"
                         android:text="Error Message" />
 
-                    <EditText
-                        android:id="@+id/error_msg_text"
-                        android:layout_weight="2"
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content" />
+                        android:layout_weight="2" >
+
+                        <RadioGroup
+                            android:id="@+id/event_msg_radio_grp"
+                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checkedButton="@id/custom_error_message_button"
+                            android:orientation="horizontal" >
+
+                            <RadioButton
+                                android:id="@+id/custom_error_message_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Custom"
+                                android:onClick="@{() -> activity.onCustomErrorMessageButtonClick()}" />
+
+                            <RadioButton
+                                android:id="@+id/arithmetic_exception_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Err1"
+                                android:onClick="@{() -> activity.onException1ButtonClick()}" />
+
+                            <RadioButton
+                                android:id="@+id/illegal_argument_exception_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Err2"
+                                android:onClick="@{() -> activity.onException2ButtonClick()}" />
+
+                        </RadioGroup>
+
+                        <EditText
+                            android:inputType="textMultiLine"
+                            android:maxLines="2"
+                            android:id="@+id/error_msg_text"
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+
                 </TableRow>
 
                 <TableRow
@@ -115,6 +158,7 @@
                 <TableRow
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" >
+
                     <TextView
                         android:id="@+id/event_type_label"
                         android:layout_weight="1"
@@ -177,12 +221,19 @@
 
         </LinearLayout>
 
+        <View
+            android:id="@+id/divider"
+            android:layout_below="@id/log_event_container"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="#000000"/>
+
         <LinearLayout
             android:id="@+id/sync_event_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@id/log_event_container"
+            android:layout_below="@id/divider"
             android:layout_alignParentBottom="true" >
 
             <Button

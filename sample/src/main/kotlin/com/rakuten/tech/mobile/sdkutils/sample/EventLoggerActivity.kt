@@ -63,6 +63,22 @@ class EventLoggerActivity : Activity() {
         }
     }
 
+    fun onCustomErrorMessageButtonClick() {
+        binding.errorMsgText.setText("")
+    }
+
+    fun onException1ButtonClick() {
+        binding.errorMsgText.setText(
+            ArithmeticException().stackTraceToString().take(1000)
+        )
+    }
+
+    fun onException2ButtonClick() {
+        binding.errorMsgText.setText(
+            IllegalArgumentException().stackTraceToString().take(1000)
+        )
+    }
+
     @Suppress("MagicNumber")
     fun onShowEventsCacheClick() {
         val eventsCache = this
@@ -84,7 +100,7 @@ class EventLoggerActivity : Activity() {
     private fun setDefaultsOrHints() {
         binding.apply {
             sdkNameText.setText("sdkutils")
-            sdkVerText.setText("${com.rakuten.tech.mobile.sdkutils.BuildConfig.VERSION_NAME}")
+            sdkVerText.setText(com.rakuten.tech.mobile.sdkutils.BuildConfig.VERSION_NAME)
             numTimesText.setText("1")
             addtnlInfoText.hint = """{ "key": "value" }"""
         }
