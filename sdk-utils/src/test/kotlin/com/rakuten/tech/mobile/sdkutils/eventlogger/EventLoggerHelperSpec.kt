@@ -41,7 +41,7 @@ class EventLoggerHelperSpec {
         `when`(mockContext.getString(anyInt()))
             .thenReturn("2.0.0")
         mockPackageInfo.versionName = "1.0.0"
-        mockPackageInfo.longVersionCode = 1
+        mockPackageInfo.versionCode = 1
 
         eventLoggerHelper = EventLoggerHelper(WeakReference(mockContext))
     }
