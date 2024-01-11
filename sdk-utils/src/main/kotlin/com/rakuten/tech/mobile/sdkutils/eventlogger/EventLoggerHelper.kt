@@ -19,8 +19,7 @@ internal class EventLoggerHelper(private val context: WeakReference<Context>) {
      * Information that is typically constant throughout the application lifecycle such as application and
      * device information.
      */
-    var metadata: Metadata = buildMetadata(context.get())
-        private set
+    val metadata: Metadata = buildMetadata(context.get())
 
     /**
      * Returns true if all event parameters are non-empty, otherwise false.
