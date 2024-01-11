@@ -34,14 +34,6 @@ class EventLoggerActivity : AppCompatActivity() {
 
     @SuppressWarnings("LongMethod")
     fun onLogEventButtonClick() {
-
-        val infoString = binding.addtnlInfoText.text.toString()
-        val info = if (infoString.isEmpty()) {
-            null
-        } else {
-            jsonStringToMap(infoString)
-        }
-
         val sdkName = binding.sdkNameText.text.toString().ifEmpty { "sdkutils" }
         val sdkVersion = binding.sdkVerText.text.toString().ifEmpty {
             com.rakuten.tech.mobile.sdkutils.BuildConfig.VERSION_NAME }
@@ -50,6 +42,12 @@ class EventLoggerActivity : AppCompatActivity() {
         val numTimes = binding.numTimesText.text.toString().toIntOrNull() ?: 1
         val eventTypeRadId = binding.eventTypeRadioGrp.checkedRadioButtonId
         val eventType = findViewById<RadioButton>(eventTypeRadId).text.toString().lowercase()
+        val infoString = binding.addtnlInfoText.text.toString()
+        val info = if (infoString.isEmpty()) {
+            null
+        } else {
+            jsonStringToMap(infoString)
+        }
 
         Toast.makeText(this, "Event processed!", Toast.LENGTH_SHORT).show()
 

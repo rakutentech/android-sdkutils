@@ -234,42 +234,5 @@
 
         </LinearLayout>
 
-<!--        <View-->
-<!--            android:id="@+id/divider"-->
-<!--            android:layout_below="@id/log_event_container"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="3dp"-->
-<!--            android:background="#000000"/>-->
-
-<!--        <LinearLayout-->
-<!--            android:id="@+id/sync_event_container"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical"-->
-<!--            android:layout_below="@id/log_event_container"-->
-<!--            android:layout_alignParentBottom="true" >-->
-
-<!--            <Button-->
-<!--                android:id="@+id/show_events_cache"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:textStyle="bold"-->
-<!--                android:text="Show/sync events storage"-->
-<!--                android:onClick="@{() -> activity.onShowEventsCacheClick()}" />-->
-
-<!--&lt;!&ndash;            <ScrollView&ndash;&gt;-->
-<!--&lt;!&ndash;                android:background="#D3D3D3"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="match_parent">&ndash;&gt;-->
-
-<!--&lt;!&ndash;                <TextView&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:id="@+id/events_storage_text"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_width="match_parent"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                    android:layout_margin="8dp" />&ndash;&gt;-->
-<!--&lt;!&ndash;            </ScrollView>&ndash;&gt;-->
-
-<!--        </LinearLayout>-->
-
     </RelativeLayout>
 </layout>
