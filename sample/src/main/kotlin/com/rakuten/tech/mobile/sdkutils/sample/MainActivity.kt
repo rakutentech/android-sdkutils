@@ -1,9 +1,9 @@
 package com.rakuten.tech.mobile.sdkutils.sample
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.rakuten.tech.mobile.sdkutils.PreferencesUtil
 import com.rakuten.tech.mobile.sdkutils.logger.Logger
@@ -21,7 +21,7 @@ import okhttp3.Response
 import java.util.Date
 
 @Suppress("UndocumentedPublicClass", "UndocumentedPublicFunction", "SpreadOperator")
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val log = Logger(MainActivity::class.java.simpleName)

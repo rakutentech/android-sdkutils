@@ -15,6 +15,7 @@
 
     <activity
         android:name=".MainActivity"
+        android:label="SDK Utils Sample"
         android:exported="true">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -24,6 +25,13 @@
 
     <activity
         android:name=".EventLoggerActivity"
+        android:label="Event Logger"
+        android:exported="true">
+    </activity>
+
+    <activity
+        android:name=".EventLoggerCacheActivity"
+        android:label="Event Logger Cache"
         android:exported="true">
     </activity>
   </application>

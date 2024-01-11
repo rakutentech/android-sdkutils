@@ -1,30 +1,28 @@
 package com.rakuten.tech.mobile.sdkutils.sample
 
-import android.app.Activity
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.google.gson.reflect.TypeToken
 import com.rakuten.tech.mobile.sdkutils.eventlogger.EventLogger
 import com.rakuten.tech.mobile.sdkutils.sample.databinding.ActivityEventLoggerBinding
-import org.json.JSONObject
 
 @Suppress(
     "UndocumentedPublicClass",
     "UndocumentedPublicFunction",
     "MagicNumber"
 )
-class EventLoggerActivity : Activity() {
+class EventLoggerActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEventLoggerBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_event_logger)
         binding.activity = this
@@ -80,22 +78,9 @@ class EventLoggerActivity : Activity() {
         )
     }
 
-    @Suppress("MagicNumber")
     fun onShowEventsCacheClick() {
-        val eventsCache = this
-            .getSharedPreferences("com.rakuten.tech.mobile.sdkutils.eventlogger.events", Context.MODE_PRIVATE)
-
-        val textBuilder = StringBuilder(0)
-        for (event in eventsCache.all) {
-            textBuilder.append(event.key)
-            textBuilder.append("\n")
-            textBuilder.append(
-                JSONObject(event.value.toString()).toString(4)
-            )
-            textBuilder.append("\n\n\n")
-        }
-
-        binding.eventsStorageText.text = textBuilder
+        val intent = Intent(this, EventLoggerCacheActivity::class.java)
+        this.startActivity(intent)
     }
 
     private fun setDefaultsOrHints() {
