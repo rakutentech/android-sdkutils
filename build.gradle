@@ -24,6 +24,11 @@ plugins {
 }
 
 allprojects { proj ->
+
+  def property = { key ->
+    return System.getenv(key) ?: (project.hasProperty(key) ? project."$key" : "")
+  }
+
   repositories {
     google()
     mavenCentral()
