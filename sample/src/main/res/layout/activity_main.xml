@@ -43,5 +43,14 @@
         android:layout_height="wrap_content"
         android:onClick="@{() -> activity.onAppInfoButtonClick()}"
         android:text="Show App Info"/>
+
+    <Button
+        android:id="@+id/eventLoggerButton"
+        app:layout_constraintTop_toBottomOf="@id/appInfoButton"
+        android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> activity.onEventLoggerButtonClick()}"
+        android:text="Event Logger"/>
   </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

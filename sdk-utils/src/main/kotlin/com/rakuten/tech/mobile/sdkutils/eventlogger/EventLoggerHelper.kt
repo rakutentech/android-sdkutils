@@ -1,9 +1,11 @@
 package com.rakuten.tech.mobile.sdkutils.eventlogger
 
 import android.content.Context
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
+import androidx.core.content.pm.PackageInfoCompat
 import com.rakuten.tech.mobile.sdkutils.StringExtension.sanitize
 import java.lang.ref.WeakReference
 
@@ -15,13 +17,11 @@ import java.lang.ref.WeakReference
 )
 internal class EventLoggerHelper(private val context: WeakReference<Context>) {
 
-    private val metadata: Metadata = buildMetadata(context.get())
-
     /**
-     * Returns information that is typically constant throughout the application lifecycle such as application and
+     * Information that is typically constant throughout the application lifecycle such as application and
      * device information.
      */
-    fun getMetadata(): Metadata = metadata
+    val metadata: Metadata = buildMetadata(context.get())
 
     /**
      * Returns true if all event parameters are non-empty, otherwise false.
@@ -83,13 +83,20 @@ internal class EventLoggerHelper(private val context: WeakReference<Context>) {
         return Metadata(
             appId = context?.packageName.orEmpty(),
             appName = context?.applicationInfo?.loadLabel(context.packageManager)?.toString().orEmpty(),
-            appVer = packageInfo?.versionName.orEmpty(),
+            appVer = getAppVersion(packageInfo),
             osVer = "Android ${Build.VERSION.RELEASE}",
             deviceModel = Build.MODEL,
             deviceBrand = Build.MANUFACTURER,
             deviceName = Settings.Global.getString(context?.contentResolver, "device_name").orEmpty(),
             rmcSdks = getRmcVersions()
         )
+    }
+
+    private fun getAppVersion(packageInfo: PackageInfo?): String {
+        if (packageInfo != null) {
+            return "${packageInfo.versionName}.${PackageInfoCompat.getLongVersionCode(packageInfo)}"
+        }
+        return ""
     }
 
     private fun getRmcVersions(): Map<String, String>? {

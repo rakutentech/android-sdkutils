@@ -41,17 +41,18 @@ class EventLoggerHelperSpec {
         `when`(mockContext.getString(anyInt()))
             .thenReturn("2.0.0")
         mockPackageInfo.versionName = "1.0.0"
+        mockPackageInfo.versionCode = 1
 
         eventLoggerHelper = EventLoggerHelper(WeakReference(mockContext))
     }
 
     @Test
     fun `should return metadata`() {
-        eventLoggerHelper.getMetadata() shouldBeEqualTo
+        eventLoggerHelper.metadata shouldBeEqualTo
             EventLoggerHelper.Metadata(
                 "com.sdkutils",
                 "sdk utils sample app",
-                "1.0.0",
+                "1.0.0.1",
                 "Android ${Build.VERSION.RELEASE}",
                 Build.MODEL,
                 Build.MANUFACTURER,
@@ -73,7 +74,7 @@ class EventLoggerHelperSpec {
             eventType shouldBeEqualTo EventType.CRITICAL.displayName
             appId shouldBeEqualTo "com.sdkutils"
             appName shouldBeEqualTo "sdk utils sample app"
-            appVersion shouldBeEqualTo "1.0.0"
+            appVersion shouldBeEqualTo "1.0.0.1"
             rmcSdks shouldBeEqualTo mapOf("rmc_inappmessaging" to "2.0.0")
             osVersion shouldBeEqualTo "Android ${Build.VERSION.RELEASE}"
             deviceModel shouldBeEqualTo Build.MODEL
@@ -94,7 +95,7 @@ class EventLoggerHelperSpec {
             eventType shouldBeEqualTo EventType.WARNING.displayName
             appId shouldBeEqualTo "com.sdkutils"
             appName shouldBeEqualTo "sdk utils sample app"
-            appVersion shouldBeEqualTo "1.0.0"
+            appVersion shouldBeEqualTo "1.0.0.1"
             rmcSdks shouldBeEqualTo mapOf("rmc_inappmessaging" to "2.0.0")
             osVersion shouldBeEqualTo "Android ${Build.VERSION.RELEASE}"
             deviceModel shouldBeEqualTo Build.MODEL
