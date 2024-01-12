@@ -27,7 +27,7 @@ allprojects { proj ->
   repositories {
     google()
     mavenCentral()
-    maven { url 'https://artifactory.rakuten-it.com/mobile-libs-mvn-release'}
+    maven { url property("ARTIFACTORY_MOBILE_LIBS_MVN_RELEASE_URL") }
   }
 
   apply plugin: 'pl.allegro.tech.build.axion-release'
