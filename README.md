@@ -223,7 +223,78 @@ val retrofit = Retrofit.Builder().build("your_baseUrl", okHttpClient gsonConvert
 </li>
 </ul>
 
+### Event Logger
+
+A remote troubleshooting utility which helps to track or send important events to a remote API server.
+This is intended to be used internally by Rakuten's SDKs.
+
+<ul>
+<li>
+
+```configure```: Initializes or configures this utility. Call this as early as possible in the application lifecycle, such as `onCreate` or other initialization methods. Calling other APIs without calling this API has no effect.
+
+| Parameter | Description                                                   | Datatype | Required? |
+|-----------| ------------------------------------------------------------- |----------|-----------|
+| context   | Application context                                           | Context  | `Yes`     |
+| apiUrl    | Optional server API URL that will override the default configuration | String   | `No`      |
+| apiKey    | Optional server API Key that will override the default configuration | String   | `No`      |
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    // configure
+    EventLogger.configure(this)
+}
+
+```
+
+</li>
+
+<li>
+
+```send*Event```: Logs an event and sends to server based on criticality.
+
+| Parameter | Description | Datatype | Required? |
+|----------|---------|----------|-----------|
+| sourceName | Non-empty source of the event, e.g. "sdkutils" | String | `Yes` |
+| sourceVersion | Non-empty source' version, e.g. "2.0.0" | String | `Yes` |
+| errorCode | Non-empty source' error code or HTTP backend response code e.g. "500" | String | `Yes` |
+| errorMessage | Non-empty description of the error. Make it as descriptive as possible, for example, the stacktrace of an exception | String | `Yes` |
+| info | Optional parameter to attach other useful key-value pair, such as filename, method, line number, etc. | Map | `No` |
+
+```kotlin
+
+// sendCriticalEvent
+// Logs a critical event, wherein the unique event will be sent to the server immediately.
+EventLogger.sendCriticalEvent(
+    sourceName = "sdkutils",
+    sourceVersion = "2.0.0",
+    errorCode = "XXX",
+    errorMessage = "java.lang.ArithmeticException: divide by zero
+                    at com.rakuten.test.MainActivityFragment.onViewCreated(MainActivityFragment.kt:58)
+                    at androidx.fragment.app.FragmentManagerImpl.ensureInflatedFragmentView(FragmentManagerImpl.java:1144)
+                    at androidx.fragment.app.FragmentManagerImpl.moveToState(FragmentManagerImpl.java:851)"
+    info = mapOf("filename" to "MyFile.kt")
+)
+
+// sendWarningEvent
+// Logs a warning event, which will be sent at a later time based on TTL.
+EventLogger.sendWarningEvent(
+    sourceName = "sdkutils",
+    sourceVersion = "2.0.0",
+    errorCode = "YYY",
+    errorMessage = "Incorrect credentials",
+    info = mapOf("filename" to "MyFile.kt")
+)
+
+```
+
+</li>
+<li>
+
 ## Changelog
+
+### v2.2.0 (In-Progress)
+* SDKCF-6859: Added `EventLogger` feature which sends events to a remote API server. It is intended to be used internally by Rakuten's SDKs. See [usage](#event-logging) section for details.
 
 ### v2.1.1 (2022-08-04)
 * SDKCF-5737: Reverted `Logger` constructor to single parameter.
