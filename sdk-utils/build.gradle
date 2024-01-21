@@ -11,11 +11,6 @@ android {
   defaultConfig {
     consumerProguardFiles "proguard-rules.pro"
     resValue 'string', 'sdk_utils__version', project.version
-
-    buildConfigField("String", "EVENT_LOGGER_API_URL_PRD", "\"${property("EVENT_LOGGER_API_URL_PRD")}\"")
-    buildConfigField("String", "EVENT_LOGGER_API_URL_STG", "\"${property("EVENT_LOGGER_API_URL_STG")}\"")
-    buildConfigField("String", "EVENT_LOGGER_API_KEY_PRD", "\"${property("EVENT_LOGGER_API_KEY_PRD")}\"")
-    buildConfigField("String", "EVENT_LOGGER_API_KEY_STG", "\"${property("EVENT_LOGGER_API_KEY_STG")}\"")
   }
 
   lintOptions {
@@ -34,18 +29,6 @@ android {
 
   kotlinOptions {
     jvmTarget = JavaVersion.toVersion(CONFIG.versions.java).toString()
-  }
-
-  buildTypes {
-    debug {
-      buildConfigField("String", "EVENT_LOGGER_API_URL", "\"${property("EVENT_LOGGER_API_URL_STG")}\"")
-      buildConfigField("String", "EVENT_LOGGER_API_KEY", "\"${property("EVENT_LOGGER_API_KEY_STG")}\"")
-    }
-
-    release {
-      buildConfigField("String", "EVENT_LOGGER_API_URL", "\"${property("EVENT_LOGGER_API_URL_PRD")}\"")
-      buildConfigField("String", "EVENT_LOGGER_API_KEY", "\"${property("EVENT_LOGGER_API_KEY_PRD")}\"")
-    }
   }
 }
 
