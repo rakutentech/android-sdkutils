@@ -155,6 +155,7 @@ class ConfigureSpec : EventLoggerSpec() {
 
     @Test
     fun `1 - should configure only once`() {
+        EventLogger.configure(mockContext, "", "")
         EventLogger.configure(mockContext, "https://test", "abcd")
         EventLogger.configure(mockContext, "https://test2", "wxyz")
 
