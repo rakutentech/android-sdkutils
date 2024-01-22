@@ -233,11 +233,11 @@ This is intended to be used internally by Rakuten's SDKs.
 
 ```configure```: Sets the server configuration and other initialization processing. Call this as early as possible in the application lifecycle, such as `onCreate` or other initialization methods. Calling other APIs without calling this API has no effect.
 
-| Parameter | Description                                                   | Datatype | Required? |
-|-----------| ------------------------------------------------------------- |----------|-----------|
-| context   | Application context                                           | Context  | `Yes`     |
-| apiUrl    | Non-empty server API URL | String   | `Yes`      |
-| apiKey    | Non-empty server API Key | String   | `Yes`      |
+| Parameter | Description              | Datatype | Required? |
+|-----------| ------------------------ |----------|-----------|
+| context   | Application context      | Context  | `Yes`     |
+| apiUrl    | Non-empty server API URL | String   | `Yes`     |
+| apiKey    | Non-empty server API Key | String   | `Yes`     |
 
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
