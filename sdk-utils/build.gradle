@@ -4,10 +4,6 @@ apply plugin: "kotlin-android"
 apply plugin: 'kotlin-kapt'
 
 android {
-  def property = { key ->
-    return System.getenv(key) ?: (project.hasProperty(key) ? project."$key" : "")
-  }
-
   defaultConfig {
     consumerProguardFiles "proguard-rules.pro"
     resValue 'string', 'sdk_utils__version', project.version
