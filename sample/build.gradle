@@ -16,6 +16,11 @@ android {
     versionName "1.0"
     minSdkVersion 23
     targetSdkVersion 33
+
+    buildConfigField("String", "EVENT_LOGGER_API_URL_PRD", "\"${property("EVENT_LOGGER_API_URL_PRD")}\"")
+    buildConfigField("String", "EVENT_LOGGER_API_URL_STG", "\"${property("EVENT_LOGGER_API_URL_STG")}\"")
+    buildConfigField("String", "EVENT_LOGGER_API_KEY_PRD", "\"${property("EVENT_LOGGER_API_KEY_PRD")}\"")
+    buildConfigField("String", "EVENT_LOGGER_API_KEY_STG", "\"${property("EVENT_LOGGER_API_KEY_STG")}\"")
   }
 
   sourceSets.each {
@@ -46,10 +51,18 @@ android {
   }
 
   buildTypes {
+    debug {
+      buildConfigField("String", "EVENT_LOGGER_API_URL", "\"${property("EVENT_LOGGER_API_URL_STG")}\"")
+      buildConfigField("String", "EVENT_LOGGER_API_KEY", "\"${property("EVENT_LOGGER_API_KEY_STG")}\"")
+    }
+
     release {
       minifyEnabled true
       debuggable false
       signingConfig signingConfigs.release
+
+      buildConfigField("String", "EVENT_LOGGER_API_URL", "\"${property("EVENT_LOGGER_API_URL_PRD")}\"")
+      buildConfigField("String", "EVENT_LOGGER_API_KEY", "\"${property("EVENT_LOGGER_API_KEY_PRD")}\"")
     }
   }
 }

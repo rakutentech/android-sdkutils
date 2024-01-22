@@ -38,26 +38,26 @@ object EventLogger {
      * `onCreate` or other initialization methods.
      *
      * @param context Application context.
-     * @param apiUrl Optional API URL that will override the default configuration.
-     * @param apiKey Optional API Key that will override the default configuration.
+     * @param apiUrl Server API URL.
+     * @param apiKey Server API Key.
      */
     @Synchronized
     fun configure(
         context: Context,
-        apiUrl: String? = null,
-        apiKey: String? = null
+        apiUrl: String,
+        apiKey: String
     ) {
         if (isConfigureCalled) {
             log.debug("Event Logger has been configured already")
             return
         }
 
-        val (realApiUrl, realApiKey) = if (!apiUrl.isNullOrEmpty() && !apiKey.isNullOrEmpty()) {
-            Pair(apiUrl, apiKey)
-        } else {
-            Pair(Config.EVENT_LOGGER_BASE_URL, Config.EVENT_LOGGER_API_KEY)
+        if (apiUrl.isEmpty() || apiKey.isEmpty()) {
+            log.warn("Event Logger cannot be configured due to empty API URL or key")
+            return
         }
-        initialize(context, realApiUrl, realApiKey)
+
+        initialize(context, apiUrl, apiKey)
     }
 
     /**
@@ -302,8 +302,6 @@ object EventLogger {
     internal object Config {
         const val MAX_EVENTS_COUNT = 50
         const val TTL_EXPIRY_MILLIS = 3600 * 1000 * 12 // 12 hours
-        const val EVENT_LOGGER_BASE_URL = BuildConfig.EVENT_LOGGER_API_URL
-        const val EVENT_LOGGER_API_KEY = BuildConfig.EVENT_LOGGER_API_KEY
         const val EVENTS_STORAGE_FILENAME = "${BuildConfig.LIBRARY_PACKAGE_NAME}.eventlogger.events"
         const val EVENT_LOGGER_GENERAL_CACHE_FILENAME = "${BuildConfig.LIBRARY_PACKAGE_NAME}.eventlogger.cache"
     }
