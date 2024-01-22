@@ -28,8 +28,7 @@ class EventLoggerActivity : AppCompatActivity() {
         binding.activity = this
         setDefaultsOrHints()
 
-        // EventLogger: use default API Key+URL
-        EventLogger.configure(this)
+        EventLogger.configure(this, BuildConfig.EVENT_LOGGER_API_URL, BuildConfig.EVENT_LOGGER_API_KEY)
     }
 
     @SuppressWarnings("LongMethod")
