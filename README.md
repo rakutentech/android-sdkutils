@@ -231,18 +231,18 @@ This is intended to be used internally by Rakuten's SDKs.
 <ul>
 <li>
 
-```configure```: Initializes or configures this utility. Call this as early as possible in the application lifecycle, such as `onCreate` or other initialization methods. Calling other APIs without calling this API has no effect.
+```configure```: Sets the server configuration and other initialization processing. Call this as early as possible in the application lifecycle, such as `onCreate` or other initialization methods. Calling other APIs without calling this API has no effect.
 
 | Parameter | Description                                                   | Datatype | Required? |
 |-----------| ------------------------------------------------------------- |----------|-----------|
 | context   | Application context                                           | Context  | `Yes`     |
-| apiUrl    | Optional server API URL that will override the default configuration | String   | `No`      |
-| apiKey    | Optional server API Key that will override the default configuration | String   | `No`      |
+| apiUrl    | Non-empty server API URL | String   | `Yes`      |
+| apiKey    | Non-empty server API Key | String   | `Yes`      |
 
 ```kotlin
 override fun onCreate(savedInstanceState: Bundle?) {
-    // configure
-    EventLogger.configure(this)
+    // API: configure
+    EventLogger.configure(this, "my-api-url", "my-api-key")
 }
 
 ```
@@ -263,7 +263,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ```kotlin
 
-// sendCriticalEvent
+// API: sendCriticalEvent
 // Logs a critical event, wherein the unique event will be sent to the server immediately.
 EventLogger.sendCriticalEvent(
     sourceName = "sdkutils",
@@ -276,7 +276,7 @@ EventLogger.sendCriticalEvent(
     info = mapOf("filename" to "MyFile.kt")
 )
 
-// sendWarningEvent
+// API: sendWarningEvent
 // Logs a warning event, which will be sent at a later time based on TTL.
 EventLogger.sendWarningEvent(
     sourceName = "sdkutils",
