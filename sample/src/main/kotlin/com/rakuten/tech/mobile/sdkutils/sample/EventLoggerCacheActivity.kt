@@ -29,12 +29,14 @@ class EventLoggerCacheActivity : AppCompatActivity() {
     private fun setCacheText() {
 
         if (eventsCache.all.isEmpty()) {
-            binding.eventsStorageText.text = "<empty>"
+            binding.numEventsLabel.text = "Count: 0"
             return
         }
 
         val textBuilder = StringBuilder(0)
-        for (event in eventsCache.all) {
+        val allEvents = eventsCache.all
+        binding.numEventsLabel.text = "Count: ${allEvents.size}"
+        for (event in allEvents) {
             textBuilder.append(event.key)
             textBuilder.append("\n")
             textBuilder.append(
