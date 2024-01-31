@@ -224,6 +224,19 @@
                 android:layout_height="wrap_content" >
 
                 <Button
+                    android:id="@+id/log_unique_events"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="Log Unique Event/s\n(randomize Error Message)"
+                    android:onClick="@{() -> activity.onLogUniqueEventButtonClick()}" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
                     android:id="@+id/show_events_cache"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
