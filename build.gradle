@@ -24,9 +24,15 @@ plugins {
 }
 
 allprojects { proj ->
+
+  def property = { key ->
+    return System.getenv(key) ?: (project.hasProperty(key) ? project."$key" : "")
+  }
+
   repositories {
     google()
     mavenCentral()
+    maven { url property("ARTIFACTORY_MOBILE_LIBS_MVN_RELEASE_URL") }
   }
 
   apply plugin: 'pl.allegro.tech.build.axion-release'

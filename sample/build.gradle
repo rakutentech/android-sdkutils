@@ -8,11 +8,14 @@ android {
     return System.getenv(key) ?: (project.hasProperty(key) ? project."$key" : "")
   }
 
+  compileSdkVersion 33
+
   defaultConfig {
     applicationId "com.rakuten.tech.mobile.sdkutils.sample"
     versionCode 1
     versionName "1.0"
     minSdkVersion 23
+    targetSdkVersion 33
 
     buildConfigField("String", "EVENT_LOGGER_API_URL_PRD", "\"${property("EVENT_LOGGER_API_URL_PRD")}\"")
     buildConfigField("String", "EVENT_LOGGER_API_URL_STG", "\"${property("EVENT_LOGGER_API_URL_STG")}\"")
@@ -70,6 +73,7 @@ dependencies {
   implementation "com.squareup.okhttp3:okhttp:$CONFIG.versions.okhttp"
   implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2"
   implementation 'com.google.code.gson:gson:2.8.9'
+  implementation 'com.rakuten.tech.mobile.rmc:rmc-inappmessaging:1.0.0' // used for `rmcSdks` EventLogger field
   implementation project(':sdk-utils')
 }
 
