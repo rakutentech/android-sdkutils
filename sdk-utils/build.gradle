@@ -5,6 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
   defaultConfig {
+    consumerProguardFiles "proguard-rules.pro"
     resValue 'string', 'sdk_utils__version', project.version
   }
 
@@ -34,7 +35,6 @@ dependencies {
   implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
   implementation 'com.squareup.retrofit2:retrofit:2.9.0'
   implementation 'com.google.code.gson:gson:2.8.9'
-  implementation "com.google.code.gson:gson:$CONFIG.versions.thirdParty.gson"
   implementation 'com.google.android.gms:play-services-base:17.0.0'
 
   testImplementation 'junit:junit:4.13.2'
