@@ -142,4 +142,18 @@ object StringExtension {
             ""
         }
     }
+
+    /**
+     * Sanitizes the input string by the following rules:
+     * - Removes tabs
+     * - Removes leading/trailing spaces
+     * - Optionally trims based on [maxLength] or retains the original string length if supplied [maxLength]
+     * is negative.
+     */
+    fun String.sanitize(maxLength: Int = this.length): String {
+        return this
+            .replace("\t", "")
+            .trim()
+            .take(if (maxLength < 0) this.length else maxLength)
+    }
 }
