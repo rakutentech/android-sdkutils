@@ -293,7 +293,7 @@ EventLogger.sendWarningEvent(
 
 ## Changelog
 
-### v2.2.0 (In-Progress)
+### v2.2.0 (2024-05-14)
 * SDKCF-6859: Added `EventLogger` feature which sends events to a remote API server. It is intended to be used internally by Rakuten's SDKs. See [Event Logger](#event-logger) section for details.
 
 ### v2.1.1 (2022-08-04)
